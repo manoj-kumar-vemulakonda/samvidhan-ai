@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Samvidhan AI - the AI workspace for Indian lawyers</title>
+  <meta name="description" content="Cases, files, calendar and an AI that knows Indian law - BNS, BNSS, BSA, IPC, CPC, the Constitution and 95 more Acts - with checked citations.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: cases, general chats, tools -->
+    <aside class="left" aria-label="Cases and chats">
+      <div class="brand">
+        <img src="/favicon.svg" alt="" width="28" height="28">
+        <span>Samvidhan <b>AI</b></span>
+        <span id="ai-badge" class="ai-badge">…</span>
+      </div>
+      <button id="new-case" class="btn primary block">+ New case</button>
+      <input id="case-search" type="search" placeholder="Find a case…" aria-label="Find a case">
+      <div id="case-filter" class="seg small" role="group" aria-label="Which cases">
+        <button data-filter="active" class="active">Active</button><button data-filter="closed">Closed</button><button data-filter="all">All</button>
+      </div>
+      <h4 class="side-head">Cases</h4>
+      <ul id="case-list" class="side-list"></ul>
+      <h4 class="side-head">General chats <button id="new-chat" class="link small" title="A chat not tied to any case">+ New</button></h4>
+      <ul id="chat-list" class="side-list chats"></ul>
+      <nav id="tool-links" class="tools" aria-label="Tools">
+        <a href="#/" data-view="home">🏠 Home</a>
+        <a href="#/library" data-view="library">📚 Law library</a>
+        <a href="#/convert" data-view="convert">🔁 IPC → BNS</a>
+        <a href="#/workflows" data-view="workflows">⚡ Workflows</a>
+        <a href="#/settings" data-view="settings">⚙ Settings</a>
+      </nav>
+    </aside>
+
+    <!-- CENTRE: the open chat / case / tool -->
+    <main class="centre">
+      <div class="mobile-bar">
+        <button id="menu-toggle" class="icon-btn" aria-label="Cases and chats">☰</button>
+        <span class="brand-mini">Samvidhan <b>AI</b></span>
+        <button id="agenda-toggle" class="icon-btn" aria-label="Calendar">📅</button>
+      </div>
+      <div id="index-note" class="index-note" hidden>Preparing the law library search… (first start only)</div>
+      <div id="view"></div>
+    </main>
+
+    <!-- RIGHT: calendar, next hearing, reminders -->
+    <aside class="right" aria-label="Calendar and reminders">
+      <div class="right-head">
+        <h3>Calendar</h3>
+        <span class="spacer"></span>
+        <button id="add-event" class="link small">+ Add</button>
+        <button id="bell" class="icon-btn" aria-label="Reminders">🔔<span id="bell-count" class="count" hidden>0</span></button>
+      </div>
+      <section id="next-hearing" class="card next-hearing"></section>
+      <section id="calendar" class="card"></section>
+      <section id="upcoming" class="card"></section>
+      <section id="notifications-box" class="card">
+        <div class="right-head"><h3>Reminders</h3><span class="spacer"></span><button id="mark-all-read" class="link small">Mark all read</button></div>
+        <button id="desktop-notify" class="btn small block" hidden>Turn on desktop notifications</button>
+        <div id="notifications"></div>
+      </section>
+      <p class="muted small export"><a href="/api/calendar.ics">⬇ Export calendar (.ics)</a></p>
+    </aside>
+  </div>
+
+  <aside id="reader" class="reader" hidden aria-label="Reader"></aside>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <noscript>This app needs JavaScript.</noscript>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

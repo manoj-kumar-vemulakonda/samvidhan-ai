@@ -1,0 +1,48 @@
+{
+ "code": "SCAPPELLATE",
+ "cite": "Supreme Court (Enlargement of Criminal Appellate Jurisdiction) Act",
+ "name": "Supreme Court (Enlargement of Criminal Appellate Jurisdiction) Act, 1970",
+ "short": "Supreme Court (Enlargement of Criminal Appellate Jurisdiction) Act",
+ "year": 1970,
+ "category": "Courts and procedure",
+ "status": "in_force",
+ "replaced_by": null,
+ "replaces": null,
+ "note": "",
+ "aliases": [
+  "supreme court (enlargement of criminal appellate jurisdiction) act",
+  "supreme court (enlargement of criminal appellate jurisdiction) act, 1970"
+ ],
+ "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+ "kind": "act",
+ "court": "Supreme Court of India",
+ "jurisdiction": "Central",
+ "pdf": "SCAPPELLATE.pdf",
+ "url": "https://indiacode.gov.in/items/b0fc5073-36b7-4f2a-bbd0-9a6323556151",
+ "as_on": "",
+ "parsed_as": "sections",
+ "sections": [
+  {
+   "number": "1",
+   "ref": "s. 1",
+   "kind": "section",
+   "title": "Short title and extent",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) This Act may be called the Supreme Court (Enlargement of Criminal Appellate Jurisdiction) Act, 1970.\n(2) It extends to the whole of India ***.",
+   "status": "in_force",
+   "page": 2
+  },
+  {
+   "number": "2",
+   "ref": "s. 2",
+   "kind": "section",
+   "title": "Enlarged appellate jurisdiction of Supreme Court in regard to criminal matters",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Without prejudice to the powers conferred on the Supreme Court by clause (1) of article 134 of the Constitution, an appeal shall lie to the Supreme Court from any judgment, final order or sentence in a criminal proceeding of a High Court in the territory of India if the High Court—\n(a) has on appeal reversed an order of acquittal of an accused person and sentenced him to imprisonment for life or to imprisonment for a period of not less than ten years;\n(b) has withdrawn for trial before itself any case from any court subordinate to its authority and has in such trial convicted the accused person and sentenced him to imprisonment for life or to imprisonment for a period of not less than ten years.",
+   "status": "in_force",
+   "page": 2
+  }
+ ]
+}

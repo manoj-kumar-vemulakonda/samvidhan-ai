@@ -1,0 +1,10 @@
+{
+  // Use this project's own Python environment (made by setup.bat)
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+  "files.exclude": {
+    "**/__pycache__": true,
+    ".pytest_cache": true
+  }
+}

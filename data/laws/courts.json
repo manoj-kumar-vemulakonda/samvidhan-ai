@@ -1,0 +1,1758 @@
+{
+ "courts": [
+  {
+   "name": "Supreme Court of India",
+   "kind": "Supreme Court",
+   "states": "All of India",
+   "website": "https://www.sci.gov.in/supreme-court-rules/",
+   "main_rules": [
+    "Supreme Court Rules, 2013",
+    "Handbook on Practice and Procedure",
+    "Contempt Rules"
+   ],
+   "books": [
+    {
+     "code": "SCCONTEMPT",
+     "name": "Rules to Regulate Proceedings for Contempt of the Supreme Court, 1975",
+     "kind": "rules",
+     "count": 12
+    },
+    {
+     "code": "SCRAMEND",
+     "name": "Supreme Court (Amendment) Rules, 2024-2025 (gazette notifications)",
+     "kind": "rules",
+     "count": 10
+    },
+    {
+     "code": "SCHANDBOOK",
+     "name": "Supreme Court Handbook on Practice and Procedure and Office Procedure, 2017 (updated 06.10.2025)",
+     "kind": "handbook",
+     "count": 258
+    },
+    {
+     "code": "SCR2013",
+     "name": "Supreme Court Rules, 2013",
+     "kind": "rules",
+     "count": 493
+    },
+    {
+     "code": "SCAPPELLATE",
+     "name": "Supreme Court (Enlargement of Criminal Appellate Jurisdiction) Act, 1970",
+     "kind": "act",
+     "count": 2
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Allahabad High Court",
+   "kind": "High Court",
+   "states": "Uttar Pradesh",
+   "website": "https://www.allahabadhighcourt.in/publications.html",
+   "main_rules": [
+    "Allahabad High Court Rules, 1952",
+    "General Rules (Civil), 1957",
+    "General Rules (Criminal), 1977"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "ALLHC1952",
+     "name": "Allahabad High Court Rules, 1952 (Rules of the Court) - Part I, Chapters I to VIII",
+     "kind": "rules",
+     "count": 445
+    },
+    {
+     "code": "UPFAMILY",
+     "name": "Uttar Pradesh Family Courts (Court) Rules, 2006",
+     "kind": "rules",
+     "count": 39
+    },
+    {
+     "code": "UPGRAM2009",
+     "name": "Uttar Pradesh Gram Nyayalay Procedure and Practice Rules, 2009",
+     "kind": "rules",
+     "count": 37
+    }
+   ],
+   "missing": [
+    "General Rules (Civil), 1957",
+    "General Rules (Criminal), 1977"
+   ]
+  },
+  {
+   "name": "Andhra Pradesh High Court",
+   "kind": "High Court",
+   "states": "Andhra Pradesh",
+   "website": "https://aphc.gov.in/rules.php?type=2",
+   "main_rules": [
+    "Appellate Side Rules",
+    "Writ Proceedings Rules",
+    "Civil Rules of Practice and Circular Orders",
+    "Criminal Rules of Practice and Circular Orders"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "APAPPELLATE",
+     "name": "Andhra Pradesh High Court Appellate Side Rules",
+     "kind": "rules",
+     "count": 65
+    },
+    {
+     "code": "APCRIMRP",
+     "name": "Criminal Rules of Practice and Circular Orders, 1990 (Andhra Pradesh and Telangana)",
+     "kind": "rules",
+     "count": 133
+    }
+   ],
+   "missing": [
+    "Writ Proceedings Rules",
+    "Civil Rules of Practice and Circular Orders"
+   ]
+  },
+  {
+   "name": "Bombay High Court",
+   "kind": "High Court",
+   "states": "Maharashtra, Goa, Dadra & Nagar Haveli and Daman & Diu",
+   "website": "https://bombayhighcourt.nic.in/rules.php",
+   "main_rules": [
+    "Bombay High Court Appellate Side Rules, 1960",
+    "Bombay High Court (Original Side) Rules, 1980",
+    "Civil Manual",
+    "Criminal Manual"
+   ],
+   "note": "The court website (and its Goa bench site) did not answer from this computer, and the district-court sites only carry the e-filing and video-conferencing rules. Try the link on another network (e.g. a phone hotspot); otherwise get the rules from a law library or a lawyer and save the PDF in the inbox folder.",
+   "links": [
+    {
+     "label": "Rules page",
+     "url": "https://bombayhighcourt.nic.in/rules.php"
+    }
+   ],
+   "books": [
+    {
+     "code": "BOMVC2022",
+     "name": "High Court of Bombay Rules for Video Conferencing for Courts, 2022",
+     "kind": "rules",
+     "count": 14
+    },
+    {
+     "code": "BOMCONTEMPT",
+     "name": "Rules of Bombay High Court on Contempt of Courts Act, 1971",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "BOMEFILING2022",
+     "name": "e-Filing Rules of the High Court of Bombay, 2022",
+     "kind": "rules",
+     "count": 57
+    },
+    {
+     "code": "BOMFAMILY",
+     "name": "Family Courts Rules, 1988 (Bombay High Court)",
+     "kind": "rules",
+     "count": 13
+    }
+   ],
+   "missing": [
+    "Bombay High Court Appellate Side Rules, 1960",
+    "Bombay High Court (Original Side) Rules, 1980",
+    "Civil Manual",
+    "Criminal Manual"
+   ]
+  },
+  {
+   "name": "Calcutta High Court",
+   "kind": "High Court",
+   "states": "West Bengal, Andaman & Nicobar Islands",
+   "website": "https://calcuttahighcourt.gov.in/",
+   "main_rules": [
+    "Calcutta High Court (Original Side) Rules",
+    "Appellate Side Rules",
+    "Civil Rules and Orders",
+    "Criminal Rules and Orders"
+   ],
+   "note": "The rules are not linked as files on the court's website; add them with 'Add a rule book'.",
+   "links": [],
+   "books": [
+    {
+     "code": "CALCIVILRO2015",
+     "name": "Amendments of the Civil Rules and Orders of the High Court, Calcutta (No. 131 G, 15.01.2015)",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "CALCRIMRO2015",
+     "name": "Amendments of the Criminal Rules and Orders of the High Court, Calcutta (No. 131 G, 15.01.2015)",
+     "kind": "rules",
+     "count": 4
+    }
+   ],
+   "missing": [
+    "Calcutta High Court (Original Side) Rules",
+    "Appellate Side Rules",
+    "Civil Rules and Orders",
+    "Criminal Rules and Orders"
+   ]
+  },
+  {
+   "name": "Chhattisgarh High Court",
+   "kind": "High Court",
+   "states": "Chhattisgarh",
+   "website": "https://highcourt.cg.gov.in/",
+   "main_rules": [
+    "High Court of Chhattisgarh Rules, 2007"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "CGHC2007",
+     "name": "High Court of Chhattisgarh Rules, 2007",
+     "kind": "rules",
+     "count": 152
+    },
+    {
+     "code": "CGFAMILY",
+     "name": "Chhattisgarh Family Court Rules, 2007",
+     "kind": "rules",
+     "count": 10
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Delhi High Court",
+   "kind": "High Court",
+   "states": "Delhi",
+   "website": "https://delhihighcourt.nic.in/web/court-rules",
+   "main_rules": [
+    "Delhi High Court (Original Side) Rules, 2018",
+    "High Court Rules and Orders (Vol. I-V)"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "DHCOS2018",
+     "name": "Delhi High Court (Original Side) Rules, 2018",
+     "kind": "rules",
+     "count": 298
+    },
+    {
+     "code": "DELHIHC",
+     "name": "Delhi High Court Act, 1966",
+     "kind": "act",
+     "count": 22
+    },
+    {
+     "code": "DHCRO",
+     "name": "High Court Rules and Orders (Delhi) - Volumes I to V",
+     "kind": "rules",
+     "count": 1757
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Gauhati High Court",
+   "kind": "High Court",
+   "states": "Assam, Nagaland, Mizoram, Arunachal Pradesh",
+   "website": "https://ghconline.gov.in/",
+   "main_rules": [
+    "Gauhati High Court Rules",
+    "Civil Rules and Orders",
+    "Criminal Rules and Orders"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "GHCRULES",
+     "name": "Gauhati High Court Rules",
+     "kind": "rules",
+     "count": 550
+    },
+    {
+     "code": "GHCECOURTS",
+     "name": "e-Courts Service Rules (Gauhati High Court)",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "TRIPCIVILRO2022",
+     "name": "Civil Courts Rules and Orders of the Gauhati High Court (Tripura Amendment), 2022",
+     "kind": "rules",
+     "count": 8
+    }
+   ],
+   "missing": [
+    "Civil Rules and Orders",
+    "Criminal Rules and Orders"
+   ]
+  },
+  {
+   "name": "Gujarat High Court",
+   "kind": "High Court",
+   "states": "Gujarat",
+   "website": "https://gujarathighcourt.nic.in/rules",
+   "main_rules": [
+    "Gujarat High Court Rules, 1993",
+    "Civil Manual",
+    "Criminal Manual"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "GUJPIL",
+     "name": "Gujarat High Court Public Interest Litigation Rules",
+     "kind": "rules",
+     "count": 10
+    },
+    {
+     "code": "GUJHC1993",
+     "name": "Gujarat High Court Rules, 1993",
+     "kind": "rules",
+     "count": 397
+    },
+    {
+     "code": "GUJCFM",
+     "name": "Gujarat High Court Case Flow Management (Subordinate Courts) Rules, 2016",
+     "kind": "rules",
+     "count": 18
+    }
+   ],
+   "missing": [
+    "Civil Manual",
+    "Criminal Manual"
+   ]
+  },
+  {
+   "name": "Himachal Pradesh High Court",
+   "kind": "High Court",
+   "states": "Himachal Pradesh",
+   "website": "https://highcourt.hp.gov.in/",
+   "main_rules": [
+    "High Court of Himachal Pradesh (Appellate Side) Rules, 1997",
+    "High Court of Himachal Pradesh (Original Side) Rules, 1997"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "HPCFMHC",
+     "name": "High Court of Himachal Pradesh Case Flow Management (High Court) Rules, 2005",
+     "kind": "rules",
+     "count": 10
+    },
+    {
+     "code": "HPCFMSUB",
+     "name": "High Court of Himachal Pradesh Case Flow Management (Subordinate Courts) Rules, 2005",
+     "kind": "rules",
+     "count": 18
+    }
+   ],
+   "missing": [
+    "High Court of Himachal Pradesh (Appellate Side) Rules, 1997",
+    "High Court of Himachal Pradesh (Original Side) Rules, 1997"
+   ]
+  },
+  {
+   "name": "Jammu & Kashmir and Ladakh High Court",
+   "kind": "High Court",
+   "states": "Jammu & Kashmir, Ladakh",
+   "website": "https://jkhighcourt.nic.in/",
+   "main_rules": [
+    "Jammu and Kashmir High Court Rules, 1999",
+    "Writ Proceedings Rules, 1997",
+    "General Rules (Civil)",
+    "General Rules (Criminal)"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "JKHC1999",
+     "name": "Jammu and Kashmir High Court Rules, 1999",
+     "kind": "rules",
+     "count": 254
+    },
+    {
+     "code": "JKGRAM2025",
+     "name": "High Court of Jammu & Kashmir and Ladakh Gram Nyayalayas Rules, 2025",
+     "kind": "rules",
+     "count": 25
+    }
+   ],
+   "missing": [
+    "Writ Proceedings Rules, 1997",
+    "General Rules (Civil)",
+    "General Rules (Criminal)"
+   ]
+  },
+  {
+   "name": "Jharkhand High Court",
+   "kind": "High Court",
+   "states": "Jharkhand",
+   "website": "https://www.jharkhandhighcourt.nic.in/rules.php",
+   "main_rules": [
+    "Jharkhand High Court Rules, 2001",
+    "Civil Court Rules"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "JHARHC2001",
+     "name": "High Court of Jharkhand Rules, 2001",
+     "kind": "rules",
+     "count": 446
+    },
+    {
+     "code": "JHARCIVIL",
+     "name": "Civil Court Rules of the High Court of Jharkhand",
+     "kind": "rules",
+     "count": 144
+    },
+    {
+     "code": "JHARFAMILY",
+     "name": "Jharkhand Family Courts Rules, 2018",
+     "kind": "rules",
+     "count": 19
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Karnataka High Court",
+   "kind": "High Court",
+   "states": "Karnataka",
+   "website": "https://judiciary.karnataka.gov.in/comm_notify.php?p=19&stateNM=",
+   "main_rules": [
+    "High Court of Karnataka Rules, 1959",
+    "Writ Proceedings Rules, 1977",
+    "Karnataka Civil Rules of Practice, 1967",
+    "Karnataka Criminal Rules of Practice, 1968"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "KARPARTY2018",
+     "name": "High Court of Karnataka (Conduct of Proceedings by Party-in-Person) Rules, 2018",
+     "kind": "rules",
+     "count": 6
+    },
+    {
+     "code": "KARCONTEMPT1981",
+     "name": "High Court of Karnataka (Contempt of Court) Rules, 1981",
+     "kind": "rules",
+     "count": 21
+    },
+    {
+     "code": "KARPIL2018",
+     "name": "High Court of Karnataka (Public Interest Litigation) Rules, 2018",
+     "kind": "rules",
+     "count": 11
+    },
+    {
+     "code": "KARHC1959",
+     "name": "High Court of Karnataka Rules, 1959",
+     "kind": "rules",
+     "count": 238
+    },
+    {
+     "code": "KARWRIT1977",
+     "name": "Writ Proceedings Rules, 1977 (High Court of Karnataka)",
+     "kind": "rules",
+     "count": 39
+    },
+    {
+     "code": "KARADR2005",
+     "name": "Civil Procedure (Alternative Dispute Resolution) (Karnataka) Rules, 2005",
+     "kind": "rules",
+     "count": 7
+    },
+    {
+     "code": "KARCRPC1984",
+     "name": "Code of Criminal Procedure (Karnataka) Rules, 1984",
+     "kind": "rules",
+     "count": 2
+    },
+    {
+     "code": "KARFAMILY1987",
+     "name": "Family Courts (Karnataka) Rules, 1987",
+     "kind": "rules",
+     "count": 8
+    },
+    {
+     "code": "KARCFM2005",
+     "name": "Karnataka (Case Flow Management in Subordinate Courts) Rules, 2005",
+     "kind": "rules",
+     "count": 10
+    },
+    {
+     "code": "KARMEDIATION2005",
+     "name": "Karnataka Civil Procedure (Mediation) Rules, 2005",
+     "kind": "rules",
+     "count": 27
+    },
+    {
+     "code": "KACRPCIVIL",
+     "name": "Karnataka Civil Rules of Practice, 1967",
+     "kind": "rules",
+     "count": 276
+    },
+    {
+     "code": "KACRPCRIM",
+     "name": "Karnataka Criminal Rules of Practice, 1968",
+     "kind": "rules",
+     "count": 144
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Kerala High Court",
+   "kind": "High Court",
+   "states": "Kerala, Lakshadweep",
+   "website": "https://highcourt.kerala.gov.in/",
+   "main_rules": [
+    "Rules of the High Court of Kerala, 1971",
+    "Civil Rules of Practice, Kerala, 1971",
+    "Criminal Rules of Practice, Kerala, 1982"
+   ],
+   "note": "The full Civil and Criminal Rules of Practice are not on the court's site (only amendments); add them with 'Add a rule book'.",
+   "links": [],
+   "books": [
+    {
+     "code": "KERCOMPENDIUM",
+     "name": "Compendium of Kerala High Court Procedure",
+     "kind": "handbook",
+     "count": 142
+    },
+    {
+     "code": "KEREFILING2021",
+     "name": "Electronic Filing Rules for Courts (Kerala), 2021",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "KERVC2021",
+     "name": "Electronic Video Linkage Rules for Courts (Kerala), 2021",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "KERSENIOR2018",
+     "name": "High Court of Kerala (Designation of Senior Advocates) Rules, 2018",
+     "kind": "rules",
+     "count": 22
+    },
+    {
+     "code": "KERHCAMEND",
+     "name": "Rules of the High Court of Kerala - amendments (Second Amendment 2023; 2nd amendment 2026)",
+     "kind": "rules",
+     "count": 19
+    },
+    {
+     "code": "KERHC1971",
+     "name": "Rules of the High Court of Kerala, 1971",
+     "kind": "rules",
+     "count": 257
+    },
+    {
+     "code": "KLHCACT",
+     "name": "Kerala High Court Act, 1958",
+     "kind": "act",
+     "count": 9
+    },
+    {
+     "code": "KERCRPAMEND",
+     "name": "Amendments to the Criminal Rules of Practice, Kerala",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "KERADR2008",
+     "name": "Civil Procedure (Alternative Dispute Resolution) Rules, 2008 (Kerala)",
+     "kind": "rules",
+     "count": 1
+    }
+   ],
+   "missing": [
+    "Civil Rules of Practice, Kerala, 1971",
+    "Criminal Rules of Practice, Kerala, 1982"
+   ]
+  },
+  {
+   "name": "Madhya Pradesh High Court",
+   "kind": "High Court",
+   "states": "Madhya Pradesh",
+   "website": "https://mphc.gov.in/rules",
+   "main_rules": [
+    "High Court of Madhya Pradesh Rules, 2008",
+    "MP Civil Court Rules, 1961",
+    "Rules and Orders (Criminal)"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "MPHC2008",
+     "name": "High Court of Madhya Pradesh Rules, 2008 (as amended up to 02.10.2026)",
+     "kind": "rules",
+     "count": 439
+    },
+    {
+     "code": "MPARB1997",
+     "name": "Madhya Pradesh Arbitration Rules, 1997 (as amended up to 22.09.2023)",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "MPCIVILAMEND",
+     "name": "Amendments in the MP Civil Courts Rules, 1961 and the MP Rules and Orders (Criminal)",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "MPVCDIST2020",
+     "name": "District Courts of Madhya Pradesh Video Conference and Audio-Visual Electronic Linkage Rules, 2020",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "MPFAMILY2002",
+     "name": "Madhya Pradesh Family Court Rules, 2002",
+     "kind": "rules",
+     "count": 20
+    },
+    {
+     "code": "MPMEDIATION2016",
+     "name": "Madhya Pradesh Mediation Rules, 2016",
+     "kind": "rules",
+     "count": 2
+    }
+   ],
+   "missing": [
+    "MP Civil Court Rules, 1961",
+    "Rules and Orders (Criminal)"
+   ]
+  },
+  {
+   "name": "Madras High Court",
+   "kind": "High Court",
+   "states": "Tamil Nadu, Puducherry",
+   "website": "https://hcmadras.tn.gov.in/",
+   "main_rules": [
+    "Appellate Side Rules, 1965",
+    "Original Side Rules",
+    "Writ Rules, 2021",
+    "Civil Rules of Practice",
+    "Criminal Rules of Practice, 2019"
+   ],
+   "note": "The Writ Rules, 2021 come from the Tamil Nadu Government Gazette. The court website refuses automated downloads (HTTP 429), so the Appellate Side, Original Side and Criminal Rules of Practice are still missing: get them from a law library or a lawyer and save the PDFs in the inbox folder.",
+   "links": [
+    {
+     "label": "TN Gazette (judicial notifications)",
+     "url": "https://www.stationeryprinting.tn.gov.in/"
+    }
+   ],
+   "books": [
+    {
+     "code": "MADCONTEMPT",
+     "name": "Contempt of Court Rules, High Court, Madras, 1975",
+     "kind": "rules",
+     "count": 11
+    },
+    {
+     "code": "MADEFILING2020",
+     "name": "Madras High Court E-Filing Rules, 2020",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "MADVC2026",
+     "name": "Madras High Court Video Conferencing Rules, 2026",
+     "kind": "rules",
+     "count": 31
+    },
+    {
+     "code": "MADWRIT2021",
+     "name": "Madras High Court Writ Rules, 2021",
+     "kind": "rules",
+     "count": 32
+    },
+    {
+     "code": "TNCIVILRP",
+     "name": "Civil Rules of Practice and Circular Orders (Tamil Nadu)",
+     "kind": "rules",
+     "count": 123
+    }
+   ],
+   "missing": [
+    "Appellate Side Rules, 1965",
+    "Original Side Rules",
+    "Criminal Rules of Practice, 2019"
+   ]
+  },
+  {
+   "name": "Manipur High Court",
+   "kind": "High Court",
+   "states": "Manipur",
+   "website": "https://hcmimphal.nic.in/courtrules.html",
+   "main_rules": [
+    "High Court of Manipur Rules, 2019",
+    "Criminal Rules and Orders"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "MANHC2019",
+     "name": "High Court of Manipur Rules, 2019",
+     "kind": "rules",
+     "count": 399
+    },
+    {
+     "code": "MANCRIM2021",
+     "name": "High Court of Manipur Criminal Rules and Orders, 2021",
+     "kind": "rules",
+     "count": 21
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Meghalaya High Court",
+   "kind": "High Court",
+   "states": "Meghalaya",
+   "website": "https://meghalayahighcourt.nic.in/rules-and-regulation",
+   "main_rules": [
+    "Rules of the High Court of Meghalaya, 2013"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "MEGPIL",
+     "name": "High Court of Meghalaya (Public Interest Litigation) Rules, 2013",
+     "kind": "rules",
+     "count": 9
+    },
+    {
+     "code": "MEGHC2013A",
+     "name": "Rules of the High Court of Meghalaya, 2013 - Part I",
+     "kind": "rules",
+     "count": 104
+    },
+    {
+     "code": "MEGHC2013B",
+     "name": "Rules of the High Court of Meghalaya, 2013 - Part II",
+     "kind": "rules",
+     "count": 97
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Orissa High Court",
+   "kind": "High Court",
+   "states": "Odisha",
+   "website": "https://www.orissahighcourt.nic.in/",
+   "main_rules": [
+    "Orissa High Court Rules, 1948",
+    "General Rules and Circular Orders"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "ORIHC1948",
+     "name": "Rules of the High Court of Orissa, 1948 - Volume I",
+     "kind": "rules",
+     "count": 168
+    },
+    {
+     "code": "ORIGRCO",
+     "name": "General Rules and Circular Orders of the High Court of Orissa",
+     "kind": "rules",
+     "count": 146
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Patna High Court",
+   "kind": "High Court",
+   "states": "Bihar",
+   "website": "https://www.patnahighcourt.gov.in/Rules.aspx",
+   "main_rules": [
+    "Patna High Court Rules, 1916",
+    "Civil Court Rules",
+    "Criminal Court Rules"
+   ],
+   "note": "The 1916 Rules are online only as addenda; Volume I of the Civil and Criminal Court Rules was not found.",
+   "links": [],
+   "books": [
+    {
+     "code": "PATCONTEMPT",
+     "name": "Contempt of Courts (Patna High Court) Rules",
+     "kind": "rules",
+     "count": 15
+    },
+    {
+     "code": "PATHCGAZ",
+     "name": "Patna High Court Rules - Gazette notification (incl. Chapter III-A, Filing Procedure)",
+     "kind": "rules",
+     "count": 21
+    },
+    {
+     "code": "PATCIVIL2",
+     "name": "Civil Court Rules of the High Court of Judicature at Patna - Volume II",
+     "kind": "rules",
+     "count": 400
+    },
+    {
+     "code": "PATCRIM2",
+     "name": "Criminal Court Rules of the High Court of Judicature at Patna - Volume II",
+     "kind": "rules",
+     "count": 32
+    },
+    {
+     "code": "PATFAMILY",
+     "name": "Family Courts (Patna High Court) Rules, 2000",
+     "kind": "rules",
+     "count": 6
+    }
+   ],
+   "missing": [
+    "Patna High Court Rules, 1916"
+   ]
+  },
+  {
+   "name": "Punjab and Haryana High Court",
+   "kind": "High Court",
+   "states": "Punjab, Haryana, Chandigarh",
+   "website": "https://new.phhc.gov.in/",
+   "main_rules": [
+    "High Court Rules and Orders (Vol. I-V)"
+   ],
+   "note": "The court moved to a new website (new.phhc.gov.in) that does not list the Rules and Orders; the old file server refuses downloads (HTTP 403), and the district-court sites only have short extracts. Get the volumes from a law library or a lawyer and save the PDFs in the inbox folder.",
+   "links": [
+    {
+     "label": "New court website",
+     "url": "https://new.phhc.gov.in/"
+    }
+   ],
+   "books": [
+    {
+     "code": "PHRO_V5C6D",
+     "name": "High Court Rules and Orders (Punjab and Haryana) - Vol. 5, Ch. 6, Part D: Pleaders and Bar Associations",
+     "kind": "rules",
+     "count": 60
+    },
+    {
+     "code": "PHRO_V1C1",
+     "name": "Rules and Orders of the Punjab High Court - Vol. I, Ch. 1, Part A (extract)",
+     "kind": "rules",
+     "count": 6
+    }
+   ],
+   "missing": [
+    "High Court Rules and Orders (Vol. I-V)"
+   ]
+  },
+  {
+   "name": "Rajasthan High Court",
+   "kind": "High Court",
+   "states": "Rajasthan",
+   "website": "https://hcraj.nic.in/hcraj/rules.php",
+   "main_rules": [
+    "Rajasthan High Court Rules, 1952",
+    "General Rules (Civil and Criminal), 2018"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "RAJHC1952",
+     "name": "Rules of the High Court of Judicature for Rajasthan, 1952",
+     "kind": "rules",
+     "count": 622
+    },
+    {
+     "code": "RAJGR1",
+     "name": "Rajasthan General Rules (Civil and Criminal), 2018 - Volume 1",
+     "kind": "rules",
+     "count": 147
+    },
+    {
+     "code": "RAJGR2",
+     "name": "Rajasthan General Rules (Civil and Criminal), 2018 - Volume 2",
+     "kind": "rules",
+     "count": 191
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Sikkim High Court",
+   "kind": "High Court",
+   "states": "Sikkim",
+   "website": "https://hcs.gov.in/hcs/procedure-rule",
+   "main_rules": [
+    "Sikkim High Court (Practice and Procedure) Rules, 2011"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "SIKHC2011",
+     "name": "Sikkim High Court (Practice and Procedure) Rules, 2011",
+     "kind": "rules",
+     "count": 64
+    },
+    {
+     "code": "SIKFAMILY2005",
+     "name": "Sikkim Family Courts Rules, 2005",
+     "kind": "rules",
+     "count": 25
+    },
+    {
+     "code": "SIKCFM2006",
+     "name": "Sikkim Subordinate Courts Case Flow Management Rules, 2006",
+     "kind": "rules",
+     "count": 6
+    },
+    {
+     "code": "SIKADR2006",
+     "name": "Sikkim Subordinate Courts Civil Procedure Alternative Dispute Resolution Rules, 2006",
+     "kind": "rules",
+     "count": 5
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Telangana High Court",
+   "kind": "High Court",
+   "states": "Telangana",
+   "website": "https://tshc.gov.in/",
+   "main_rules": [
+    "Writ Proceedings Rules",
+    "Appellate Side Rules",
+    "Civil Rules of Practice",
+    "Criminal Rules of Practice"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "TSHCMANUAL",
+     "name": "High Court for the State of Telangana Manual",
+     "kind": "handbook",
+     "count": 186
+    },
+    {
+     "code": "TSCFMHC2024",
+     "name": "Telangana High Court Case Flow Management Rules, 2024",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "TSEFILING",
+     "name": "e-Filing Rules (High Court for the State of Telangana)",
+     "kind": "rules",
+     "count": 19
+    },
+    {
+     "code": "TSCFMSUB2012",
+     "name": "Case Flow Management in Subordinate Courts Rules, 2012 (Telangana)",
+     "kind": "rules",
+     "count": 7
+    },
+    {
+     "code": "TSCIVILRP",
+     "name": "Civil Rules of Practice and Circular Orders, 1980 (Telangana)",
+     "kind": "rules",
+     "count": 114
+    },
+    {
+     "code": "APCRIMRP",
+     "name": "Criminal Rules of Practice and Circular Orders, 1990 (Andhra Pradesh and Telangana)",
+     "kind": "rules",
+     "count": 133
+    },
+    {
+     "code": "TSCRIMRP",
+     "name": "Criminal Rules of Practice and Circular Orders, 1990 (Telangana)",
+     "kind": "rules",
+     "count": 137
+    }
+   ],
+   "missing": [
+    "Writ Proceedings Rules"
+   ]
+  },
+  {
+   "name": "Tripura High Court",
+   "kind": "High Court",
+   "states": "Tripura",
+   "website": "https://thc.nic.in/",
+   "main_rules": [
+    "High Court of Tripura Rules"
+   ],
+   "note": "",
+   "links": [],
+   "books": [
+    {
+     "code": "TRIPVC",
+     "name": "High Court of Tripura Video Conferencing Rules",
+     "kind": "rules",
+     "count": 8
+    },
+    {
+     "code": "TRIPMEDIATION2016",
+     "name": "Mediation (High Court of Tripura) Rules, 2016",
+     "kind": "rules",
+     "count": 13
+    },
+    {
+     "code": "TRIPEFILING2021",
+     "name": "Online Electronic Filing (e-Filing) of cases in the High Court and Subordinate Courts of Tripura Rules, 2021",
+     "kind": "rules",
+     "count": 21
+    },
+    {
+     "code": "TRIPCIVILRO2022",
+     "name": "Civil Courts Rules and Orders of the Gauhati High Court (Tripura Amendment), 2022",
+     "kind": "rules",
+     "count": 8
+    },
+    {
+     "code": "TRIPFAMILY2002",
+     "name": "Tripura Family Court Rules, 2002",
+     "kind": "rules",
+     "count": 6
+    },
+    {
+     "code": "TRIPVICTIM2018",
+     "name": "Tripura Victim and Women Victim Compensation Scheme, 2018",
+     "kind": "rules",
+     "count": 17
+    }
+   ],
+   "missing": [
+    "High Court of Tripura Rules"
+   ]
+  },
+  {
+   "name": "Uttarakhand High Court",
+   "kind": "High Court",
+   "states": "Uttarakhand",
+   "website": "https://highcourtofuttarakhand.gov.in/",
+   "main_rules": [
+    "Uttarakhand High Court Rules",
+    "Rules of the Court, 1952 (as applicable)"
+   ],
+   "note": "The published links returned 'not found'.",
+   "links": [],
+   "books": [
+    {
+     "code": "UKNYAYSHRUTI",
+     "name": "High Court of Uttarakhand Electronic Communication and Audio-Video Electronic Means (Nyay Shruti) Rules, 2025",
+     "kind": "rules",
+     "count": 12
+    },
+    {
+     "code": "UKGRCIVIL",
+     "name": "General Rules (Civil) - High Court of Uttarakhand",
+     "kind": "rules",
+     "count": 657
+    }
+   ],
+   "missing": [
+    "Uttarakhand High Court Rules",
+    "Rules of the Court, 1952 (as applicable)"
+   ]
+  },
+  {
+   "name": "District courts",
+   "kind": "District courts",
+   "states": "All States",
+   "website": "https://districts.ecourts.gov.in/",
+   "main_rules": [],
+   "note": "District courts follow the CPC, BNSS, the State's civil-courts and court-fees Acts and the Civil / Criminal Rules of Practice made by their High Court.",
+   "books": [
+    {
+     "code": "KLRENT",
+     "name": "Kerala Buildings (Lease and Rent Control) Act, 1965",
+     "kind": "act",
+     "count": 37
+    },
+    {
+     "code": "KEREFILING2021",
+     "name": "Electronic Filing Rules for Courts (Kerala), 2021",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "KERVC2021",
+     "name": "Electronic Video Linkage Rules for Courts (Kerala), 2021",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "TRIPVC",
+     "name": "High Court of Tripura Video Conferencing Rules",
+     "kind": "rules",
+     "count": 8
+    },
+    {
+     "code": "UKNYAYSHRUTI",
+     "name": "High Court of Uttarakhand Electronic Communication and Audio-Video Electronic Means (Nyay Shruti) Rules, 2025",
+     "kind": "rules",
+     "count": 12
+    },
+    {
+     "code": "MPARB1997",
+     "name": "Madhya Pradesh Arbitration Rules, 1997 (as amended up to 22.09.2023)",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "MADEFILING2020",
+     "name": "Madras High Court E-Filing Rules, 2020",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "MADVC2026",
+     "name": "Madras High Court Video Conferencing Rules, 2026",
+     "kind": "rules",
+     "count": 31
+    },
+    {
+     "code": "TRIPMEDIATION2016",
+     "name": "Mediation (High Court of Tripura) Rules, 2016",
+     "kind": "rules",
+     "count": 13
+    },
+    {
+     "code": "TRIPEFILING2021",
+     "name": "Online Electronic Filing (e-Filing) of cases in the High Court and Subordinate Courts of Tripura Rules, 2021",
+     "kind": "rules",
+     "count": 21
+    },
+    {
+     "code": "GHCECOURTS",
+     "name": "e-Courts Service Rules (Gauhati High Court)",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "TSEFILING",
+     "name": "e-Filing Rules (High Court for the State of Telangana)",
+     "kind": "rules",
+     "count": 19
+    },
+    {
+     "code": "BOMEFILING2022",
+     "name": "e-Filing Rules of the High Court of Bombay, 2022",
+     "kind": "rules",
+     "count": 57
+    },
+    {
+     "code": "MPCIVILAMEND",
+     "name": "Amendments in the MP Civil Courts Rules, 1961 and the MP Rules and Orders (Criminal)",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "CALCIVILRO2015",
+     "name": "Amendments of the Civil Rules and Orders of the High Court, Calcutta (No. 131 G, 15.01.2015)",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "CALCRIMRO2015",
+     "name": "Amendments of the Criminal Rules and Orders of the High Court, Calcutta (No. 131 G, 15.01.2015)",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "KERCRPAMEND",
+     "name": "Amendments to the Criminal Rules of Practice, Kerala",
+     "kind": "rules",
+     "count": 4
+    },
+    {
+     "code": "APCIVILCOURTS",
+     "name": "Andhra Pradesh Civil Courts Act, 1972",
+     "kind": "act",
+     "count": 36
+    },
+    {
+     "code": "APCOURTFEES",
+     "name": "Andhra Pradesh Court-fees and Suits Valuation Act, 1956",
+     "kind": "act",
+     "count": 79
+    },
+    {
+     "code": "BLRCITYCIVIL",
+     "name": "Bangalore City Civil Court Act, 1979",
+     "kind": "act",
+     "count": 20
+    },
+    {
+     "code": "BAACCA",
+     "name": "Bengal, Agra and Assam Civil Courts Act, 1887",
+     "kind": "act",
+     "count": 39
+    },
+    {
+     "code": "TSCFMSUB2012",
+     "name": "Case Flow Management in Subordinate Courts Rules, 2012 (Telangana)",
+     "kind": "rules",
+     "count": 7
+    },
+    {
+     "code": "CGCIVILCOURTS",
+     "name": "Chhattisgarh Civil Courts Act, 1958",
+     "kind": "act",
+     "count": 22
+    },
+    {
+     "code": "CALCITYCIVIL",
+     "name": "City Civil Court Act, 1953 (West Bengal)",
+     "kind": "act",
+     "count": 13
+    },
+    {
+     "code": "JHARCIVIL",
+     "name": "Civil Court Rules of the High Court of Jharkhand",
+     "kind": "rules",
+     "count": 144
+    },
+    {
+     "code": "PATCIVIL2",
+     "name": "Civil Court Rules of the High Court of Judicature at Patna - Volume II",
+     "kind": "rules",
+     "count": 400
+    },
+    {
+     "code": "TRIPCIVILRO2022",
+     "name": "Civil Courts Rules and Orders of the Gauhati High Court (Tripura Amendment), 2022",
+     "kind": "rules",
+     "count": 8
+    },
+    {
+     "code": "KARADR2005",
+     "name": "Civil Procedure (Alternative Dispute Resolution) (Karnataka) Rules, 2005",
+     "kind": "rules",
+     "count": 7
+    },
+    {
+     "code": "KERADR2008",
+     "name": "Civil Procedure (Alternative Dispute Resolution) Rules, 2008 (Kerala)",
+     "kind": "rules",
+     "count": 1
+    },
+    {
+     "code": "TNCIVILRP",
+     "name": "Civil Rules of Practice and Circular Orders (Tamil Nadu)",
+     "kind": "rules",
+     "count": 123
+    },
+    {
+     "code": "TSCIVILRP",
+     "name": "Civil Rules of Practice and Circular Orders, 1980 (Telangana)",
+     "kind": "rules",
+     "count": 114
+    },
+    {
+     "code": "KARCRPC1984",
+     "name": "Code of Criminal Procedure (Karnataka) Rules, 1984",
+     "kind": "rules",
+     "count": 2
+    },
+    {
+     "code": "COURTFEES",
+     "name": "Court-fees Act, 1870",
+     "kind": "act",
+     "count": 50
+    },
+    {
+     "code": "PATCRIM2",
+     "name": "Criminal Court Rules of the High Court of Judicature at Patna - Volume II",
+     "kind": "rules",
+     "count": 32
+    },
+    {
+     "code": "APCRIMRP",
+     "name": "Criminal Rules of Practice and Circular Orders, 1990 (Andhra Pradesh and Telangana)",
+     "kind": "rules",
+     "count": 133
+    },
+    {
+     "code": "TSCRIMRP",
+     "name": "Criminal Rules of Practice and Circular Orders, 1990 (Telangana)",
+     "kind": "rules",
+     "count": 137
+    },
+    {
+     "code": "MPVCDIST2020",
+     "name": "District Courts of Madhya Pradesh Video Conference and Audio-Visual Electronic Linkage Rules, 2020",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "UKGRCIVIL",
+     "name": "General Rules (Civil) - High Court of Uttarakhand",
+     "kind": "rules",
+     "count": 657
+    },
+    {
+     "code": "ORIGRCO",
+     "name": "General Rules and Circular Orders of the High Court of Orissa",
+     "kind": "rules",
+     "count": 146
+    },
+    {
+     "code": "GOACIVILCOURTS",
+     "name": "Goa Civil Courts Act, 1965",
+     "kind": "act",
+     "count": 33
+    },
+    {
+     "code": "GUJCFM",
+     "name": "Gujarat High Court Case Flow Management (Subordinate Courts) Rules, 2016",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "DHCRO",
+     "name": "High Court Rules and Orders (Delhi) - Volumes I to V",
+     "kind": "rules",
+     "count": 1757
+    },
+    {
+     "code": "PHRO_V5C6D",
+     "name": "High Court Rules and Orders (Punjab and Haryana) - Vol. 5, Ch. 6, Part D: Pleaders and Bar Associations",
+     "kind": "rules",
+     "count": 60
+    },
+    {
+     "code": "HPCFMSUB",
+     "name": "High Court of Himachal Pradesh Case Flow Management (Subordinate Courts) Rules, 2005",
+     "kind": "rules",
+     "count": 18
+    },
+    {
+     "code": "MANCRIM2021",
+     "name": "High Court of Manipur Criminal Rules and Orders, 2021",
+     "kind": "rules",
+     "count": 21
+    },
+    {
+     "code": "HPCOURTFEES",
+     "name": "Himachal Pradesh Court Fees Act, 1968",
+     "kind": "act",
+     "count": 49
+    },
+    {
+     "code": "HPCOURTS",
+     "name": "Himachal Pradesh Courts Act, 1976",
+     "kind": "act",
+     "count": 31
+    },
+    {
+     "code": "JKCIVILCOURTS",
+     "name": "Jammu and Kashmir Civil Courts Act, 1977",
+     "kind": "act",
+     "count": 21
+    },
+    {
+     "code": "KARCFM2005",
+     "name": "Karnataka (Case Flow Management in Subordinate Courts) Rules, 2005",
+     "kind": "rules",
+     "count": 10
+    },
+    {
+     "code": "KACIVILCOURTS",
+     "name": "Karnataka Civil Courts Act, 1964",
+     "kind": "act",
+     "count": 32
+    },
+    {
+     "code": "KARMEDIATION2005",
+     "name": "Karnataka Civil Procedure (Mediation) Rules, 2005",
+     "kind": "rules",
+     "count": 27
+    },
+    {
+     "code": "KACRPCIVIL",
+     "name": "Karnataka Civil Rules of Practice, 1967",
+     "kind": "rules",
+     "count": 276
+    },
+    {
+     "code": "KACOURTFEES",
+     "name": "Karnataka Court-fees and Suits Valuation Act, 1958",
+     "kind": "act",
+     "count": 80
+    },
+    {
+     "code": "KACRPCRIM",
+     "name": "Karnataka Criminal Rules of Practice, 1968",
+     "kind": "rules",
+     "count": 144
+    },
+    {
+     "code": "KLCIVILCOURTS",
+     "name": "Kerala Civil Courts Act, 1957",
+     "kind": "act",
+     "count": 25
+    },
+    {
+     "code": "KLCOURTFEES",
+     "name": "Kerala Court Fees and Suits Valuation Act, 1959",
+     "kind": "act",
+     "count": 93
+    },
+    {
+     "code": "KLSCC",
+     "name": "Kerala Small Cause Courts Act, 1957",
+     "kind": "act",
+     "count": 34
+    },
+    {
+     "code": "MPCIVILCOURTS",
+     "name": "Madhya Pradesh Civil Courts Act, 1958",
+     "kind": "act",
+     "count": 26
+    },
+    {
+     "code": "MPMEDIATION2016",
+     "name": "Madhya Pradesh Mediation Rules, 2016",
+     "kind": "rules",
+     "count": 2
+    },
+    {
+     "code": "MHCIVILCOURTS",
+     "name": "Maharashtra Civil Courts Act, 1869",
+     "kind": "act",
+     "count": 51
+    },
+    {
+     "code": "MHCOURTFEES",
+     "name": "Maharashtra Court-fees Act, 1959",
+     "kind": "act",
+     "count": 53
+    },
+    {
+     "code": "ODCIVILCOURTS",
+     "name": "Odisha Civil Courts Act, 1984",
+     "kind": "act",
+     "count": 22
+    },
+    {
+     "code": "PSCCA",
+     "name": "Presidency Small Cause Courts Act, 1882",
+     "kind": "act",
+     "count": 106
+    },
+    {
+     "code": "PRSCCA",
+     "name": "Provincial Small Cause Courts Act, 1887",
+     "kind": "act",
+     "count": 37
+    },
+    {
+     "code": "PBCOURTS",
+     "name": "Punjab Courts Act, 1918",
+     "kind": "act",
+     "count": 12
+    },
+    {
+     "code": "RAJGR1",
+     "name": "Rajasthan General Rules (Civil and Criminal), 2018 - Volume 1",
+     "kind": "rules",
+     "count": 147
+    },
+    {
+     "code": "RAJGR2",
+     "name": "Rajasthan General Rules (Civil and Criminal), 2018 - Volume 2",
+     "kind": "rules",
+     "count": 191
+    },
+    {
+     "code": "PHRO_V1C1",
+     "name": "Rules and Orders of the Punjab High Court - Vol. I, Ch. 1, Part A (extract)",
+     "kind": "rules",
+     "count": 6
+    },
+    {
+     "code": "SKCIVILCOURTS",
+     "name": "Sikkim Civil Courts Act, 1978",
+     "kind": "act",
+     "count": 13
+    },
+    {
+     "code": "SIKCFM2006",
+     "name": "Sikkim Subordinate Courts Case Flow Management Rules, 2006",
+     "kind": "rules",
+     "count": 6
+    },
+    {
+     "code": "SIKADR2006",
+     "name": "Sikkim Subordinate Courts Civil Procedure Alternative Dispute Resolution Rules, 2006",
+     "kind": "rules",
+     "count": 5
+    },
+    {
+     "code": "SUITSVALUATION",
+     "name": "Suits Valuation Act, 1887",
+     "kind": "act",
+     "count": 12
+    },
+    {
+     "code": "TSCIVILCOURTS",
+     "name": "Telangana Civil Courts Act, 1972",
+     "kind": "act",
+     "count": 29
+    },
+    {
+     "code": "TSCOURTFEES",
+     "name": "Telangana Court-fees and Suits Valuation Act, 1956",
+     "kind": "act",
+     "count": 81
+    },
+    {
+     "code": "TRIPVICTIM2018",
+     "name": "Tripura Victim and Women Victim Compensation Scheme, 2018",
+     "kind": "rules",
+     "count": 17
+    },
+    {
+     "code": "WBCOURTFEES",
+     "name": "West Bengal Court-fees Act, 1970",
+     "kind": "act",
+     "count": 21
+    }
+   ],
+   "missing": []
+  },
+  {
+   "name": "Gram Nyayalayas (mobile village courts)",
+   "kind": "Gram Nyayalayas",
+   "states": "Notified States",
+   "website": "https://doj.gov.in/gram-nyayalayas/",
+   "main_rules": [],
+   "note": "Village courts under the Gram Nyayalayas Act, 2008. Section 9: they hold mobile courts in villages.",
+   "books": [
+    {
+     "code": "GRAMNYAYALAYA",
+     "name": "Gram Nyayalayas Act, 2008",
+     "kind": "act",
+     "count": 42
+    },
+    {
+     "code": "JKGRAM2025",
+     "name": "High Court of Jammu & Kashmir and Ladakh Gram Nyayalayas Rules, 2025",
+     "kind": "rules",
+     "count": 25
+    },
+    {
+     "code": "UPGRAM2009",
+     "name": "Uttar Pradesh Gram Nyayalay Procedure and Practice Rules, 2009",
+     "kind": "rules",
+     "count": 37
+    }
+   ],
+   "missing": []
+  }
+ ],
+ "updated": "2026-11-10",
+ "results": {
+  "CPC": "ok: First Schedule - Orders and Rules, 715 provisions",
+  "LIMITATION": "ok: The Schedule - periods of limitation, 137 provisions",
+  "BNSS": "ok: First Schedule - classification of offences, 441 provisions",
+  "GENCLAUSES": "ok: 36 provisions (sections)",
+  "COURTFEES": "ok: 50 provisions (sections)",
+  "SUITSVALUATION": "ok: 12 provisions (sections)",
+  "GRAMNYAYALAYA": "ok: 42 provisions (sections)",
+  "BAACCA": "ok: 39 provisions (sections)",
+  "PSCCA": "ok: 106 provisions (sections)",
+  "PRSCCA": "ok: 37 provisions (sections)",
+  "OATHS": "ok: 10 provisions (sections)",
+  "NOTARIES": "ok: 16 provisions (sections)",
+  "SCAPPELLATE": "ok: 2 provisions (sections)",
+  "DELHIHC": "ok: 22 provisions (sections)",
+  "MEDIATION": "ok: 75 provisions (sections)",
+  "BANKERSBOOKS": "ok: 18 provisions (sections)",
+  "PUBLICPREMISES": "ok: 27 provisions (sections)",
+  "PRISONERSATT": "ok: 12 provisions (sections)",
+  "CPIA": "ok: 10 provisions (sections)",
+  "PROBATION": "ok: 19 provisions (sections)",
+  "ITPA": "ok: 32 provisions (sections)",
+  "EXPLOSIVES": "ok: 7 provisions (sections)",
+  "NIAGENCY": "ok: 27 provisions (sections)",
+  "LOKPAL": "ok: 64 provisions (sections)",
+  "FEOA": "ok: 27 provisions (sections)",
+  "OSA": "ok: 16 provisions (sections)",
+  "DSPE": "ok: 13 provisions (sections)",
+  "IRWA": "ok: 10 provisions (sections)",
+  "PUBLICEXAMS": "ok: 22 provisions (sections)",
+  "HMGA": "ok: 13 provisions (sections)",
+  "DMMA": "ok: 6 provisions (sections)",
+  "SHARIAT": "ok: 6 provisions (sections)",
+  "DIVORCE": "ok: 65 provisions (sections)",
+  "PARSI": "ok: 55 provisions (sections)",
+  "CHRISTIANMARRIAGE": "ok: 87 provisions (sections)",
+  "MAJORITY": "ok: 3 provisions (sections)",
+  "WAQF": "ok: 119 provisions (sections)",
+  "TRUSTS": "ok: 98 provisions (sections)",
+  "MTP": "ok: 9 provisions (sections)",
+  "PCPNDT": "ok: 39 provisions (sections)",
+  "ECA": "ok: 30 provisions (sections)",
+  "PASSPORTS": "ok: 29 provisions (sections)",
+  "CITIZENSHIP": "ok: 28 provisions (sections)",
+  "IMMIGRATION": "ok: 36 provisions (sections)",
+  "TRANSGENDER": "ok: 23 provisions (sections)",
+  "RAILWAYS": "ok: 234 provisions (sections)",
+  "ANIMALS": "ok: 44 provisions (sections)",
+  "BLACKMONEY": "ok: 88 provisions (sections)",
+  "SCR2013": "ok: 493 provisions (orders)",
+  "SCRAMEND": "ok: 10 provisions (parts)",
+  "SCHANDBOOK": "ok: 258 provisions (pages)",
+  "SCCONTEMPT": "ok: 12 provisions (rules)",
+  "DHCOS2018": "ok: 298 provisions (chapters)",
+  "DHCRO": "ok: 1757 provisions (parts)",
+  "ALLHC1952": "ok: 445 provisions (chapters)",
+  "GUJHC1993": "ok: 397 provisions (rules)",
+  "GUJCIVIL": "FAILED: not downloaded yet (run without --offline)",
+  "GUJCRIM": "FAILED: not downloaded yet (run without --offline)",
+  "GUJPIL": "ok: 10 provisions (pages)",
+  "GUJCFM": "ok: 18 provisions (rules)",
+  "RAJHC1952": "ok: 622 provisions (rules)",
+  "RAJGR1": "ok: 147 provisions (chapters)",
+  "RAJGR2": "ok: 191 provisions (pages)",
+  "ORIHC1948": "ok: 168 provisions (chapters)",
+  "ORIGRCO": "ok: 146 provisions (chapters)",
+  "JHARHC2001": "ok: 446 provisions (rules)",
+  "JHARCIVIL": "ok: 144 provisions (pages)",
+  "APAPPELLATE": "ok: 65 provisions (pages)",
+  "JKHC1999": "ok: 254 provisions (rules)",
+  "JKGRAM2025": "ok: 25 provisions (rules)",
+  "MANHC2019": "ok: 399 provisions (pages)",
+  "MANCRIM2021": "ok: 21 provisions (rules)",
+  "MEGHC2013A": "ok: 104 provisions (rules)",
+  "MEGHC2013B": "ok: 97 provisions (chapters)",
+  "MEGPIL": "ok: 9 provisions (rules)",
+  "CGHC2007": "ok: 152 provisions (pages)",
+  "HPCFMHC": "ok: 10 provisions (pages)",
+  "HPCFMSUB": "ok: 18 provisions (pages)",
+  "KARPIL2018": "ok: 11 provisions (rules)",
+  "BOMVC2022": "ok: 14 provisions (pages)",
+  "MADCONTEMPT": "ok: 11 provisions (rules)",
+  "PATCONTEMPT": "ok: 15 provisions (rules)",
+  "BOMCONTEMPT": "ok: 18 provisions (rules)",
+  "UKNYAYSHRUTI": "ok: 12 provisions (rules)",
+  "UPFAMILY": "ok: 39 provisions (rules)",
+  "BOMFAMILY": "ok: 13 provisions (pages)",
+  "JHARFAMILY": "ok: 19 provisions (rules)",
+  "CGFAMILY": "ok: 10 provisions (rules)",
+  "PATFAMILY": "ok: 6 provisions (pages)",
+  "KERHC1971": "ok: 257 provisions (rules)",
+  "KERHCAMEND": "ok: 19 provisions (parts)",
+  "KERCOMPENDIUM": "ok: 142 provisions (pages)",
+  "KERCRPAMEND": "ok: 4 provisions (pages)",
+  "KEREFILING2021": "ok: 17 provisions (rules)",
+  "KERVC2021": "ok: 17 provisions (rules)",
+  "KERADR2008": "ok: 1 provisions (rules)",
+  "KERSENIOR2018": "ok: 22 provisions (rules)",
+  "KLHCACT": "ok: 9 provisions (sections)",
+  "KLCIVILCOURTS": "ok: 25 provisions (sections)",
+  "KLSCC": "ok: 34 provisions (sections)",
+  "KLCOURTFEES": "ok: 93 provisions (sections)",
+  "KLRENT": "ok: 37 provisions (sections)",
+  "MPHC2008": "ok: 439 provisions (rules)",
+  "MPFAMILY2002": "ok: 20 provisions (rules)",
+  "MPARB1997": "ok: 18 provisions (pages)",
+  "MPMEDIATION2016": "ok: 2 provisions (pages)",
+  "SIKHC2011": "ok: 64 provisions (chapters)",
+  "PATCIVIL2": "ok: 400 provisions (pages)",
+  "PATCRIM2": "ok: 32 provisions (chapters)",
+  "PATHCGAZ": "ok: 21 provisions (pages)",
+  "GHCRULES": "ok: 550 provisions (parts)",
+  "TSCIVILRP": "ok: 114 provisions (pages)",
+  "TSCRIMRP": "ok: 137 provisions (rules)",
+  "TSHCMANUAL": "ok: 186 provisions (pages)",
+  "TSCFMHC2024": "ok: 18 provisions (rules)",
+  "TSCFMSUB2012": "ok: 7 provisions (pages)",
+  "TSEFILING": "ok: 19 provisions (rules)",
+  "KARHC1959": "ok: 238 provisions (rules)",
+  "KARWRIT1977": "ok: 39 provisions (rules)",
+  "KARCONTEMPT1981": "ok: 21 provisions (rules)",
+  "KARADR2005": "ok: 7 provisions (pages)",
+  "KARMEDIATION2005": "ok: 27 provisions (rules)",
+  "KARFAMILY1987": "ok: 8 provisions (rules)",
+  "KARCRPC1984": "ok: 2 provisions (pages)",
+  "KARPARTY2018": "ok: 6 provisions (pages)",
+  "KARCFM2005": "ok: 10 provisions (rules)",
+  "UKGRCIVIL": "ok: 657 provisions (rules)",
+  "KACRPCIVIL": "ok: 276 provisions (rules)",
+  "KACRPCRIM": "ok: 144 provisions (rules)",
+  "APCRIMRP": "ok: 133 provisions (pages)",
+  "TNCIVILRP": "ok: 123 provisions (rules)",
+  "MADVC2026": "ok: 31 provisions (pages)",
+  "MADWRIT2021": "ok: 32 provisions (rules)",
+  "MADEFILING2020": "ok: 18 provisions (rules)",
+  "BOMEFILING2022": "ok: 57 provisions (pages)",
+  "CALCIVILRO2015": "ok: 4 provisions (pages)",
+  "CALCRIMRO2015": "ok: 4 provisions (pages)",
+  "MPCIVILAMEND": "ok: 4 provisions (pages)",
+  "MPVCDIST2020": "ok: 17 provisions (rules)",
+  "GHCECOURTS": "ok: 17 provisions (pages)",
+  "TRIPCIVILRO2022": "ok: 8 provisions (pages)",
+  "TRIPFAMILY2002": "ok: 6 provisions (pages)",
+  "TRIPMEDIATION2016": "ok: 13 provisions (pages)",
+  "TRIPCOMMISSIONERS2017": "FAILED: no text could be read",
+  "TRIPEFILING2021": "ok: 21 provisions (rules)",
+  "TRIPVICTIM2018": "ok: 17 provisions (rules)",
+  "TRIPVC": "ok: 8 provisions (rules)",
+  "SIKCFM2006": "ok: 6 provisions (rules)",
+  "SIKFAMILY2005": "ok: 25 provisions (rules)",
+  "SIKADR2006": "ok: 5 provisions (pages)",
+  "PHRO_V5C6D": "ok: 60 provisions (pages)",
+  "PHRO_V1C1": "ok: 6 provisions (pages)",
+  "UPGRAM2009": "ok: 37 provisions (rules)",
+  "APCIVILCOURTS": "ok: 36 provisions (sections)",
+  "TSCIVILCOURTS": "ok: 29 provisions (sections)",
+  "KACIVILCOURTS": "ok: 32 provisions (sections)",
+  "MPCIVILCOURTS": "ok: 26 provisions (sections)",
+  "CGCIVILCOURTS": "ok: 22 provisions (sections)",
+  "ODCIVILCOURTS": "ok: 22 provisions (sections)",
+  "HPCOURTS": "ok: 31 provisions (sections)",
+  "SKCIVILCOURTS": "ok: 13 provisions (sections)",
+  "JKCIVILCOURTS": "ok: 21 provisions (sections)",
+  "PBCOURTS": "ok: 12 provisions (sections)",
+  "MHCIVILCOURTS": "ok: 51 provisions (sections)",
+  "GOACIVILCOURTS": "ok: 33 provisions (sections)",
+  "BLRCITYCIVIL": "ok: 20 provisions (sections)",
+  "CALCITYCIVIL": "ok: 13 provisions (sections)",
+  "MHCOURTFEES": "ok: 53 provisions (sections)",
+  "KACOURTFEES": "ok: 80 provisions (sections)",
+  "APCOURTFEES": "ok: 79 provisions (sections)",
+  "TSCOURTFEES": "ok: 81 provisions (sections)",
+  "WBCOURTFEES": "ok: 21 provisions (sections)",
+  "HPCOURTFEES": "ok: 49 provisions (sections)"
+ }
+}

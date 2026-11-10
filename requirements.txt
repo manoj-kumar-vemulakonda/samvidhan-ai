@@ -1,0 +1,17 @@
+# Python packages this app needs. setup.bat installs them for you.
+# Versions are pinned to the ones the app was built and tested with.
+
+fastapi==0.162.0        # the web server framework
+uvicorn==0.54.0         # runs the FastAPI app
+anthropic==2.4.0        # official Claude SDK
+chromadb==1.5.9         # vector database ("meaning" search)
+rank-bm25==0.2.2        # keyword search
+python-dotenv==1.2.4    # reads settings from the .env file
+pymupdf==2.1            # reads PDFs (the official Constitution, your case files) and splits them
+python-multipart==0.0.33  # lets the web page upload files
+python-docx==1.2.0      # reads Word files and writes Word drafts
+rapidocr-onnxruntime==1.4.4  # OCR: reads scanned pages and photos on your PC (free)
+openpyxl==3.1.5         # Excel exports (review tables, data-room index)
+pytest==9.2.0           # runs the tests
+httpx==0.28.1           # used by the tests to call the web routes
+truststore==0.10.4

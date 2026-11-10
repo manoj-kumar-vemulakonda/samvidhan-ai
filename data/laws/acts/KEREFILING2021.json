@@ -1,0 +1,213 @@
+{
+ "code": "KEREFILING2021",
+ "cite": "Kerala e-Filing Rules",
+ "name": "Electronic Filing Rules for Courts (Kerala), 2021",
+ "short": "Kerala e-Filing Rules",
+ "year": 2021,
+ "category": "Court rules - High Courts",
+ "status": "in_force",
+ "replaced_by": null,
+ "replaces": null,
+ "note": "",
+ "aliases": [
+  "electronic filing rules for courts (kerala), 2021",
+  "kerala e-filing rules"
+ ],
+ "source": "High Court of Kerala (highcourt.kerala.gov.in)",
+ "kind": "rules",
+ "court": "Kerala High Court; District courts",
+ "jurisdiction": "Kerala",
+ "pdf": "KEREFILING2021.pdf",
+ "url": "https://highcourt.kerala.gov.in/",
+ "as_on": "",
+ "parsed_as": "rules",
+ "sections": [
+  {
+   "number": "R1",
+   "ref": "r. 1",
+   "kind": "rule",
+   "title": "Short Title, Commencement and Applicability::",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Short Title, Commencement and Applicability::\n(1) These Rules shall be called the Electronic Filing Rules for Courts\n(Kerala), 2021.\n(2) They shall come into force on the date notified by the High Court.\n(3) These Rules shall apply to the High Court and Subordinate Courts over which the High Court exercises supervisory jurisdiction.\n(4) These Rules shall also apply to Tribunals which shall be notified by the High Court from time to time.\n(5) These Rules shall apply to online Electronic Filing System, Designated Counters and facilities provided for Electronic Filing through Electronic Service Centres.\n(6) These Rules shall apply to such category of cases as are notified by the High Court in its website, or in such other manner, from time to time.",
+   "status": "in_force",
+   "page": 3
+  },
+  {
+   "number": "R2",
+   "ref": "r. 2",
+   "kind": "rule",
+   "title": "Definitions:",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Definitions: In the construction of these rules the following terms (unless the context Or subject-matter otherwise requires) shall have the respective meanings hereinafter assigned to them:\n(a) “Advocate\" means an advocate entered in any roll under the provisions of the Advocates Act, 1961 (Act 25 of 1961) and shall also include Government Pleaders/Advocates and officers of the prosecuting agencies.\n(b) “Action\" includes all proceedings instituted in the Courts such as suits, criminal complaints, appeals, revision petitions, writ petitions, writ appeals, contempt petitions, execution petitions, arbitration proceedings, probate cases, caveats, bail applications and interlocutory applications.\n(c)“Administrator”means the Registrar (Recruitment & Computerisation) or an officer authorized by the Chief Justice in respect of the High Court and an officer authorised by the District Judge for the Subordinate Courts and an officer authorised by the Statutory functionaries or authorities for administering and dealing with matters connected with or relating to electronic filing.\n(d) \"Chief Justice\" means the Chief Justice of the High Court of Kerala.\n(e) “Conventional Filing” means the physical non-electronic presentation of any pleadings or documents to the Court.\n(f)“Court”’ means collectively the High Court, Subordinate Courts and Tribunals.\n(g) “Designated Counters” means those counters which find mention in the Electronic Filing Web Portal and those which may be provided in the website of the High Court or Subordinate Courts or Tribunals from time to time.\n(h) “Digital Signature\" means Digital Signature as defined in Section 2(1)(p) of the Information Technology Act, 2000 (Act 21 of 2000)\n(i) “District Judge\" means the Principal District and Sessions Judge of the District\n(ji) \"Electronic Filer (E-Filer)\" means an Advocate or a Party-in-Person filing the pleadings or documents electronically through the Electronic Filing System and who has registered under Rule 4 of these Rules.\n(k) “Electronic Filing (E-Filing)\" means electronic filing in the prescribed manner through the Internet (at the Electronic Filing Web Portal of the Court) and through the Internet or Intranet at Designated Counters, unless the context otherwise requires.\n(l) “Electronic Filing Web Portal (E-Filing Web Portal)\" means the website of the Court used for filing pleadings and documents online.\n(m) “Electronic Filing System (EFS)\" means the system of software, database, network, hardware and service providers approved by the High Court to facilitate Electronic Filing Web Portal.\n(n) “\"Electronic Payment [e-payment]\" means all payments into court and out of court through electronic means.\n(o)“Electronic Signature\" means Electronic Signature as defined in Section 2 (1) (ta) of the Information Technology Act, 2000 (Act 21 of 2000).\n(p) “Evidence\" means and includes evidence as defined in Section 3 of the Indian Evidence Act, 1872 (Act 1 of 1872)\n(q) “High Court\" means High Court of Kerala.\n(r) “Objections\" means deficiencies and errors pointed out by the Registry in relation to the pleadings or documents filed under these Rules.\n(s) “Opposite Party” means defendant, respondent, judgment debtor, counter petitioner, accused or any other person against whom an Action is initiated.\n(t) “Optical Character Recognition (OCR)\" means a technology that enables one to convert different types of documents, such as scanned paper documents, PDF files or images captured by a digital equipment into editable and searchable data.\n(u) “Party” means plaintiff, petitioner, complainant, applicant, caveator, appellant, decree holder or any other person who initiates an Action.\n(v) “Party-in-Person\" means any Party or Opposite Party without availing the services of an Advocate.\n(w) “Pleadings\" for the purpose of these rules means and includes pleadings filed in support or defence of an Action including plaint, written statement, petitions, written objections, replies, counteraffidavits, counter statement and additional or supplementary affidavits.\n(x) “PDF” means an electronic document filed in a Portable Document Format with Optical Character Recognition (OCR).\n(y) “PDF/A'\" means an ISO standardized version of the Portable Document Format (PDF) specialized for the digital preservation of electronic documents.\n(z) “Registry” means the Registry of the High Court or the Filing Officer of the Subordinate Courts and Tribunals.\n(za) “Scanned Document” means an electronic document created in Portable Document Format (PDF)\n(zb) “Technical Failure\" means a failure of the court's hardware, software, network and or telecommunications facility which results in the impossibility of submitting a file electronically but does not include malfunctioning of the equipment of the person submitting an electronic file.\n(zc) “Third Party\" means and includes any person or persons or entity seeking to implead himself to become a party to the proceedings or to intervene in an Action.\n(zd)“Tribunal\" means the Tribunals which are notified by the High Court from time to time under sub rule (4) of Rule 1.\n(ze) \"Working Day” means and includes a day when the Registry of the Court is functioning under the calendar published or as directed by the Court.",
+   "status": "in_force",
+   "page": 4
+  },
+  {
+   "number": "R3",
+   "ref": "r. 3",
+   "kind": "rule",
+   "title": "General Instructions",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Online electronic filing shall be made in the High Court by visiting the web portal of the High Court or that is assigned specifically for electronic filing by the Chief Justice.\n(2) Online electronic filing shall be made in the Subordinate Courts or Tribunals by visiting the web portal of the respective courts or that is assigned specifically for electronic filing by the High Court.\n(3) Except as provided elsewhere in these Rules, all Actions whether in fresh, pending and disposed of cases, shall be filed electronically by the E-Filer in the manner provided in these Rules.\n(4) Any person who is unable to access the Electronic Filing portal would be entitled to make use of the facilities provided at the Designated Counters on payment of charges, if stipulated. (5) The size of the electronic fle shall not exceed 100 MB. In case the electronic file size exceeds 100 MB, the E-Filer should visit any one of the Designated Counters for enabling Electronic Filing through the Intranet.\n(6) A Party-in-Person who institutes or defends an Action shall submit an affidavit or an undertaking stating that he has not engaged an Advocate in the Action.\n(7) A Party in-Person who subsequently engages an Advocate shall file an application before the Administrator for transferring the data in respect of the proceedings instituted, to the Advocate's user account. Once the data is transferred by the Administrator to the user account of the Advocate, the Party-in-Person shall not be allowed to modify the data filed or file any pleadings in the same proceedings.",
+   "status": "in_force",
+   "page": 7
+  },
+  {
+   "number": "R4",
+   "ref": "r. 4",
+   "kind": "rule",
+   "title": "Registration and Responsibilities of E-Filer",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) All Advocates and Party-in-Person who have not registered on the Court Electronic Filing web portal shall register themselves in the Court Electronic Filing Web Portal. The procedure for registration will be published in the website of the Court.\n(2) The Registry shall allot a user account, if the registration done under sub-rule (1) is in proper order.\n(3) The E-Filer's username and password shall constitute the E-Filer's electronic identity and the user account for the purpose of these Rules.\n(4) The E-Filer shall maintain a valid and working Electronic Mail (email) address and mobile number to facilitate the receiving of Electronic Mail notifications or Short Messaging Service (SMS) from the Electronic Filing System. The Registry shall not be responsible if an E- Filer does not receive notifications from the Electronic Filing System through his Electronic Mail or SMS.\n(5) The E-Filer can also change his Electronic Mail address or mobile number or other information provided in his profile using the Electronic Filing Web Portal.\n(6) The E-Filer shall be responsible for safeguarding his user ID and password and shall be liable for the conduct undertaken using his user ID and password. The E-Filer shall also ensure that his user ID and password is not shared with any other person.\n(7) The E-Filer shall not use his user ID other than for filing the case in which he has been engaged or is interested in.\n(8) The E-Filer shall take all reasonable steps to ensure that the pleadings and documents filed by him do not contain any malware or virus that might be harmful to the court's electronic filing system and to the other users of that system. The E-Filer if he has reasonable apprehension that his electronic identity has been compromised or a threat to the system exists, he shall immediately inform about the same to the Administrator.\n(9) The Courts shall presume that the pleadings and documents filed by the E-Filer have been filed by him using his user ID. Any inappropriate conduct on the part of the E-Filer, which comes to the notice of the Court, shall result in the suspension of his account and strict action being initiated by the Court, against the E-Filer, under any of the laws for the time being in force.",
+   "status": "in_force",
+   "page": 8
+  },
+  {
+   "number": "R5",
+   "ref": "r. 5",
+   "kind": "rule",
+   "title": "General Procedure",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Whenever an E-Filer intends to file a pleading the same shall be prepared electronically using any word processing software following the format as mentioned below.\n(a) Paper Size: The pleadings shall be prepared on A-4 paper\n(b) Font and Font Size: The font of the letters shall be Times New Roman and the typeface shall be 14 point.\n(c) Line Spacing: All text shall be of 1.5 line spaced.\n(d) Alignment: All the documents shall be aligned with justified alignment.\n(e) Margins: Top Margin -- 1.5\"\" Bottom Margin - 1.5\" Left Margin -- 1.75\" Right Margin - 1.0\"\n(2) A document which is to be typed in the local language of the Court shall be typed using UNICODE Font 12.\n(3) All pleadings and documents filed in the High Court shall be in PDF or PDF/A format. The pleadings and the documents produced in support of the same shall be converted into Optical Character Recognition\n(OCR) searchable PDF or PDF/A document. The E-Filer in addition can also utilise the service of online web editor available in the Electronic Filing System.\n(4) The Electronic Filing System in addition to the uploading of PDF or PDF/A document shall also have the provision for uploading Video or Audio files.\n(5) Where the document is not a text document and has to be enclosed along with the pleadings, the document shall be scanned using an image resolution of 300 DPI (Dots Per Inch) in OCR searchable mode and saved as a PDF or PDF/A. The E-Filer shall ensure that the documents filed are an accurate representation of the document and is complete and readable. When the original of the document is not clearly legible, a typed copy of the document duly certified by the Advocate or Party-in- Person shall also be scanned and uploaded along with the original.\n(6) When the documents produced along with the pleadings or subsequently produced is not the original of the document, then the Advocate or the Party-in-Person producing the document, shall endorse on the top of the first page of the document, that the document is not the original document and that it is only a certified copy or a photocopy of the original document.\n(7) The pleadings filed should strictly conform to the requirements as prescribed in the relevant Acts and Rules.\n(8) The text document and the scanned documents shall be uploaded in the website of the relevant courts in the manner and method as prescribed by the High Court from time to time. Any electronic filing not made in the manner and method as prescribed by the High Court shall be treated as a defective electronic filing.\n(9) The procedure for converting a document into an OCR searchable PDF or PDF/A file will be set out in the website of the respective courts.",
+   "status": "in_force",
+   "page": 9
+  },
+  {
+   "number": "R6",
+   "ref": "r. 6",
+   "kind": "rule",
+   "title": "Digital Signature",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) A document electronically filed using the Electronic Filing System shall bear the digital signature of the Advocate or the Party-in-Person. The digital signature shall be affixed on such places as are mandated under the relevant Acts and Rules.\n(2) An Advocate or a Party-in-Person who does not possess the digital signature as issued by the competent authority, can authenticate electronically filed pleadings and documents by Electronic Signature [esignature} based on Adhaar authentication using his Adhaar number and the OTP sent to the registered number of the Advocate or Party-in- Person. Such an authentication shall be considered as a valid identification for all intents and purposes.\n(3) An Advocate or a Party-in-Person who does not possess a Digital Signature and Electronic Signature [e-signature] can authenticate electronically filed documents by electronic verification using his Electronic Mail Address (e-mail) or mobile phone number based OTP authentication.\n(4) If the Advocate or the Party-in-Person is unable to authenticate as mentioned in sub-rules (1) to (3) then a print out of the pleadings or documents shall be physically signed in accordance with the relevant Rules and thereafter it shall be scanned and uploaded.\n(5) A list of the recognised Digital Signature providers and the procedure involved in appending single or multiple signatures will be available in the web portal of the court concerned.",
+   "status": "in_force",
+   "page": 11
+  },
+  {
+   "number": "R7",
+   "ref": "r. 7",
+   "kind": "rule",
+   "title": "Payment of Court Fees",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Court fees and other charges payable under the relevant Acts and Rules shall be made through Electronic Payment [e-payment] in the manner and mode as notified by the High Court from time to time and the notification shall also be available in the web portal of the relevant courts.",
+   "status": "in_force",
+   "page": 11
+  },
+  {
+   "number": "R8",
+   "ref": "r. 8",
+   "kind": "rule",
+   "title": "Retention of Original Documents",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The original of the documents other than the pleadings that are scanned and digitally signed by the E-Filer at the time of e-filing should be preserved for production as and when directed by the Court.\n(2) In addition to the original documents referred to in sub-rule (1) the signed vakalath, notarised/attested affidavits and any original document whose authenticity is disputed should be preserved at least for three years after the final disposal of the Action including appeals if any.\n(3) The responsibility for producing the originals of the documents shall be on the person who has electronically filed the scanned copies thereof.",
+   "status": "in_force",
+   "page": 12
+  },
+  {
+   "number": "R9",
+   "ref": "r. 9",
+   "kind": "rule",
+   "title": "Access to Electronic Data of the Action",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The access to the pleadings and the documents filed electronically in an Action will be provided only to the Advocates for the parties or to the concerned Party-in-Person.\n(2) The Advocate for the parties or the Party-in-Person shall be entitled to obtain certified copies of the pleadings and documents filed electronically, in accordance with the relevant rules for grant of certified copies.\n(3) A stranger to the Action is entitled to obtain the certified copy of the pleadings and documents filed in the Action in accordance with the relevant rules.",
+   "status": "in_force",
+   "page": 12
+  },
+  {
+   "number": "R10",
+   "ref": "r. 10",
+   "kind": "rule",
+   "title": "Exemption from Electronic Filing",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "The court for reasons to be recorded in writing may on an application filed by an Advocate or Party-in-Person exempt him from online electronic filing of the entire pleadings or part of the pleadings and/or documents in any of the circumstances mentioned herein:\n(i) where online electronic filing is for reasons stated in the application not feasible; or\n(ii) where there are concerns about confidentiality and protection of privacy; or\n(i) where the document cannot be scanned or filed electronically because of its size, shape or condition; or\n(iv) where the online electronic filing web portal is either inaccessible or not available for any reason; and/or\n(v) where there are just and sufficient cause.",
+   "status": "in_force",
+   "page": 12
+  },
+  {
+   "number": "R11",
+   "ref": "r. 11",
+   "kind": "rule",
+   "title": "Service through Electronic Means",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The Court may serve the pleadings and documents that are electronically filed to the user account of the E-Filer through the designated electronic file system user account of the Registry or to his electronic mail account or through electronic post [e-post] or through any other electronic mode as prescribed by the Court. The same shall be in addition to the prescribed mode of service as per the relevant Acts and Rules.\n(2) The Court may serve the notices, pleadings and documents that are electronically filed to the opposite party through the designated electronic file system user account of the Registry or to his electronic mail account, if any, or through electronic post [e-post] or through any other electronic mode as prescribed by the Court. The same shall be in addition to the prescribed mode of service as per the relevant Acts and Rules.",
+   "status": "in_force",
+   "page": 13
+  },
+  {
+   "number": "R12",
+   "ref": "r. 12",
+   "kind": "rule",
+   "title": "Proof of Electronic Filing",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "The proof of Electronic Filing of an Action shall be informed to the E- Filer on his registered electronic mail address, mobile phone number, E- Filer user account or through any other electronic mode as prescribed by the Court.",
+   "status": "in_force",
+   "page": 14
+  },
+  {
+   "number": "R13",
+   "ref": "r. 13",
+   "kind": "rule",
+   "title": "Computation of Limitation",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Wherever Limitation under the Limitation Act, 1963 (Act 36 of 1963) or under any other law for the time being in force applies to an Action, it shall be the responsibility of the E-Filer to electronically file the Action before the prescribed period of Limitation.\n(2) The date of Electronic Filing for computation of the period of limitation shall be taken as the date when the Action is electronically received in the Registry within the time [Indian Standard Time] prescribed under the relevant Act/Rules and orders issued from time to time.\n(3) The facility for online Electronic Filing through the web portal shall be within the time prescribed under the relevant Act/Rules and orders issued from time to time.\n(4) When Electronic Filing is not possible on the Electronic Filing Web Portal of the Court due to any technical failure or system maintenance or other exigencies, then the Electronic Filer can Electronically File through the Designated Counters during the working hours of the Court.\n(5) The E-Filer shall not be permitted to claim exemption from the period of limitation, on the ground that there was failure of the Electronic Filing facility.\n(6) These Rules shall not affect the powers of the Court from permitting Conventional Filing on grounds of total inability to electronically file through the Electronic Filing Web Portal or the Designated Counter of the Court.",
+   "status": "in_force",
+   "page": 14
+  },
+  {
+   "number": "R14",
+   "ref": "r. 14",
+   "kind": "rule",
+   "title": "Hard Copies of Pleadings and Documents Electronically Filed",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The Advocates and Party-in-Person can take hard copies of the pleadings and documents filed electronically for their use in the Court.\n(2) The Registry of the Court shall take hard copies of the pleadings and documents meant for the use of the Court or for other official purposes.",
+   "status": "in_force",
+   "page": 15
+  },
+  {
+   "number": "R15",
+   "ref": "r. 15",
+   "kind": "rule",
+   "title": "Storage and Retrieval of Electronically filed Pleadings and",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Storage and Retrieval of Electronically filed Pleadings and Documents:-\n(1) The Electronically filed pleadings and documents shall be stored on an exclusive server which shall be under the control and supervision of the Courts.\n(2) The Registry shall separately label and encrypt each Action for facilitating their identification and retrieval.\n(3) The security of the Actions shall be ensured by the Courts and access to them shall be in the manner provided in the Rules subject to changes decided by the Courts from time to time.\n(4) The Courts shall take all necessary steps to ensure that a backup copy of all Actions is preserved in the manner as decided by the High Court from time to time.",
+   "status": "in_force",
+   "page": 15
+  },
+  {
+   "number": "R16",
+   "ref": "r. 16",
+   "kind": "rule",
+   "title": "Powers of High Court",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1)When the High Court is satisfied that the operation of any Rule causes undue hardship, it may order to dispense with or relax the requirements of that Rule to such extent and subject to such conditions, if any, as is necessary to deal with the case in a just and equitable manner.\n(2) The High Court may also from time to time issue practice directions under these Rules and the said directions shall be effective from the dates as may be notified.",
+   "status": "in_force",
+   "page": 15
+  },
+  {
+   "number": "R17",
+   "ref": "r. 17",
+   "kind": "rule",
+   "title": "Residuary Provision",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The Registry shall on scrutiny of the pleadings or documents filed, note the objections regarding the non-compliance with these Rules or Practice Directions or any other law for the time being in force.\n(2) The Registry shall inform the E-Filer of the objections noted in his electronic mail address (e-mail) or through any other electronic mode.\n(3) The objections noted by the Registry shall be cured by the E-Filer and the same shall be returned back to the Registry within the time provided.\n(4) The pleadings or documents shall be posted before the Court only after the objections noted by the Registry are cured by the E-Filer.\n(5) An E-Filer who has initiated an Action through Electronic Filing shall receive all copies of the pleadings or documents filed by the opposite party through his electronic mail address or electronic filing system user account or through any other electronic mode.\n(6) The person who faces an action, instead of receiving the pleadings or documents through his electronic mail address or through any other electronic mode, shall be entitled to make a written application to the concerned Registry to provide him with the hard copy of the pleadings or documents filed. The Registry, on being satisfied that sufficient reasons are made out in the written application, shall then direct the person who initiated the Action either to provide the hard copy of the pleadings or documents or to deposit the charges required for taking photocopy of the same.\n(7) An E-Filer shall be entitled to assistance from the concerned Registry in case of any assistance required under these Rules.\n(8) An E-Filer who has registered a caveat in a court shall receive all copies of the pleadings or documents filed by the opposite party to the caveat through his Electronic Mail Address or Electronic Filing system user account or through any other electronic mode.\n(9) Procedural Matters with respect to which no express provision has been made in these Rules shall be decided by the Court consistent with the principle of furthering the interest of justice.\n(10) These Rules shall be in addition to the Rules contained in the Criminal Rules of Practice, Kerala, Civil Rules of Practice, Kerala and the Rules of the High Court of Kerala, 1971. (By order) P.G. Ajithkumar Registrar (District Judiciary) Explanatory note (This is not a part of the notification, but is intended to indicate its general purport) As part of the efforts to employ technology to expedite court proceedings, filing of cases through electronic mode has been introduced in the courts in Kerala. Procedure needs to be laid down to manage efiling. Hence the rules. THE HIGH COURT OF KERALA Ernakulam-682031 Email: d1section hc-ker@gov.in Phone: 0484-2562985 Fax: 0484-2562451 No: DI-1 /20613/2018 (2) Dated: 12-05-2021 Notification Sub.: Electronic Filing Rules for Courts (Kerala), 2021 issueddate of commencement of rules- notified- reg. Ref.: High Court Notification D1-1 /20613/2018 (1), dated 12-05-2021. In exercise of the powers conferred under Articles 225 and 227 of the Constitution of India, the High Court of Kerala, under sub rule (2) of Rule 1 of 'the Electronic Filing Rules for Courts (Kerala), 2021, hereby notifies that the said rules, except sub rules (1) and (3) of Rule 8 thereof, shall come into force from the 12\" of May, 2021. (By order) P.G. Ajithkumar Registrar (District Judiciary) To All the District Judges including the District Judge, Kavaratti All the CJMs The IT Section, High Court The e Courts Cell, High Court Copy to The Advocate General, Kerala The Director, Kerala Judicial Academy The Secretary, Rule Committee The Secretary, Kerala High Court Advocates' Association The Superintendent of Government Presses, Thiruvananthapuram PS to Chief Justice PS to Judges CA to Registrars Copy submitted to The Honourable Judges The Registrars, High Court",
+   "status": "in_force",
+   "page": 16
+  }
+ ]
+}

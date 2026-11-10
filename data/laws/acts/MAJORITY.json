@@ -1,0 +1,60 @@
+{
+ "code": "MAJORITY",
+ "cite": "Majority Act",
+ "name": "Majority Act, 1875",
+ "short": "Majority Act",
+ "year": 1875,
+ "category": "Family law",
+ "status": "in_force",
+ "replaced_by": null,
+ "replaces": null,
+ "note": "",
+ "aliases": [
+  "indian majority act",
+  "majority act",
+  "majority act, 1875"
+ ],
+ "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+ "kind": "act",
+ "court": "",
+ "jurisdiction": "Central",
+ "pdf": "MAJORITY.pdf",
+ "url": "https://indiacode.gov.in/items/b4435ed8-7d5b-4224-80af-b13126602d4f",
+ "as_on": "",
+ "parsed_as": "sections",
+ "sections": [
+  {
+   "number": "1",
+   "ref": "s. 1",
+   "kind": "section",
+   "title": "Short title",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "This Act may be called the *** Majority Act, 1875. Local extent.—[It extends to the whole of India [except the State of Jammu and Kashmir]]; Commencement and operation.—and it shall come into force and have effect only on the expiration of three months from the passing thereof.",
+   "status": "in_force",
+   "page": 2
+  },
+  {
+   "number": "2",
+   "ref": "s. 2",
+   "kind": "section",
+   "title": "Saving",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Nothing herein contained shall affect:—\n(a) the capacity of any persons to act in the following matters (namely),—marriage, dower, divorce and adoption;\n(b) the religion or religious rites and usages of any class of [citizens of India]; or\n(c) the capacity of any person who before this Act comes into force has attained majority under the law applicable to him.",
+   "status": "in_force",
+   "page": 2
+  },
+  {
+   "number": "3",
+   "ref": "s. 3",
+   "kind": "section",
+   "title": "Age of majority of persons domiciled in India",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Every person domiciled in India shall attain the age of majority on his completing the age of eighteen years and not before.\n(2) In computing the age of any person, the day on which he was born is to be included as a whole day and he shall be deemed to have attained majority at the beginning of the eighteenth anniversary of that day.]",
+   "status": "in_force",
+   "page": 2
+  }
+ ]
+}

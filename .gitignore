@@ -1,0 +1,18 @@
+# Your secret API key lives here - never share or commit it
+.env
+
+# Made by setup.bat (can always be rebuilt)
+.venv/
+index/
+.cache/
+
+# The official PDF and the raw Acts downloads (data/laws is built from them)
+data/raw/
+
+# YOUR cases, files, chats and calendar - private, never commit
+workspace/
+
+# Python / test leftovers
+__pycache__/
+*.pyc
+.pytest_cache/

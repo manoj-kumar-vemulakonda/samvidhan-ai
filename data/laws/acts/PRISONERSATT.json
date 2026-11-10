@@ -1,0 +1,158 @@
+{
+ "code": "PRISONERSATT",
+ "cite": "Prisoners (Attendance in Courts) Act",
+ "name": "Prisoners (Attendance in Courts) Act, 1955",
+ "short": "Prisoners (Attendance in Courts) Act",
+ "year": 1955,
+ "category": "Courts and procedure",
+ "status": "in_force",
+ "replaced_by": null,
+ "replaces": null,
+ "note": "",
+ "aliases": [
+  "prisoners (attendance in courts) act",
+  "prisoners (attendance in courts) act, 1955"
+ ],
+ "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+ "kind": "act",
+ "court": "",
+ "jurisdiction": "Central",
+ "pdf": "PRISONERSATT.pdf",
+ "url": "https://indiacode.gov.in/items/c3783b4b-f755-452a-9dae-61f3418df236",
+ "as_on": "15th April, 2026)",
+ "parsed_as": "sections",
+ "sections": [
+  {
+   "number": "1",
+   "ref": "s. 1",
+   "kind": "section",
+   "title": "Short title, extent and commencement",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) This Act may be called the Prisoners (Attendance in Courts) Act, 1955.\n(2) It extends to the whole of India except the State of Jammu and Kashmir*.\n(3) It shall come into force on such date as the Central Government may, by notification in the Official Gazette, appoint.",
+   "status": "in_force",
+   "page": 4
+  },
+  {
+   "number": "2",
+   "ref": "s. 2",
+   "kind": "section",
+   "title": "Definitions",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "In this Act,—\n(a) “confinement in a prison”—references to confinement in a prison, by whatever form of words, include references to confinement or detention in a prison under any law providing for preventive detention;\n(b) “prison” includes—\n(i) any place which has been declared by the State Government, by general or special order, to be a subsidiary jail; and\n(ii) any reformatory, Borstal institution or other institution of a like nature; [(c) “State Government”, in relation to a Union territory, means the Administrator thereof.]",
+   "status": "in_force",
+   "page": 4
+  },
+  {
+   "number": "3",
+   "ref": "s. 3",
+   "kind": "section",
+   "title": "Power of courts to require appearance of prisoners to give evidence or answer a charge",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Any civil or criminal court may, if it thinks that the evidence of any person confined in any prison is material in any matter pending before it, make an order in the form set forth in the First Schedule, directed to the officer in charge of the prison:\nProvided that no civil court shall make an order under this sub-section in respect of a person confined in a prison situated outside the State in which the court is held.\n(2) Any criminal court may, if a charge of an offence against a person confined in any prison is made or pending before it, make an order in the form set forth in the Second Schedule, directed to the officer in charge of the prison.\n(3) No order made under this section by a civil court which is subordinate to a district judge shall have effect unless it is countersigned by the district judge; and no order made under this section by a criminal court which is inferior to the court of a magistrate of the first class shall have effect unless it is countersigned by the district magistrate to whom that court is subordinate or within the local limits of whose jurisdiction that court is situate.\n(4) For the purposes of sub-section (3), a court of small causes outside a presidency town or the city of Hyderabad shall be deemed to be subordinate to the district judge within the local limits of whose jurisdiction such court is situate.",
+   "status": "in_force",
+   "page": 4
+  },
+  {
+   "number": "4",
+   "ref": "s. 4",
+   "kind": "section",
+   "title": "Power of State Government to exempt certain persons from operation of section 3",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The State Government may, having regard to the matters specified in sub-section (2), by general or special order, direct that any person or class of persons shall not be removed from the prison in which he or they may be confined, and thereupon so long as any such order remains in force, the provisions of section 3 shall not apply to such person or class of persons.\n(2) Before making an order under sub-section (1), the State Government shall have regard to the following matters, namely:—\n(a) the nature of the offence for which or the grounds on which the confinement has been ordered in respect of the person or class of persons;\n(b) the likelihood of the disturbance of public order if the person or class of persons is allowed to be removed from the prison;\n(c) the public interest, generally.",
+   "status": "in_force",
+   "page": 5
+  },
+  {
+   "number": "5",
+   "ref": "s. 5",
+   "kind": "section",
+   "title": "Prisoners to be brought up",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Upon delivery of any order made under section 3 to the officer in charge of the prison in which the person named therein is confined, that officer shall cause him to be taken to the court in which his attendance is required, so as to be present in the court at the time of such order mentioned, and shall cause him to be detained in custody in or near the court until he has been examined or until the judge or presiding officer of the court authorises him to be taken back to the prison in which he was confined.",
+   "status": "in_force",
+   "page": 5
+  },
+  {
+   "number": "6",
+   "ref": "s. 6",
+   "kind": "section",
+   "title": "Officer in charge of prison when to abstain from carrying out order",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Where the person in respect of whom an order is made under section 3—\n(a) is, in accordance with the rules made in this behalf, declared to be unfit to be removed from the prison where he is confined by reason of sickness or other infirmity; or\n(b) is under committal for trial; or\n(c) is under remand pending trial or pending a preliminary investigation; or\n(d) is in custody for a period which would expire before the expiration of the time required for removing him under this Act and for taking him back to the prison in which he is confined, the officer in charge of the prison shall abstain from carrying out the order and shall send to the court from which the order had been issued a statement of reasons for so abstaining:\nProvided that such officer as aforesaid shall not so abstain where—\n(i) the order has been made by a criminal court; and\n(ii) the person named in the order is confined under committal for trial or under remand pending trial or pending a preliminary investigation and is not declared in accordance with the rules made in this behalf to be unfit to be removed from the prison where he is confined by reason of sickness or other infirmity; and\n(iii) the place, where the evidence of the person named in the order is required, is not more than five miles distant from the prison in which he is confined.",
+   "status": "in_force",
+   "page": 5
+  },
+  {
+   "number": "7",
+   "ref": "s. 7",
+   "kind": "section",
+   "title": "Commissions for examination of prisoners",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "In any of the following cases, that is to say,—\n(a) where it appears to any civil court that the evidence of a person confined in a prison is material in any matter pending before it and that the attendance of such person in court cannot be secured by reason of the provisions of section 6 or of an order under section 4 or of the district judge declining under sub-section (3) of section 3 to countersign an order for removal; or\n(b) where it appears to any civil court as aforesaid that the evidence of a person confined in a prison which is situated outside the State in which, or is more than fifty miles distant from the place at which, such court is held is material in any such matter, the court may, if it thinks fit, issue a commission under the provisions of the Code of Civil Procedure, 1908 (5 of 1908), for the examination of the person in the prison in which he is confined.",
+   "status": "in_force",
+   "page": 6
+  },
+  {
+   "number": "8",
+   "ref": "s. 8",
+   "kind": "section",
+   "title": "Certain provisions of the Code of Criminal Procedure and the Code of Civil Procedure to",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Certain provisions of the Code of Criminal Procedure and the Code of Civil Procedure to apply.—Save as otherwise provided in this Act and any rules made thereunder, the provisions of the Code of Civil Procedure, 1908 (5 of 1908), and the Code of Criminal Procedure, 1898 (5 of 1898), as the case may be, shall, so far as may be, apply in relation to the examination on commission or otherwise of any person confined in a prison as they apply in relation to the examination on commission of any other person.",
+   "status": "in_force",
+   "page": 6
+  },
+  {
+   "number": "9",
+   "ref": "s. 9",
+   "kind": "section",
+   "title": "Power to make rules",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) The State Government may, by notification in the Official Gazette, make rules for carrying out the purposes of this Act.\n(2) In particular and without prejudice to the generality of the foregoing power, such rules may provide for—\n(a) the procedure for obtaining the countersignature of an order made under section 3;\n(b) the authority by whom and the manner in which a declaration that a person confined in prison is unfit to be removed therefrom, may be made;\n(c) the conditions, including payment of costs and charges, subject to which an order made under section 3 by a civil court may be executed;\n(d) the manner in which a process directed against any person confined in a prison issued from any court may be served upon him;\n(e) the escort of persons confined in a prison to and from courts in which their attendance is required and for their custody during the period of such attendance;\n(f) the amount to be allowed for the costs and charges of such escort; and\n(g) the guidance of officers in all other matters connected with the enforcement of this Act.",
+   "status": "in_force",
+   "page": 6
+  },
+  {
+   "number": "10",
+   "ref": "s. 10",
+   "kind": "section",
+   "title": "Repeal",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) Part IX of the Prisoners Act, 1900 (3 of 1900) and the First and Second Schedules to the said Act are hereby repealed.\n(2) If immediately before the commencement of this Act, there is in force in any Part B State to which this Act extends any law corresponding to the provisions of this Act, that law shall, in so far as it relates to matters dealt within this Act, stand repealed on such commencement:\nProvided that anything done or any action taken under any such law, shall be deemed to have been done or taken under the corresponding provisions of this Act and shall continue to have effect accordingly, unless and until superseded by anything done or any action taken under this Act.",
+   "status": "omitted",
+   "page": 6
+  },
+  {
+   "number": "SCH1",
+   "ref": "Sch. I",
+   "kind": "schedule",
+   "title": "The First Schedule",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "[See sub-section (1) of section 3] Court of To the officer in charge of the ………………………………………….. (State name of prison). You are hereby required to produce , now confined in , under safe and sure conduct before the Court of at on the day of next by of the clock in the forenoon of the same day, there to give evidence in a matter now pending before the said Court, and after the said has then and there given his evidence before the said Court or the said Court has dispensed with his further attendance, cause him to be conveyed under safe and sure conduct back to the prison. The day of A. B. (Countersigned) C.D.",
+   "status": "in_force",
+   "page": 7
+  },
+  {
+   "number": "SCH2",
+   "ref": "Sch. II",
+   "kind": "schedule",
+   "title": "The Second Schedule",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "[See sub-section (2) of section 3] Court of To the officer in charge of the ………………………………………….. (State name of prison). You are hereby required to produce , now confined in , under safe and sure conduct before the Court of at on the day of next by of the clock in the forenoon of the same day, there to answer a charge now pending before the said Court, and after such charge has been disposed of or the said Court has dispensed with his further attendance, cause him to be conveyed under safe and sure conduct back to the said prison. The day of A. B. (Countersigned) C.D. STATEMENT OF OBJECTS AND RESONS Part IX of the Prisoners Act, 1900, deals with the attendance of prisoners and obtaining their evidence in courts. Some of the provisions in this Part for securing the attendance of a prisoner in court to give evidence or to stand his trial, are cumbersome and result in avoidable delay in the trial of criminal cases and in needless detention of prisoners who are already under trial. The Bill seeks to simplify the procedure for securing the attendance of prisoners in courts by repealing Part IX of the Prisoners Act and re-enacting its provisions with suitable modifications as a separate law while extending at the same time the provisions of this law to the whole of India except Jammu and Kashmir. The Bill provides that any civil or criminal court may, if it thinks that the evidence of any person confined in any prison is material in respect of any matter pending before it, make an order in the prescribed form and send that order direct to the officer-in-charge of the prison who will be required to comply with it. It will not be necessary, as at present, to send such an order to the district or sub-divisional magistrate of the area where the prison is situated or to the Government of the State if the prisoner is in a different State. No civil court may, however, make an order in respect of a person confined in a prison situate outside the State in which the court is held. In such cases, a commission may suffice. The Bill also provides (as in section 43 of the present Act) that in certain circumstances and subject to certain exceptions the officer-in-charge of the prison may abstain from carrying out the order, as for example, where the prisoner is unfit to be removed by reason of sickness or other infirmity or is under committal for trial or is in custody for a period which would expire before the date on which he is required to be produced before the court. NEW DELHI; K.N. KATJU. The 5th December, 1953.",
+   "status": "in_force",
+   "page": 8
+  }
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "code": "DMMA",
+ "cite": "Dissolution of Muslim Marriages Act",
+ "name": "Dissolution of Muslim Marriages Act, 1939",
+ "short": "Dissolution of Muslim Marriages Act",
+ "year": 1939,
+ "category": "Family law",
+ "status": "in_force",
+ "replaced_by": null,
+ "replaces": null,
+ "note": "",
+ "aliases": [
+  "dissolution of muslim marriages act",
+  "dissolution of muslim marriages act, 1939"
+ ],
+ "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+ "kind": "act",
+ "court": "",
+ "jurisdiction": "Central",
+ "pdf": "DMMA.pdf",
+ "url": "https://indiacode.gov.in/items/be342ec6-f8e7-4cc3-a809-1324b7dfc05d",
+ "as_on": "",
+ "parsed_as": "sections",
+ "sections": [
+  {
+   "number": "1",
+   "ref": "s. 1",
+   "kind": "section",
+   "title": "Short title and extent",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "(1) This Act may be called the Dissolution of Muslim Marriages Act, 1939.\n(2) It extends to the whole of India [***] .",
+   "status": "in_force",
+   "page": 2
+  },
+  {
+   "number": "2",
+   "ref": "s. 2",
+   "kind": "section",
+   "title": "Grounds for decree for dissolution of marriage",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "A woman married under Muslim law shall be entitle to obtain a decree for the dissolution of her marriage on any one or more of the following grounds, namely: ––\n(i) that the whereabouts of the husband have not been known for a period of four years;\n(ii) that the husband has neglected or has failed to provide for her maintenance for a period of two years;\n(iii) that the husband has been sentenced to imprisonment for a period of seven years or upwards;\n(iv) that the husband has failed to perform, without reasonable cause, his marital obligations for a period of three years;\n(v) that the husband was impotent at the time of the marriage and continues to be so;\n(vi) that the husband has been insane for a period of two years or is suffering from *** a virulent venereal disease;\n(vii) that she, having been given in marriage by her father or other guardian before she attained the age of fifteen years, repudiated the marriage before attaining the age of eighteen years :\nProvided that the marriage has not been consummated ;\n(viii) that the husband treats her with cruelty, that is to say, —\n(a) habitually assaults her or makes her life miserable by cruelty of conduct even if such conduct does not amount to physical ill-treatment, or\n(b) associates with women of evil repute or leads an infamous life, or\n(c) attempts to force her to lead an immoral life, or\n(d) disposes of her property of prevents her exercising her legal rights over it, or\n(e) obstructs her in the observance of her religious profession or practice, or\n(f) if he has more wives than one, does not treat her equitably in accordance with the injunctions of the Qoran;\n(ix) on any other ground which is recognised as valid for the dissolution of marriages under muslim law :\nProvided that —\n(a) no decree shall be passed on ground (iii) until the sentence has become final;\n(b) a decree passed on ground (i) shall not take effect for a period of six months from the date of such decree, and if the husband appears either in person or through an authorised agent within that period and satisfies the Court that he is prepared to perform his conjugal duties, the Court shall set aside the said decree; and\n(c) before passing a decree on ground (v) the Court shall, on application by the husband, make an order requiring the husband to satisfy the Court within a period of one year from the date of such order that he has ceased to be impotent, and if the husband so satisfies the Court within such period, no decree shall be passed on the said ground.",
+   "status": "in_force",
+   "page": 2
+  },
+  {
+   "number": "3",
+   "ref": "s. 3",
+   "kind": "section",
+   "title": "Notice to be served on heirs of the husband when the husband’s whereabouts are not",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Notice to be served on heirs of the husband when the husband’s whereabouts are not known. — In a suit to which clause (i) of section 2 applies —\n(a) the names and addresses of the persons who would have been the heirs of the husband under Muslim law if he had died on the date of the filing of the plant shall be stated in the plaint,\n(b) notice of the suit shall be served on such persons, and\n(c) such persons shall have the right to be heard in the suit :\nProvided that paternal uncle and brother of the husband, if any, shall be cited as party even if he or they are not heirs.",
+   "status": "in_force",
+   "page": 3
+  },
+  {
+   "number": "4",
+   "ref": "s. 4",
+   "kind": "section",
+   "title": "Effect of conversion to another faith",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "The renunciation of Islam by a married Muslim woman or her conversion to a faith other than Islam shall not by itself operate to dissolve her marriage :\nProvided that after such renunciation, or conversion, the woman shall be entitled to obtain a decree for the dissolution of her marriage on any of the grounds mentioned in section 2:\nProvided further that the provisions of this section shall not apply to a woman converted to Islam from some other faith who re-embraces her former faith.",
+   "status": "in_force",
+   "page": 3
+  },
+  {
+   "number": "5",
+   "ref": "s. 5",
+   "kind": "section",
+   "title": "Rights to dower not to be affected",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "Nothing contained in this Act shall affect any right which a married woman may have under Muslim law to her dower or any part thereof on the dissolution of her marriage.",
+   "status": "in_force",
+   "page": 3
+  },
+  {
+   "number": "6",
+   "ref": "s. 6",
+   "kind": "section",
+   "title": "[Repeal of section 5 of Act 26 of 1937.] Rep. by the Repealing and Amending",
+   "chapter": "",
+   "chapter_title": "",
+   "text": "[Repeal of section 5 of Act 26 of 1937.] Rep. by the Repealing and Amending Act, 1942 (25 of 1942), s. 2 and the First Schedule .",
+   "status": "omitted",
+   "page": 3
+  }
+ ]
+}
