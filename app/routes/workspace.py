@@ -536,6 +536,7 @@ def delete_document(document_id: int) -> dict:
 class ChatQuestion(BaseModel):
     question: str = Field(min_length=1, max_length=8000)
     style: Literal["simple", "detailed"] | None = None
+    deep: bool = False  # the "Deep" button: the strongest model, thinking longer
 
 
 @router.post("/api/chats/{chat_id}/ask")
@@ -570,13 +571,13 @@ async def ask_in_chat(chat_id: int, request: ChatQuestion) -> StreamingResponse:
             yield sse("done", {"mode": "search_only", "message": message})
             return
         system = assistant.system_prompt(settings, style, reply_language)
-        prompt = assistant.build_prompt(question, sources, history)
+        prompt = assistant.prompt_parts(question, sources, history)
         pieces: list[str] = []
         final: dict | None = None
         failure = ""
         saved = False
         try:
-            async for event in llm.stream(system, prompt):
+            async for event in llm.stream(system, prompt, tier=llm.DEEP if request.deep else llm.MAIN):
                 if event["type"] == "delta":
                     pieces.append(event["text"])
                     yield sse("delta", {"text": event["text"]})
@@ -589,7 +590,7 @@ async def ask_in_chat(chat_id: int, request: ChatQuestion) -> StreamingResponse:
             report = assistant.check_answer(answer, sources, library, state["engine"].cases)
             data = {"sources": sources_data, "citations": report, "style": style, "language": reply_language,
                     "model": (final or {}).get("model"), "cost": (final or {}).get("cost"), "error": failure or None,
-                    "stop_reason": (final or {}).get("stop_reason")}
+                    "stop_reason": (final or {}).get("stop_reason"), "deep": request.deep}
             message = store.add_message(chat_id, "assistant", answer, data)
             saved = True
             if failure and not answer:

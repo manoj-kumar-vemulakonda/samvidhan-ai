@@ -70,19 +70,24 @@ def system_prompt(settings: dict, style: str, language: str) -> str:
     )
 
 
-def build_prompt(question: str, sources: Sources, history: list[dict], extra: str = "") -> str:
-    parts = []
-    profile = case_profile(sources.case, sources.case_index)
-    if profile:
-        parts.append(profile)
-    parts.append(sources_block(sources))
+def prompt_parts(question: str, sources: Sources, history: list[dict], extra: str = "") -> list[str]:
+    """
+    The prompt in two parts: [the case details and file index, everything else].
+    The first part is the same for every question in a case, so the Claude API can read it
+    back from its cache (app/llm.py); the second changes with each question.
+    """
+    parts = [sources_block(sources)]
     if history:
         earlier = "\n\n".join(f"Lawyer: {h['question']}\nYou: {h['answer'][:2500]}" for h in history)
         parts.append(f"<earlier_conversation>\n{earlier}\n</earlier_conversation>")
     if extra:
         parts.append(extra)
     parts.append(f"<question>\n{question}\n</question>")
-    return "\n\n".join(parts)
+    return [case_profile(sources.case, sources.case_index) or "", "\n\n".join(parts)]
+
+
+def build_prompt(question: str, sources: Sources, history: list[dict], extra: str = "") -> str:
+    return "\n\n".join(part for part in prompt_parts(question, sources, history, extra) if part)
 
 
 def answer_language(question: str, detected: str, settings: dict) -> str:

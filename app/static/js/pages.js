@@ -1,4 +1,4 @@
-﻿// pages.js - the home screen, law library, IPC -> BNS converter, workflows (Skills) and settings.
+// pages.js - the home screen, law library, IPC -> BNS converter, task recipes (Skills) and settings.
 
 import {
   $, $$, S, api, confirmBox, esc, modal, niceDate, relativeDay, showArticle, showJudgment, showSection, spinner,
@@ -32,7 +32,7 @@ export async function renderHome(root) {
       <button class="tile" data-new-case><span>📁</span><b>New case</b><small>One case = its own chat, files and dates</small></button>
       <button class="tile" data-go="#/convert"><span>🔁</span><b>IPC → BNS</b><small>Convert old sections to the new laws</small></button>
       <button class="tile" data-go="#/library"><span>📚</span><b>Law library</b><small>${S.status?.acts || 0} Acts and court rule books, and the Constitution</small></button>
-      <button class="tile" data-go="#/workflows"><span>⚡</span><b>Workflows</b><small>FIR check, bail, notices, RTI…</small></button>
+      <button class="tile" data-tasks><span>📋</span><b>Tasks</b><small>Check an FIR, draft bail, reply to a notice, RTI…</small></button>
     </div>
     ${recent.length ? `<h3>Your cases</h3><div class="case-cards">${recent.map((c) => `<a class="case-card" href="#/case/${c.id}">
       <b>${esc(c.title)}</b><span class="muted small">${esc([c.court, c.case_number].filter(Boolean).join(' · ') || ' ')}</span>
@@ -40,6 +40,13 @@ export async function renderHome(root) {
   </div>`;
   $('[data-new-case]', root).onclick = () => newCaseDialog();
   $$('[data-go]', root).forEach((b) => { b.onclick = () => { location.hash = b.dataset.go; }; });
+  $('[data-tasks]', root).onclick = async () => {  // a task needs a chat to write in: start a new general chat
+    const chat = await api('/api/chats', { method: 'POST', body: { title: 'New chat' } }).catch(toastError);
+    if (!chat) return;
+    await loadSidebar();
+    window.addEventListener('chat-ready', () => import('./chat.js').then((m) => m.workflowPicker()), { once: true });
+    location.hash = `#/chat/${chat.id}`;
+  };
   setupDropBox(root);
   loadIntakes().catch(() => {});
   const form = $('.home-ask', root);
@@ -497,11 +504,11 @@ export function renderConvert(root, initial = '') {
 }
 
 // ---------------------------------------------------------------------------
-// Workflows (Skills): browse, edit, add
+// Task recipes (Settings -> Advanced): browse, edit, add. Lawyers just click tasks in a chat.
 // ---------------------------------------------------------------------------
 const NEW_SKILL = `---
-id: my-workflow
-title: My workflow
+id: my-task
+title: My task
 icon: 📋
 where: both
 documents: optional
@@ -510,7 +517,7 @@ inputs:
 - topic | What is it about? | text
 ---
 ## Purpose
-One or two sentences: what this workflow produces.
+One or two sentences: what this task produces.
 
 ## Steps
 1. First step.
@@ -524,8 +531,10 @@ Rules the AI must follow (format, what to check, what to cite).
 export async function renderWorkflows(root) {
   const skills = await api('/api/skills');
   root.innerHTML = `<div class="workflows">
-    <div class="toolbar"><h2>⚡ Workflows</h2><span class="spacer"></span><button class="btn" data-new>+ New workflow</button></div>
-    <p class="muted">A workflow is a recipe for a common task. You pick one in a chat (⚡ button). The AI writes a plan for your matter, you approve it, and it runs step by step. Each workflow is a plain-English file in <code>skills\\</code>, so you can edit it here or in Notepad.</p>
+    <p><a href="#/settings">← Settings</a></p>
+    <div class="toolbar"><h2>📋 Task recipes</h2><span class="spacer"></span><button class="btn" data-new>+ New task</button></div>
+    <p class="muted">Each task a lawyer can start in a chat (📋 Tasks) follows a recipe: its form, its steps and its rules for the AI.
+      A recipe is a plain-English file in <code>skills\\</code>, so you can edit it here or in Notepad. This page is for whoever sets up the app; lawyers never need it.</p>
     <div class="skill-grid">${skills.map((s) => `<div class="skill-card static"><span class="skill-icon">${esc(s.icon)}</span>
       <b>${esc(s.title)}</b><span class="muted small">${esc((s.purpose || '').split('\n')[0])}</span>
       <span class="small">${s.where === 'case' ? 'In a case' : s.where === 'general' ? 'General chats' : 'Cases and general chats'} · ${s.output === 'draft' ? 'Draft (Word)' : 'Report'}</span>
@@ -536,15 +545,15 @@ export async function renderWorkflows(root) {
 
 async function editSkill(id, root) {
   const skill = id ? await api(`/api/skills/${encodeURIComponent(id)}`) : { source: NEW_SKILL };
-  const m = modal(id ? `Edit: ${skill.title}` : 'New workflow', `<form class="form" id="skill-form">
+  const m = modal(id ? `Edit: ${skill.title}` : 'New task', `<form class="form" id="skill-form">
     <textarea name="source" rows="22" class="mono" spellcheck="false">${esc(skill.source)}</textarea>
-    <p class="muted small">The header between the --- lines sets the name and the inputs (one per line: <code>- key | Label | text/date/textarea</code>). The <b>## Steps</b> are the default plan; <b>## Instructions</b> are rules for the AI.</p>
+    <p class="muted small">The header between the --- lines sets the name and the form's boxes (one per line: <code>- key | Label | text/date/textarea</code>). The <b>## Steps</b> are what the AI does when a lawyer clicks Start; <b>## Instructions</b> are rules for the AI.</p>
     <div class="actions">${id ? '<button type="button" class="btn danger" data-del>Remove</button>' : ''}<span class="spacer"></span>
       <button type="button" class="btn" data-cancel>Cancel</button><button class="btn primary">Save</button></div></form>`, { wide: true });
   $('[data-cancel]', m.root).onclick = m.close;
   const del = $('[data-del]', m.root);
   if (del) del.onclick = async () => {
-    if (!(await confirmBox('Remove this workflow? (It is moved to skills\\_removed.)', 'Remove'))) return;
+    if (!(await confirmBox('Remove this task? (Its file is moved to skills\\_removed.)', 'Remove'))) return;
     await api(`/api/skills/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(toastError);
     m.close(); renderWorkflows(root);
   };
@@ -554,7 +563,7 @@ async function editSkill(id, root) {
     try {
       if (id) await api(`/api/skills/${encodeURIComponent(id)}`, { method: 'PUT', body: { source } });
       else await api('/api/skills', { method: 'POST', body: { source } });
-      m.close(); toast('Workflow saved.', 'success'); renderWorkflows(root);
+      m.close(); toast('Task saved.', 'success'); renderWorkflows(root);
     } catch (error) { toastError(error); }
   };
 }
@@ -595,6 +604,8 @@ export async function renderSettings(root) {
     <fieldset><legend>AI</legend><p>${st.ai_enabled ? `✅ AI answers on: ${esc(st.engine_label)}` : '⚠ Search-only mode: no Claude Code and no API key found.'}</p>
       <p class="muted small">Law library: ${st.acts} Acts, ${(st.sections || 0).toLocaleString('en-IN')} sections · meaning index: ${esc(st.law_index?.status || '')}.
       Change the engine or model in the <code>.env</code> file (see README).</p></fieldset>
+    <fieldset><legend>Advanced</legend>
+      <p><a href="#/workflows">📋 Task recipes</a> <span class="muted small">: change what each task does, or add your own. For whoever sets up the app; lawyers just click the tasks in a chat.</span></p></fieldset>
     <div class="actions"><span class="spacer"></span><button class="btn primary">Save settings</button></div></form>`;
   $('[data-test]', root).onclick = async () => {
     if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();

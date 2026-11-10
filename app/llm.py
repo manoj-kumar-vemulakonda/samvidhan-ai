@@ -6,15 +6,22 @@ Two engines (chosen in .env, see app/config.py):
     in "print mode" with NO tools, so it can only read what we send and write text.
   * The Claude API - needs ANTHROPIC_API_KEY.
 
-Two sizes of model:
-  * FAST - quick jobs: translating a question, reading a scanned page, review-table cells.
-  * MAIN - answers, organisation plans, drafts, workflow results.
+Three sizes of model:
+  * FAST - quick jobs: translating a question, reading a scanned page.
+  * MAIN - answers, organisation plans, drafts, task results, review tables.
+  * DEEP - the "Deep" button in the chat: the strongest model, thinking longer (slower, about 2x the cost).
 
 Four kinds of call:
   complete()       -> text
   complete_json()  -> a dict that matches a JSON schema (organisation plans, review cells)
   read_image()     -> the text on a page image (for scans the local OCR can't read)
   stream()         -> an answer word by word, for the chat
+
+A prompt is a string, or a list of parts from the most stable to the least - for example
+[the case file index, the sources and the question]. With the API, the system prompt and the
+stable parts are marked for prompt caching: if the same beginning is sent again within
+5 minutes (the next question in the same case), Claude reads it back from its cache at a
+tenth of the price or less. Claude Code caches by itself, so there the parts are just joined.
 """
 
 from __future__ import annotations
@@ -33,7 +40,9 @@ from app.claude_code import RUN_DIR, StreamJsonParser, claude_command, clean_env
 
 FAST = "fast"
 MAIN = "main"
+DEEP = "deep"
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+CACHE ={"type": "ephemeral"}  # "keep this beginning of the prompt for 5 minutes"
 
 # Claude Code helpers may run in parallel (review tables, OCR) - but not too many at once
 _slots = threading.BoundedSemaphore(config.CLAUDE_CODE_PARALLEL)
@@ -51,12 +60,54 @@ def available() -> bool:
     return engine() != "off"
 
 
+def api_model(tier: str = MAIN) -> str:
+    """The Claude API model for a size of job."""
+    return {FAST: config.FAST_MODEL, DEEP: config.DEEP_MODEL}.get(tier, config.CLAUDE_MODEL)
+
+
+def _cc_model(tier: str) -> str:
+    """The Claude Code model name for a size of job ('' = Claude Code's own default)."""
+    return {FAST: config.CLAUDE_CODE_FAST_MODEL, DEEP: config.CLAUDE_CODE_DEEP_MODEL}.get(tier, config.CLAUDE_CODE_MODEL)
+
+
+def _effort(tier: str) -> str | None:
+    """How hard Claude thinks: set for MAIN and DEEP jobs; quick jobs use the model's default."""
+    return {MAIN: config.CLAUDE_EFFORT, DEEP: config.DEEP_EFFORT}.get(tier)
+
+
 def model_label(tier: str = MAIN) -> str:
     if engine() == "api":
-        return config.FAST_MODEL if tier == FAST else config.CLAUDE_MODEL
+        return api_model(tier)
     if engine() == "claude_code":
-        return config.CLAUDE_CODE_FAST_MODEL if tier == FAST else (config.CLAUDE_CODE_MODEL or "Claude Code default")
+        return _cc_model(tier) or "Claude Code default"
     return "none"
+
+
+def _join(prompt) -> str:
+    """A prompt as one piece of text (Claude Code, and anywhere caching doesn't apply)."""
+    return prompt if isinstance(prompt, str) else "\n\n".join(part for part in prompt if part)
+
+
+def _system_blocks(system: str) -> list[dict]:
+    """The system prompt, marked for caching (it is the same for every question that day)."""
+    return [{"type": "text", "text": system, "cache_control": CACHE}]
+
+
+def _user_content(prompt) -> str | list[dict]:
+    """
+    The user's message for the API. A list of parts becomes one text block per part, and a
+    cache mark goes after each stable part (never on the last one, which changes every time).
+    A cache mark on text shorter than about 500 tokens is simply ignored by the API.
+    """
+    if isinstance(prompt, str):
+        return prompt
+    parts = [part for part in prompt if part]
+    if len(parts) <= 1:
+        return parts[0] if parts else ""
+    blocks = [{"type": "text", "text": part} for part in parts]
+    for block in blocks[:-1][-2:]:  # at most 2 marks here + 1 on the system prompt (the API allows 4)
+        block["cache_control"] = CACHE
+    return blocks
 
 
 # ---------------------------------------------------------------------------
@@ -67,11 +118,12 @@ def _cc_command(system: str, tier: str, extra: list[str]) -> list[str]:
         "-p", "--tools", "", "--system-prompt", system, "--no-session-persistence",
         "--strict-mcp-config", "--disable-slash-commands", *extra,
     ]
-    model = config.CLAUDE_CODE_FAST_MODEL if tier == FAST else config.CLAUDE_CODE_MODEL
+    model = _cc_model(tier)
     if model:
         command += ["--model", model]
-    if tier == MAIN:
-        command += ["--effort", config.CLAUDE_EFFORT]
+    effort = _effort(tier)
+    if effort:
+        command += ["--effort", effort]
     return command
 
 
@@ -114,15 +166,17 @@ def _api_client():
 
 
 def _api_create(system: str, content, tier: str, max_tokens: int, output_format: dict | None = None):
+    """One API call. `content` is the user's message, ready to send (see _user_content)."""
     params: dict = {
-        "model": config.FAST_MODEL if tier == FAST else config.CLAUDE_MODEL,
+        "model": api_model(tier),
         "max_tokens": max_tokens,
-        "system": system,
+        "system": _system_blocks(system),
         "messages": [{"role": "user", "content": content}],
     }
     output_config: dict = {}
-    if tier == MAIN:
-        output_config["effort"] = config.CLAUDE_EFFORT
+    effort = _effort(tier)
+    if effort:
+        output_config["effort"] = effort
     if output_format:
         output_config["format"] = output_format
     if output_config:
@@ -136,14 +190,14 @@ def _api_create(system: str, content, tier: str, max_tokens: int, output_format:
 # ---------------------------------------------------------------------------
 # Public functions
 # ---------------------------------------------------------------------------
-def complete(system: str, prompt: str, tier: str = FAST, timeout: float = 180, max_tokens: int = 8000) -> str:
+def complete(system: str, prompt, tier: str = FAST, timeout: float = 180, max_tokens: int = 8000) -> str:
     """Ask once, get text back."""
     kind = engine()
     if kind == "claude_code":
-        result = _cc_run(_cc_command(system, tier, ["--output-format", "json"]), prompt, timeout)
+        result = _cc_run(_cc_command(system, tier, ["--output-format", "json"]), _join(prompt), timeout)
         return str(result.get("result") or "").strip()
     if kind == "api":
-        return _api_create(system, prompt, tier, max_tokens).strip()
+        return _api_create(system, _user_content(prompt), tier, max_tokens).strip()
     raise AIUnavailable("AI is switched off (search-only mode).")
 
 
@@ -158,19 +212,20 @@ def _parse_json_text(text: str) -> dict:
     return json.loads(text[start:end + 1])
 
 
-def complete_json(system: str, prompt: str, schema: dict, tier: str = MAIN, timeout: float = 300,
+def complete_json(system: str, prompt, schema: dict, tier: str = MAIN, timeout: float = 300,
                   max_tokens: int = 16000) -> dict:
     """Ask once, get back a dict that follows `schema` (checked by Claude Code / the API)."""
     kind = engine()
     if kind == "claude_code":
         result = _cc_run(
-            _cc_command(system, tier, ["--output-format", "json", "--json-schema", json.dumps(schema)]), prompt, timeout)
+            _cc_command(system, tier, ["--output-format", "json", "--json-schema", json.dumps(schema)]),
+            _join(prompt), timeout)
         structured = result.get("structured_output")
         if isinstance(structured, dict):
             return structured
         return _parse_json_text(str(result.get("result") or ""))
     if kind == "api":
-        text = _api_create(system, prompt, tier, max_tokens, {"type": "json_schema", "schema": schema})
+        text = _api_create(system, _user_content(prompt), tier, max_tokens, {"type": "json_schema", "schema": schema})
         return _parse_json_text(text)
     raise AIUnavailable("AI is switched off (search-only mode).")
 
@@ -192,14 +247,14 @@ def read_image(png: bytes, instruction: str, tier: str = FAST, timeout: float = 
     raise AIUnavailable("AI is switched off (search-only mode).")
 
 
-async def stream(system: str, prompt: str, tier: str = MAIN) -> AsyncIterator[dict]:
+async def stream(system: str, prompt, tier: str = MAIN) -> AsyncIterator[dict]:
     """
     Stream an answer: yields {"type": "delta", "text"} pieces, then one
     {"type": "done", "text", "model", "cost", "stop_reason"} - or {"type": "error", "message"}.
     """
     kind = engine()
     if kind == "claude_code":
-        async for event in _stream_claude_code(system, prompt, tier):
+        async for event in _stream_claude_code(system, _join(prompt), tier):
             yield event
     elif kind == "api":
         async for event in _stream_api(system, prompt, tier):
@@ -286,18 +341,24 @@ async def _stream_claude_code(system: str, prompt: str, tier: str) -> AsyncItera
     }
 
 
-async def _stream_api(system: str, prompt: str, tier: str) -> AsyncIterator[dict]:
+def _async_client():
+    import anthropic
+
+    return anthropic.AsyncAnthropic(api_key=config.ANTHROPIC_API_KEY or None, max_retries=2)
+
+
+async def _stream_api(system: str, prompt, tier: str) -> AsyncIterator[dict]:
     import anthropic
 
     from app.answer import estimate_cost
     from app.answer import friendly_error as api_error
 
-    model = config.FAST_MODEL if tier == FAST else config.CLAUDE_MODEL
-    client = anthropic.AsyncAnthropic(api_key=config.ANTHROPIC_API_KEY or None, max_retries=2)
+    model = api_model(tier)
+    client = _async_client()
     params: dict = {
-        "model": model, "max_tokens": 32000, "system": system,
-        "messages": [{"role": "user", "content": prompt}],
-        "output_config": {"effort": config.CLAUDE_EFFORT},
+        "model": model, "max_tokens": 32000, "system": _system_blocks(system),
+        "messages": [{"role": "user", "content": _user_content(prompt)}],
+        "output_config": {"effort": _effort(tier) or config.CLAUDE_EFFORT},
     }
     if "haiku" not in model:
         params["betas"] = ["server-side-fallback-2026-07-01"]

@@ -1,14 +1,15 @@
 """
-Workflows ("Skills"): reusable recipes for common legal tasks, Legora-style.
+Tasks (in the code: workflows / "Skills"): ready-made recipes for common legal work.
 
-  1. You pick a workflow (e.g. "Check an FIR") and give its inputs / documents.
-  2. The AI writes a step-by-step PLAN for this matter, and may ask questions first.
-  3. You edit the plan if you like, answer the questions, and approve it.
-  4. The AI runs the plan step by step (streamed), citing its sources; the result can be
+  1. The lawyer clicks a task (e.g. "Check an FIR"), fills a small form and clicks Start.
+  2. The AI follows the task's steps (streamed), citing its sources; the result can be
      downloaded as Word and saved in the case's 08 Drafts folder.
 
-Each workflow is a plain-English file in the skills\\ folder. Copy one to make your own -
-no coding needed. Format:
+  With "Show me the steps first" ticked, step 2 waits: the AI first adapts the steps to this
+  matter (and may ask up to 3 questions), and the lawyer edits and approves them.
+
+Each task is a plain-English file in the skills\\ folder. Copy one to make your own -
+no coding needed (Settings -> Task recipes). Format:
 
     ---
     id: check-fir
@@ -148,7 +149,7 @@ def save_skill(text: str, original_id: str | None = None) -> Skill:
 # ---------------------------------------------------------------------------
 # Planning
 # ---------------------------------------------------------------------------
-PLANNER = """You plan legal work for an Indian advocate. You are given a workflow (a recipe), the lawyer's
+PLANNER = """You plan legal work for an Indian advocate. You are given a task (a recipe), the lawyer's
 inputs, and the documents chosen. Write a concrete step plan FOR THIS MATTER (4-8 steps): each step a short
 title plus one sentence saying what will be checked or produced, naming the specific documents, sections or
 facts involved where known. If something essential is missing to do the work well, add it to "questions"
@@ -184,13 +185,19 @@ def documents_text(document_ids: list[int], limit: int = 45000) -> str:
     return "\n\n".join(parts)
 
 
+def standard_plan(skill: Skill) -> dict:
+    """The task's own steps, as written in its file (used when the lawyer just clicks Start)."""
+    return {"summary": skill.purpose.splitlines()[0] if skill.purpose else skill.title,
+            "steps": [{"title": s, "detail": ""} for s in skill.steps], "questions": [], "made_by": "skill"}
+
+
 def make_plan(run_id: int) -> dict:
+    """'Show me the steps first': the AI adapts the steps to this matter, for the lawyer to approve."""
     run = store.get_run(run_id)
     skill = get_skill(run["skill"])
     if skill is None:
-        return store.update_run(run_id, status="failed", output="This workflow no longer exists.")
-    plan = {"summary": skill.purpose.splitlines()[0] if skill.purpose else skill.title,
-            "steps": [{"title": s, "detail": ""} for s in skill.steps], "questions": [], "made_by": "skill"}
+        return store.update_run(run_id, status="failed", output="This task no longer exists.")
+    plan = standard_plan(skill)
     if llm.available():
         try:
             index = ""
@@ -200,25 +207,25 @@ def make_plan(run_id: int) -> dict:
                         for d in store.list_documents(case_id=run["case_id"])[:80]]
                 index = (f"<case title=\"{case['title']}\" court=\"{case['court']}\" stage=\"{case['stage']}\">\n"
                          + ("\n".join(rows) or "(no documents filed yet)")
-                         + "\n</case>\n(The whole case file above is available when the workflow runs.)\n\n")
-            prompt = (index + f"<workflow title=\"{skill.title}\">\n{skill.purpose}\n\nDefault steps:\n"
+                         + "\n</case>\n(The whole case file above is available when the task runs.)\n\n")
+            prompt = (index + f"<task title=\"{skill.title}\">\n{skill.purpose}\n\nDefault steps:\n"
                       + "\n".join(f"{i}. {s}" for i, s in enumerate(skill.steps, 1))
-                      + f"\n\nInstructions:\n{skill.instructions}\n</workflow>\n\n<inputs>\n{inputs_text(skill, run['inputs'])}\n</inputs>\n\n"
+                      + f"\n\nInstructions:\n{skill.instructions}\n</task>\n\n<inputs>\n{inputs_text(skill, run['inputs'])}\n</inputs>\n\n"
                       + f"<documents>\n{documents_text(run['inputs'].get('document_ids') or [], 20000)}\n</documents>")
             made = llm.complete_json(PLANNER, prompt, PLAN_SCHEMA, tier=llm.MAIN, timeout=240)
             if made.get("steps"):
                 plan = {**made, "made_by": "ai"}
         except Exception as error:
-            plan["note"] = f"The AI could not adapt the plan ({str(error)[:150]}); these are the workflow's standard steps."
+            plan["note"] = f"The AI could not adapt the plan ({str(error)[:150]}); these are the task's standard steps."
     return store.update_run(run_id, status="waiting", plan=plan)
 
 
 EXECUTE = """
 
-You are now running the workflow "{title}" for this lawyer. Follow the APPROVED PLAN exactly, in order.
+You are now doing the task "{title}" for this lawyer. Follow the APPROVED PLAN exactly, in order.
 Write each step under a heading "## Step N: <title>", short and to the point, with citations.
 Finish with a heading "## Result" that contains the deliverable{deliverable}.
-Workflow instructions:
+Instructions for this task:
 {instructions}"""
 
 
@@ -229,7 +236,7 @@ def execution_prompts(run: dict, skill: Skill, steps: list[dict], answers: dict)
     plan_text = "\n".join(f"{i}. {s.get('title', '').strip()}" + (f" - {s.get('detail', '').strip()}" if s.get("detail") else "")
                           for i, s in enumerate(steps, 1) if s.get("title", "").strip())
     answers_text = "\n".join(f"- Q: {q}\n  A: {a}" for q, a in (answers or {}).items() if str(a).strip())
-    material = (f"<workflow_inputs>\n{inputs_text(skill, run['inputs'])}\n</workflow_inputs>\n\n"
+    material = (f"<task_inputs>\n{inputs_text(skill, run['inputs'])}\n</task_inputs>\n\n"
                 f"<chosen_documents>\n{documents_text(run['inputs'].get('document_ids') or [])}\n</chosen_documents>\n\n"
                 f"<approved_plan>\n{plan_text}\n</approved_plan>")
     if answers_text:

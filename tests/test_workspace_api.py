@@ -146,6 +146,38 @@ def test_tools(client):
     assert len(run["plan"]["steps"]) >= 3
 
 
+def test_a_task_can_start_straight_away(client):
+    chat = client.post("/api/chats", json={"title": "x"}).json()
+    started = client.post("/api/runs", json={"chat_id": chat["id"], "skill": "rti-application", "inputs": {},
+                                             "review_steps": False}).json()
+    run = started["run"]  # no planning call: the task's own steps, ready to run at once
+    assert run["status"] == "waiting" and run["plan"]["made_by"] == "skill" and len(run["plan"]["steps"]) >= 3
+    assert started["message"]["data"]["title"] == "Draft an RTI application"
+    # AI is off in these tests, so running it says so plainly
+    events = sse_events(client.post(f"/api/runs/{run['id']}/execute", json={"steps": run["plan"]["steps"]}).text)
+    assert events[-1][0] == "error" and "a task needs" in events[-1][1]["message"]
+
+
+def test_the_deep_button_reaches_the_model(client, monkeypatch):
+    from app import llm
+
+    seen = []
+
+    async def fake_stream(system, prompt, tier=llm.MAIN):
+        seen.append((tier, prompt))
+        yield {"type": "delta", "text": "An answer."}
+        yield {"type": "done", "text": "An answer.", "model": "fake", "cost": None, "stop_reason": "end_turn"}
+
+    monkeypatch.setattr(llm, "available", lambda: True)
+    monkeypatch.setattr(llm, "stream", fake_stream)
+    chat = client.post("/api/chats", json={"title": "x"}).json()
+    for deep in (False, True):
+        events = sse_events(client.post(f"/api/chats/{chat['id']}/ask", json={"question": "Is cheating bailable?", "deep": deep}).text)
+        assert events[-1][0] == "done" and events[-1][1]["message"]["data"]["deep"] is deep
+    assert [tier for tier, _ in seen] == [llm.MAIN, llm.DEEP]
+    assert isinstance(seen[0][1], list) and seen[0][1][-1].endswith("<question>\nIs cheating bailable?\n</question>")
+
+
 def test_citation_check_covers_documents_sections_and_articles(workspace, law_library, engine):
     case = store.create_case({"title": "X"})
     document = store.add_document({"case_id": case["id"], "title": "Order", "doc_type": "Order"}, ["text"])

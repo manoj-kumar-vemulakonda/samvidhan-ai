@@ -1,6 +1,33 @@
-﻿# Plan: Samvidhan AI, the AI workspace for Indian lawyers
+# Plan: Samvidhan AI, the AI workspace for Indian lawyers
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
+
+## Version 3.3 (10 Nov 2026): simple tasks, Deep answers, cheaper AI
+
+You said workflows were confusing for you and for lawyers, and asked for the most cost-efficient AI with the best results.
+
+- **"Workflows" are now "Tasks".**
+  - Every new chat shows them as buttons, and **📋 Tasks** sits under the chat box and on Home.
+  - Click a task, fill its small form and press **Start ▶**: the result is written straight away. That's one AI call instead of two, since the planning call is skipped.
+  - **Show me the steps first** brings back the old plan → approve screen for lawyers who want it.
+  - The recipe editor moved out of the left column to **Settings → Advanced → Task recipes**.
+  - The stray blank "My workflow" recipe was removed.
+- **Three model sizes, one per kind of job.**
+  - Everyday work uses **Claude Sonnet 5.5** (the new API default, half Opus's price).
+  - **🧠 Deep** in the chat uses **Claude Opus 5.5** at effort `high`, for hard questions.
+  - Small jobs use **Claude Haiku 5.5**.
+  - With Claude Code the same switch picks `opus`.
+  - Settings: `CLAUDE_MODEL`, `DEEP_MODEL`, `DEEP_EFFORT`, `CLAUDE_CODE_DEEP_MODEL`.
+- **Prompt caching (API).**
+  - The system prompt and a case's details and file index are marked for caching, so the next question in the same case reads them back at $0.20 per million tokens instead of $2.
+  - The cost under each answer now prices cached tokens correctly; before, it charged them at the full input price.
+- **Checked live in headless Edge with Claude Code:**
+  - **Home → Tasks** opened the picker, and a new chat showed 7 task buttons (the other 3 are for case chats).
+  - **Rights after arrest → Start** ran at once, with no plan screen, and wrote its report with 6 green citations.
+  - A **🧠 Deep** answer was labelled as such.
+  - **Settings → Task recipes** listed all 10 recipes.
+  - There were no JavaScript errors.
+- **Tests:** 200 pass (8 new). Caching and the model sizes are tested with a fake API client; no API key was used.
 
 ## Version 3.2 (10 Nov 2026): the drop box on the home screen
 

@@ -1,5 +1,6 @@
 // chat.js - a chat (in a case or general): messages, streamed answers, file uploads,
-// the AI's organisation plan (edit / approve) and workflow runs (plan -> approve -> run).
+// the AI's organisation plan (edit / approve) and tasks (click -> small form -> Start -> result;
+// in the code a task is a "workflow" / "skill").
 
 import {
   $, $$, KIND_LABEL, S, api, confirmBox, download, esc, h, markdown, modal, niceDate, spinner, streamPost,
@@ -8,6 +9,7 @@ import {
 
 let view = null;          // {root, chat, case, messages}
 let controller = null;    // to stop a streaming answer
+let deep = false;         // the "Deep" button: the strongest model, thinking longer (stays on until clicked off)
 const planEdits = {};     // plan id -> the plan as you are editing it
 const FOLDERS = ['01 Pleadings & Petitions', '02 Applications', '03 Orders & Judgments', '04 Police Records',
   '05 Evidence & Exhibits', '06 Notices & Correspondence', '07 Client Documents', '08 Drafts', '09 Research & Notes', '99 Other'];
@@ -55,7 +57,9 @@ function composerHtml(isCase) {
     <textarea rows="1" maxlength="8000" placeholder="${isCase ? 'Ask about this case, or drop its files here…' : 'Ask anything about Indian law, or drop a file…'}" aria-label="Your question"></textarea>
     <div class="composer-bar">
       <label class="icon-btn" title="Add files (PDF, Word, photos)">📎<input type="file" multiple hidden accept=".pdf,.docx,.txt,.md,.jpg,.jpeg,.png,.webp,.tif,.tiff,.bmp"></label>
-      <button type="button" class="btn small ghost" data-workflows>⚡ Workflows</button>
+      <button type="button" class="btn small ghost" data-workflows title="Ready-made tasks: check an FIR, draft a bail application, reply to a notice…">📋 Tasks</button>
+      <button type="button" class="btn small ghost deep-btn" data-deep aria-pressed="${deep}"
+        title="Deep answer: the strongest model thinks longer. Use it for hard questions - slower, and about twice the cost.">🧠 Deep</button>
       <div class="seg small" role="group" aria-label="Answer style">
         <button type="button" data-style="detailed" class="${style === 'detailed' ? 'active' : ''}">For lawyers</button>
         <button type="button" data-style="simple" class="${style === 'simple' ? 'active' : ''}">Plain words</button></div>
@@ -83,6 +87,12 @@ function bindComposer(root) {
   });
   $('input[type=file]', form).onchange = (e) => { uploadFiles([...e.target.files]); e.target.value = ''; };
   $('[data-workflows]', form).onclick = () => workflowPicker();
+  const deepButton = $('[data-deep]', form);
+  deepButton.onclick = () => {
+    deep = !deep;
+    deepButton.setAttribute('aria-pressed', String(deep));
+    if (deep) toast('Deep answers on: the strongest model, thinking longer. Click 🧠 Deep again to turn it off.', 'info', 4000);
+  };
   $('[data-stop]', form).onclick = () => { if (controller) controller.abort(); };
   const zone = $('#chat-drop', root);
   let depth = 0;
@@ -111,6 +121,7 @@ function renderMessages() {
   if (!view.messages.length) {
     list.innerHTML = emptyState();
     $$('[data-example]', list).forEach((b) => { b.onclick = () => setComposerText(b.textContent, true); });
+    fillTaskButtons(list);
     return;
   }
   list.innerHTML = '';
@@ -118,16 +129,21 @@ function renderMessages() {
   list.scrollTop = list.scrollHeight;
 }
 
+const TASKS_HTML = `<div class="task-strip"><h4>Start a task</h4><div class="task-buttons" data-tasks>${spinner()}</div></div>`;
+
 function emptyState() {
   if (view.case) {
     return `<div class="empty-chat"><h3>${esc(view.case.title)}</h3>
       <p><b>Drop the case files here</b> (FIR, orders, petitions, notices, scans, photos). I'll read them and propose how to file and name them. I'll also suggest the hearing dates and deadlines for your calendar, and nothing moves until you approve.</p>
-      <p class="muted">Then ask anything, for example:</p>
+      ${TASKS_HTML}
+      <p class="muted">Or ask anything, for example:</p>
       <div class="examples"><button data-example>What did the court direct at the last hearing?</button>
       <button data-example>Make a list of dates from the file</button><button data-example>What are our strongest grounds for bail?</button></div></div>`;
   }
   return `<div class="empty-chat"><h3>Ask anything about Indian law</h3>
-    <p class="muted">Answers cite the BNS, BNSS, BSA, IPC, CrPC, CPC, the Constitution and about 95 other Acts, and every citation is checked. Questions work in English, हिंदी, Hinglish, தமிழ், తెలుగు, বাংলা, मराठी and more.</p>
+    <p class="muted">Answers cite the BNS, BNSS, BSA, IPC, CrPC, CPC, the Constitution, 160+ other Acts and court rule books, and every citation is checked. Questions work in English, हिंदी, Hinglish, தமிழ், తెలుగు, বাংলা, मराठी and more.</p>
+    ${TASKS_HTML}
+    <p class="muted">Or ask a question, for example:</p>
     <div class="examples"><button data-example>What is the punishment for cheating under the BNS, and what was it under the IPC?</button>
     <button data-example>When is anticipatory bail available under the BNSS?</button>
     <button data-example>Cheque bounce: what are the time limits under section 138 NI Act?</button>
@@ -213,7 +229,7 @@ function fillAnswer(el, content, data, streaming = false) {
   const counts = data.citations?.counts;
   const check = counts ? `<span class="check ${counts.unknown || counts.outside ? 'bad' : 'good'}" title="Green = from the sources; amber = in the library, not given to the AI; red = not found">
     ${counts.verified ? `🟢 ${counts.verified}` : ''} ${counts.library ? `🟠 ${counts.library}` : ''} ${(counts.unknown || 0) + (counts.outside || 0) ? `🔴 ${(counts.unknown || 0) + (counts.outside || 0)}` : ''}</span>` : '';
-  const cost = data.cost ? `<span class="muted small" title="${data.cost.billing === 'subscription' ? 'Included in your Claude subscription; this is what the API would have cost' : 'Charged to your API credits'}">${esc(data.model || '')} · ≈ ₹${data.cost.inr}</span>` : '';
+  const cost = data.cost ? `<span class="muted small" title="${data.cost.billing === 'subscription' ? 'Included in your Claude subscription; this is what the API would have cost' : 'Charged to your API credits'}${data.cost.cached_tokens ? ` (${data.cost.cached_tokens.toLocaleString('en-IN')} tokens read from the cache at a lower price)` : ''}">${data.deep ? '🧠 Deep · ' : ''}${esc(data.model || '')} · ≈ ₹${data.cost.inr}</span>` : '';
   foot.innerHTML = `${sourcesHtml(data.sources)}
     <div class="answer-actions">${check}
       ${content ? `<button class="link small" data-copy>Copy</button>
@@ -246,6 +262,7 @@ async function ask(question) {
   const list = $('.messages', view.root);
   if ($('.empty-chat', list)) list.innerHTML = '';
   const style = $('.composer [data-style].active', view.root)?.dataset.style || 'detailed';
+  const askDeep = deep;
   const userEl = h(`<div class="msg user"><div class="bubble">${esc(question).replace(/\n/g, '<br>')}</div></div>`);
   const answerEl = h(`<div class="msg assistant streaming"><div class="answer"><div class="answer-body">${spinner('Searching the case file and the law…')}</div><div class="answer-foot"></div></div></div>`);
   list.append(userEl, answerEl);
@@ -258,9 +275,12 @@ async function ask(question) {
   let lastPaint = 0;
   const chatId = view.chat.id;
   try {
-    await streamPost(`/api/chats/${chatId}/ask`, { question, style }, {
+    await streamPost(`/api/chats/${chatId}/ask`, { question, style, deep: askDeep }, {
       start: (data) => { userEl.dataset.id = data.user_message.id; if (data.chat && !view.case) { $('.chat-title', view.root) && ($('.chat-title', view.root).textContent = data.chat.title); } },
-      sources: (data) => { sources = data; fillAnswer(answerEl, '', { sources }, true); $('.answer-body', answerEl).innerHTML = spinner(data.ai_enabled ? 'Writing the answer…' : ''); },
+      sources: (data) => {
+        sources = data; fillAnswer(answerEl, '', { sources }, true);
+        $('.answer-body', answerEl).innerHTML = spinner(!data.ai_enabled ? '' : askDeep ? 'Thinking deeply… (a Deep answer takes longer)' : 'Writing the answer…');
+      },
       delta: (data) => {
         text += data.text;
         const now = performance.now();
@@ -319,6 +339,7 @@ function addOrReplaceMessage(message) {
   const list = $('.messages', view.root);
   if ($('.empty-chat', list)) list.innerHTML = '';
   const existing = $(`.msg[data-id="${message.id}"]`, list);
+  if (existing?.classList.contains('running')) return; // a task is writing its result here right now
   const el = messageElement(message);
   if (existing) existing.replaceWith(el);
   else {
@@ -527,23 +548,38 @@ function renderPlanEditor(box, plan, edit) {
 }
 
 // ---------------------------------------------------------------------------
-// Workflows: pick -> inputs -> AI plan -> approve -> run (streamed)
+// Tasks: click -> small form -> Start -> the result (streamed).
+// "Show me the steps first" adds a step: the AI adapts the steps, you edit and approve them.
 // ---------------------------------------------------------------------------
+async function usableTasks() {
+  const skills = await api('/api/skills');
+  return skills.filter((s) => (view.case ? s.where !== 'general' : s.where !== 'case'));
+}
+
+async function fillTaskButtons(container) {
+  const holder = $('[data-tasks]', container);
+  if (!holder) return;
+  try {
+    const tasks = await usableTasks();
+    holder.innerHTML = tasks.map((s) => `<button class="task-btn" data-task="${esc(s.id)}" title="${esc((s.purpose || '').split('\n')[0])}">
+      <span class="task-icon">${esc(s.icon)}</span><span>${esc(s.title)}</span></button>`).join('');
+    $$('[data-task]', holder).forEach((b) => { b.onclick = () => workflowForm(tasks.find((s) => s.id === b.dataset.task)); });
+  } catch { holder.closest('.task-strip')?.remove(); }
+}
+
 export async function workflowPicker(preselect = null, prefill = {}) {
   if (!view) return;
-  const skills = await api('/api/skills');
-  const usable = skills.filter((s) => (view.case ? s.where !== 'general' : s.where !== 'case'));
-  const m = modal('Run a workflow', `<div class="skill-grid">${usable.map((s) => `
+  const usable = await usableTasks();
+  if (preselect) { const skill = usable.find((s) => s.id === preselect); if (skill) { workflowForm(skill, prefill); return; } }
+  const m = modal('Start a task', `<div class="skill-grid">${usable.map((s) => `
     <button class="skill-card" data-skill="${esc(s.id)}"><span class="skill-icon">${esc(s.icon)}</span>
       <b>${esc(s.title)}</b><span class="muted small">${esc((s.purpose || '').split('\n')[0].slice(0, 140))}</span>
-      <span class="badge">${s.output === 'draft' ? 'Draft' : 'Report'}</span></button>`).join('')}</div>
-    <p class="muted small">Workflows are plain-English files in the <code>skills</code> folder. Edit them or add your own under ⚡ Workflows in the left column.</p>`, { wide: true });
-  const choose = (skill) => { m.close(); workflowForm(skill, prefill); };
-  $$('[data-skill]', m.root).forEach((b) => { b.onclick = () => choose(usable.find((s) => s.id === b.dataset.skill)); });
-  if (preselect) { const skill = usable.find((s) => s.id === preselect); if (skill) choose(skill); }
+      <span class="badge">${s.output === 'draft' ? 'Draft' : 'Report'}</span></button>`).join('')}</div>`, { wide: true });
+  $$('[data-skill]', m.root).forEach((b) => { b.onclick = () => { m.close(); workflowForm(usable.find((s) => s.id === b.dataset.skill), prefill); }; });
 }
 
 function workflowForm(skill, prefill = {}) {
+  if (!skill || !view) return;
   const documents = view.case ? null : view.documents;
   const fields = skill.inputs.map((i) => `<label>${esc(i.label)}
     ${i.type === 'textarea' ? `<textarea name="${esc(i.key)}" rows="3">${esc(prefill[i.key] || '')}</textarea>`
@@ -553,9 +589,14 @@ function workflowForm(skill, prefill = {}) {
       ${fields}
       ${skill.documents !== 'none' ? `<fieldset><legend>Documents to use ${skill.documents === 'required' ? '(at least one)' : '(optional)'}</legend>
         <div class="doc-picker">${spinner()}</div></fieldset>` : ''}
-      <div class="actions"><button type="button" class="btn" data-cancel>Cancel</button><button class="btn primary">Make the plan →</button></div>
+      <div class="actions"><label class="check small" title="The AI first adapts the steps to this matter, and may ask you up to 3 questions. You approve the steps before it starts.">
+          <input type="checkbox" name="review_steps"> Show me the steps first</label>
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-cancel>Cancel</button><button class="btn primary" data-go>Start ▶</button></div>
     </form>`, { wide: true });
   $('[data-cancel]', m.root).onclick = m.close;
+  const review = $('[name=review_steps]', m.root);
+  review.onchange = () => { $('[data-go]', m.root).textContent = review.checked ? 'Show the steps →' : 'Start ▶'; };
   const picker = $('.doc-picker', m.root);
   if (picker) {
     const load = view.case ? api(`/api/cases/${view.case.id}/documents`).then((r) => r.folders.flatMap((f) => f.documents)) : Promise.resolve(documents || []);
@@ -568,15 +609,26 @@ function workflowForm(skill, prefill = {}) {
   $('#wf-form').onsubmit = async (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
+    const reviewSteps = form.has('review_steps');
     const inputs = {};
-    for (const [key, value] of form.entries()) if (key !== 'doc') inputs[key] = value;
+    for (const [key, value] of form.entries()) if (key !== 'doc' && key !== 'review_steps') inputs[key] = value;
     inputs.document_ids = form.getAll('doc').map(Number);
     if (skill.documents === 'required' && !inputs.document_ids.length) { toast('Choose at least one document (or upload it first).', 'warn'); return; }
+    const button = $('[data-go]', m.root);
+    button.disabled = true;
     try {
-      const result = await api('/api/runs', { method: 'POST', body: { chat_id: view.chat.id, skill: skill.id, inputs } });
+      const result = await api('/api/runs', {
+        method: 'POST', body: { chat_id: view.chat.id, skill: skill.id, inputs, review_steps: reviewSteps },
+      });
       m.close();
-      addOrReplaceMessage({ ...result.message, run: result.run });
-    } catch (error) { toastError(error); }
+      const message = { ...result.message, run: result.run };
+      addOrReplaceMessage(message);
+      if (!reviewSteps) {
+        // Straight to work: run the task's own steps now
+        const el = $(`.msg.workflow[data-id="${message.id}"]`, view.root);
+        if (el) executeRun(el, result.run, result.run.plan?.steps || [], {}, message.data || {});
+      }
+    } catch (error) { toastError(error); button.disabled = false; }
   };
 }
 
@@ -587,11 +639,13 @@ export function startHearingBrief(event) {
   location.hash = `#/case/${event.case_id}`;
 }
 
+const STATUS_LABEL = { planning: 'preparing the steps', waiting: 'waiting for you', running: 'working', done: 'done', failed: 'stopped', cancelled: 'cancelled' };
+
 function workflowElement(m) {
   const run = m.run || {};
   const data = m.data || {};
   const el = h(`<div class="msg workflow" data-id="${m.id}" data-run="${run.id || data.run_id}"><div class="wf-box">
-    <div class="wf-head"><h3>${esc(data.icon || '⚡')} ${esc(data.title || run.skill || 'Workflow')}</h3><span class="badge wf-status">${esc(run.status || '')}</span></div>
+    <div class="wf-head"><h3>${esc(data.icon || '📋')} ${esc(data.title || run.skill || 'Task')}</h3><span class="badge wf-status">${esc(STATUS_LABEL[run.status] || run.status || '')}</span></div>
     <div class="wf-body"></div></div></div>`);
   const body = $('.wf-body', el);
   const status = run.status;
@@ -628,14 +682,14 @@ function workflowElement(m) {
     body.innerHTML = `<div data-id="${m.id}"><div class="answer"><div class="answer-body"></div><div class="answer-foot"></div></div></div>`;
     const holder = $('[data-id]', body);
     const output = m.content || run.output || '';
-    fillAnswer(holder, output, status === 'failed' && !output ? { error: 'The workflow did not finish. Try again.' } : data);
+    fillAnswer(holder, output, status === 'failed' && !output ? { error: 'The task did not finish. Try again.' } : data);
   }
   return el;
 }
 
 async function executeRun(el, run, steps, answers, data) {
   el.classList.add('running');
-  $('.wf-status', el).textContent = 'running';
+  $('.wf-status', el).textContent = STATUS_LABEL.running;
   const body = $('.wf-body', el);
   body.innerHTML = `<div class="wf-progress">${steps.map((s, i) => `<div class="wf-p" data-p="${i + 1}"><span class="n">${i + 1}</span> ${esc(s.title)}</div>`).join('')}</div>
     <div data-id="${el.dataset.id}"><div class="answer"><div class="answer-body">${spinner('Starting…')}</div><div class="answer-foot"></div></div></div>`;
@@ -661,9 +715,9 @@ async function executeRun(el, run, steps, answers, data) {
       },
       done: (d) => {
         fillAnswer(holder, text, { ...data, sources, citations: d.citations, model: d.model, cost: d.cost });
-        mark(); $('.wf-status', el).textContent = 'done';
+        mark(); $('.wf-status', el).textContent = STATUS_LABEL.done;
       },
-      error: (d) => { fillAnswer(holder, text, { sources, error: d.message }); $('.wf-status', el).textContent = 'failed'; },
+      error: (d) => { fillAnswer(holder, text, { sources, error: d.message }); $('.wf-status', el).textContent = STATUS_LABEL.failed; },
     });
   } catch (error) {
     fillAnswer(holder, text, { sources, error: error.message });

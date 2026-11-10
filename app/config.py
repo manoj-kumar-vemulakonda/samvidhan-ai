@@ -46,14 +46,21 @@ CLAUDE_CODE_MODEL = os.getenv("CLAUDE_CODE_MODEL", "").strip()  # optional: empt
 
 # ---- Claude API ------------------------------------------------------------
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
-CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "").strip() or "claude-opus-5-5"
+# Three sizes of model, one per kind of job (see app/llm.py):
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "").strip() or "claude-sonnet-5-5"  # everyday: answers, plans, drafts
+DEEP_MODEL = os.getenv("DEEP_MODEL", "").strip() or "claude-opus-5-5"        # the "Deep" button: hard questions
 FAST_MODEL = "claude-haiku-5-5"  # small jobs, like turning a Hindi question into English search words
-# The same two tiers when Claude Code answers (its own short model names)
+# The same tiers when Claude Code answers (its own short model names)
 CLAUDE_CODE_FAST_MODEL = os.getenv("CLAUDE_CODE_FAST_MODEL", "").strip() or "haiku"
+CLAUDE_CODE_DEEP_MODEL = os.getenv("CLAUDE_CODE_DEEP_MODEL", "").strip() or "opus"
 CLAUDE_CODE_PARALLEL = 3  # how many Claude Code helpers may run at once (review tables, OCR)
+EFFORTS = ("low", "medium", "high", "xhigh", "max")
 CLAUDE_EFFORT = os.getenv("CLAUDE_EFFORT", "").strip().lower() or "medium"
-if CLAUDE_EFFORT not in {"low", "medium", "high", "xhigh", "max"}:
+if CLAUDE_EFFORT not in EFFORTS:
     CLAUDE_EFFORT = "medium"
+DEEP_EFFORT = os.getenv("DEEP_EFFORT", "").strip().lower() or "high"  # a Deep answer thinks longer
+if DEEP_EFFORT not in EFFORTS:
+    DEEP_EFFORT = "high"
 
 # A safety cap on how long one answer (including Claude's thinking) can be.
 # Normal answers are far shorter; this only limits cost if something goes wrong.
@@ -70,6 +77,11 @@ PRICES_PER_MILLION = {
     "claude-opus-4-8": (5.00, 25.00),
     "claude-sonnet-5": (2.00, 10.00),
 }
+# Prompt caching (app/llm.py): text Claude has seen in the last 5 minutes is read back from the
+# cache. Reading costs this much per million tokens (others: a tenth of the input price);
+# saving text into the cache costs 1.25x the input price, once.
+CACHE_READ_PER_MILLION = {"claude-opus-5-5": 0.20, "claude-sonnet-5-5": 0.20, "claude-fable-5-1": 0.25}
+CACHE_WRITE_FACTOR = 1.25
 try:
     USD_TO_INR = float(os.getenv("USD_TO_INR", "88"))
 except ValueError:
@@ -130,7 +142,7 @@ def engine_label() -> str:
     """A short description of the engine, shown on the page."""
     engine = answer_engine()
     if engine == "api":
-        return f"{CLAUDE_MODEL} via API key"
+        return f"{CLAUDE_MODEL} via API key (Deep: {DEEP_MODEL})"
     if engine == "claude_code":
         return "Claude Code (your Claude subscription)"
     return "Search-only"

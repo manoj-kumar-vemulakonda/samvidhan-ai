@@ -170,15 +170,16 @@ def estimate_cost(model: str, usage) -> dict:
     price_in, price_out = config.PRICES_PER_MILLION.get(
         model, config.PRICES_PER_MILLION.get(config.CLAUDE_MODEL, (0.0, 0.0))
     )
-    input_tokens = (
-        (getattr(usage, "input_tokens", 0) or 0)
-        + (getattr(usage, "cache_creation_input_tokens", 0) or 0)
-        + (getattr(usage, "cache_read_input_tokens", 0) or 0)
-    )
+    fresh = getattr(usage, "input_tokens", 0) or 0
+    cache_write = getattr(usage, "cache_creation_input_tokens", 0) or 0  # saved into the cache (1.25x)
+    cache_read = getattr(usage, "cache_read_input_tokens", 0) or 0       # read back from the cache (cheap)
+    read_price = config.CACHE_READ_PER_MILLION.get(model, price_in / 10)
     output_tokens = getattr(usage, "output_tokens", 0) or 0
-    usd = input_tokens * price_in / 1_000_000 + output_tokens * price_out / 1_000_000
+    usd = (fresh * price_in + cache_write * price_in * config.CACHE_WRITE_FACTOR
+           + cache_read * read_price + output_tokens * price_out) / 1_000_000
     return {
-        "input_tokens": input_tokens,
+        "input_tokens": fresh + cache_write + cache_read,
+        "cached_tokens": cache_read,
         "output_tokens": output_tokens,
         "usd": round(usd, 5),
         "inr": round(usd * config.USD_TO_INR, 2),

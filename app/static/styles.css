@@ -224,7 +224,7 @@ ul.plain li { margin: 3px 0; }
 .plan-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
 .revise { display: flex; gap: 8px; margin-top: 10px; }
 
-/* ---- workflows ------------------------------------------------------------ */
+/* ---- tasks (workflows) ----------------------------------------------------- */
 .wf-steps { padding-left: 1.4em; }
 .wf-steps li { margin: 6px 0; position: relative; }
 .wf-steps li input { padding: 5px 30px 5px 8px; }
@@ -241,6 +241,15 @@ ul.plain li { margin: 3px 0; }
 .skill-card:not(.static):hover { border-color: var(--navy-2); box-shadow: var(--shadow); }
 .skill-card.static { cursor: default; }
 .skill-icon { font-size: 1.5rem; }
+/* tasks as big buttons in a new chat */
+.task-strip { margin: 18px 0 10px; }
+.task-strip h4 { margin: 0 0 8px; font-size: .9rem; color: var(--navy); }
+.task-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; text-align: left; }
+.task-btn { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 10px 12px; cursor: pointer; font: inherit; font-size: .88rem; font-weight: 600; color: var(--ink); text-align: left; }
+.task-btn:hover { border-color: var(--navy-2); box-shadow: var(--shadow); color: var(--navy); }
+.task-icon { font-size: 1.25rem; }
+/* the Deep switch in the composer */
+.deep-btn[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
 .doc-picker { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; }
 .doc-pick { display: flex !important; gap: 8px; align-items: baseline; font-size: .88rem; }
 .doc-pick input { width: auto; }

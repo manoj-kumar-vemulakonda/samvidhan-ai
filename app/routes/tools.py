@@ -74,7 +74,7 @@ def list_skills() -> list[dict]:
 def get_skill(skill_id: str) -> dict:
     skill = workflows.get_skill(skill_id)
     if not skill:
-        raise HTTPException(status_code=404, detail="Workflow not found.")
+        raise HTTPException(status_code=404, detail="Task not found.")
     return skill.to_dict(full=True)
 
 
@@ -97,7 +97,7 @@ def new_skill(request: SkillText) -> dict:
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     if workflows.get_skill(skill.id):
-        raise HTTPException(status_code=400, detail=f"A workflow with the id '{skill.id}' already exists - change the id.")
+        raise HTTPException(status_code=400, detail=f"A task with the id '{skill.id}' already exists - change the id.")
     return workflows.save_skill(request.source).to_dict(full=True)
 
 
@@ -105,7 +105,7 @@ def new_skill(request: SkillText) -> dict:
 def delete_skill(skill_id: str) -> dict:
     skill = workflows.get_skill(skill_id)
     if not skill:
-        raise HTTPException(status_code=404, detail="Workflow not found.")
+        raise HTTPException(status_code=404, detail="Task not found.")
     path = Path(skill.path)
     trash = config.SKILLS_DIR / "_removed"
     trash.mkdir(exist_ok=True)
@@ -120,6 +120,7 @@ class StartRun(BaseModel):
     chat_id: int
     skill: str
     inputs: dict = Field(default_factory=dict)
+    review_steps: bool = True  # False = "Start": skip the plan screen and run the task's own steps
 
 
 @router.post("/api/runs")
@@ -127,12 +128,17 @@ async def start_run(request: StartRun) -> dict:
     chat = need_chat(request.chat_id)
     skill = workflows.get_skill(request.skill)
     if not skill:
-        raise HTTPException(status_code=404, detail="Workflow not found.")
+        raise HTTPException(status_code=404, detail="Task not found.")
     inputs = dict(request.inputs)
     inputs["document_ids"] = [int(d) for d in inputs.get("document_ids") or []][:20]
     run = store.create_run(chat["id"], chat["case_id"], skill.id, inputs)
     message = store.add_message(chat["id"], "workflow", "", {"run_id": run["id"], "title": skill.title, "icon": skill.icon})
     store.update_run(run["id"], message_id=message["id"])
+    if not request.review_steps:
+        # Ready to run at once: the page calls /execute straight away with these steps
+        run = store.update_run(run["id"], status="waiting", plan=workflows.standard_plan(skill))
+        bus.publish("message", {"chat_id": chat["id"], "message": {**message, "run": run}})
+        return {"run": run, "message": message}
     bus.publish("message", {"chat_id": chat["id"], "message": {**message, "run": store.get_run(run["id"])}})
 
     def plan_it() -> None:
@@ -148,7 +154,7 @@ async def start_run(request: StartRun) -> dict:
 def get_run(run_id: int) -> dict:
     run = store.get_run(run_id)
     if not run:
-        raise HTTPException(status_code=404, detail="Workflow run not found.")
+        raise HTTPException(status_code=404, detail="Task run not found.")
     return run
 
 
@@ -161,7 +167,7 @@ class ApproveRun(BaseModel):
 def cancel_run(run_id: int) -> dict:
     run = store.get_run(run_id)
     if not run:
-        raise HTTPException(status_code=404, detail="Workflow run not found.")
+        raise HTTPException(status_code=404, detail="Task run not found.")
     run = store.update_run(run_id, status="cancelled")
     bus.publish("run", {"run_id": run_id, "chat_id": run["chat_id"], "status": "cancelled"})
     return run
@@ -171,12 +177,12 @@ def cancel_run(run_id: int) -> dict:
 async def execute_run(run_id: int, request: ApproveRun) -> StreamingResponse:
     run = store.get_run(run_id)
     if not run:
-        raise HTTPException(status_code=404, detail="Workflow run not found.")
+        raise HTTPException(status_code=404, detail="Task run not found.")
     if run["status"] not in ("waiting", "failed", "done"):
-        raise HTTPException(status_code=400, detail="This workflow is not waiting for approval.")
+        raise HTTPException(status_code=400, detail="This task is not waiting to start.")
     skill = workflows.get_skill(run["skill"])
     if not skill:
-        raise HTTPException(status_code=404, detail="Workflow not found.")
+        raise HTTPException(status_code=404, detail="Task not found.")
     steps = [s for s in request.steps if str(s.get("title", "")).strip()] or run["plan"].get("steps", [])
     plan = {**run["plan"], "steps": steps, "answers": request.answers}
     store.update_run(run_id, status="running", plan=plan)
@@ -188,7 +194,7 @@ async def execute_run(run_id: int, request: ApproveRun) -> StreamingResponse:
                                       chat["case_id"], None if chat["case_id"] else chat["id"])
     extra, material = workflows.execution_prompts(run, skill, steps, request.answers)
     system = assistant.system_prompt(settings, "detailed", assistant.answer_language("", "english", settings)) + extra
-    prompt = assistant.build_prompt(f"Run the workflow \"{skill.title}\" now, following the approved plan.", sources, [], material)
+    prompt = assistant.prompt_parts(f"Do the task \"{skill.title}\" now, following the approved plan.", sources, [], material)
     sources_data = sources.to_dict()
 
     async def events():
@@ -196,7 +202,7 @@ async def execute_run(run_id: int, request: ApproveRun) -> StreamingResponse:
         yield sse("sources", sources_data)
         if not llm.available():
             store.update_run(run_id, status="failed", output="")
-            yield sse("error", {"message": "AI is off - a workflow needs Claude Code or an API key."})
+            yield sse("error", {"message": "AI is off - a task needs Claude Code or an API key."})
             return
         pieces: list[str] = []
         final, failure = None, ""

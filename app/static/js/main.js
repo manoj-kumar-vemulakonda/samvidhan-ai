@@ -5,7 +5,7 @@
 //   #/library               law library            #/library/act/BNS  #/library/constitution  #/library/judgments
 //   #/library/courts        every court, its rule books, what is missing, "Add a rule book"
 //   #/convert?q=IPC 420     old -> new law
-//   #/workflows             Skills
+//   #/workflows             task recipes (Settings -> Advanced; lawyers start tasks from a chat: 📋 Tasks)
 //   #/settings
 
 import { $, S, api, closeReader, esc, spinner, toastError } from './core.js';
