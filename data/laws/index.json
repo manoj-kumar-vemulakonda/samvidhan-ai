@@ -135,8 +135,7 @@
     "limitation act",
     "law of limitation"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 169,
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
    "official_parts": [
     {
      "label": "The Schedule - periods of limitation",
@@ -146,7 +145,15 @@
      "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
      "as_on": "30th August, 2026"
     }
-   ]
+   ],
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "LIMITATION.pdf",
+   "url": "https://indiacode.gov.in/items/5e69d11a-63e7-4a63-b86f-e063bcdeaee2",
+   "as_on": "30th August, 2026",
+   "parsed_as": "sections",
+   "sections": 169
   },
   {
    "code": "RERA",
@@ -219,7 +226,18 @@
     "specific relief act",
     "sra"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SRA.pdf",
+   "url": "https://indiacode.gov.in/items/e0a1c7bb-8bed-47d7-a0b6-9fd3c8a3944c",
+   "as_on": "30th August, 2026",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "43",
+    "44"
+   ],
    "sections": 48
   },
   {
@@ -787,8 +805,15 @@
     "rti",
     "सूचना का अधिकार"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 31
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RTI.pdf",
+   "url": "https://indiacode.gov.in/items/37520cf3-5c3f-4c0b-aa4a-5985e6f522bf",
+   "as_on": "18th November, 2025",
+   "parsed_as": "sections",
+   "sections": 33
   },
   {
    "code": "RPWDA",
@@ -866,7 +891,14 @@
     "consumer act",
     "cpa"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CONSUMER.pdf",
+   "url": "https://indiacode.gov.in/items/1b6c1754-47b1-411e-9607-1712a9caf368",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
    "sections": 107
   },
   {
@@ -2527,8 +2559,7 @@
     "भारतीय नागरिक सुरक्षा संहिता",
     "बीएनएसएस"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 972,
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
    "official_parts": [
     {
      "label": "First Schedule - classification of offences",
@@ -2538,7 +2569,15 @@
      "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
      "as_on": "6th October, 2025"
     }
-   ]
+   ],
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "BNSS.pdf",
+   "url": "https://indiacode.gov.in/items/72592ac7-d084-4545-95d3-0c98dc49fac3",
+   "as_on": "6th October, 2025",
+   "parsed_as": "sections",
+   "sections": 972
   },
   {
    "code": "BNS",
@@ -2558,7 +2597,14 @@
     "भारतीय न्याय संहिता",
     "बीएनएस"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "BNS.pdf",
+   "url": "https://indiacode.gov.in/items/4bb3e636-ed67-4731-8fb1-7ebfd83e1584",
+   "as_on": "6th October, 2025",
+   "parsed_as": "sections",
    "sections": 358
   },
   {
@@ -2578,8 +2624,15 @@
     "sakshya adhiniyam",
     "भारतीय साक्ष्य अधिनियम"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 170
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "BSA.pdf",
+   "url": "https://indiacode.gov.in/items/9e461245-2c13-4171-9d9d-267425c01e1d",
+   "as_on": "6th October, 2025",
+   "parsed_as": "sections",
+   "sections": 171
   },
   {
    "code": "CRPC",
@@ -2858,8 +2911,15 @@
     "narcotic drugs and psychotropic substances act",
     "ndps"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 127
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "NDPS.pdf",
+   "url": "https://indiacode.gov.in/items/fe1456eb-e02e-41f2-8338-f134677bbe99",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 130
   },
   {
    "code": "NIAGENCY",
@@ -2991,8 +3051,15 @@
     "protection of children from sexual offences act",
     "pocso"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 47
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "POCSO.pdf",
+   "url": "https://indiacode.gov.in/items/60dad1b9-bbf1-4310-8fa1-62643beab7a6",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 48
   },
   {
    "code": "PUBLICEXAMS",
@@ -3037,7 +3104,14 @@
     "atrocities act",
     "prevention of atrocities act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SCST.pdf",
+   "url": "https://indiacode.gov.in/items/f9c8fb04-363a-4779-b628-0d9f9bb997e0",
+   "as_on": "21st September, 2025",
+   "parsed_as": "sections",
    "sections": 26
   },
   {
@@ -3162,7 +3236,14 @@
     "information technology act",
     "cyber law"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ITACT.pdf",
+   "url": "https://indiacode.gov.in/items/d41fe391-b9c0-40b1-afdc-ad034c7ac62f",
+   "as_on": "27th June, 2025",
+   "parsed_as": "sections",
    "sections": 125
   },
   {
@@ -5378,7 +5459,14 @@
     "hindu marriage act",
     "हिंदू विवाह अधिनियम"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "HMA.pdf",
+   "url": "https://indiacode.gov.in/items/33e4083a-e967-4091-b91f-915b4d3f95a8",
+   "as_on": "15th April, 2026",
+   "parsed_as": "sections",
    "sections": 37
   },
   {
@@ -5421,8 +5509,20 @@
     "hindu succession act",
     "hsa"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 31
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "HSA.pdf",
+   "url": "https://indiacode.gov.in/items/3371dabc-b1ab-4bb1-874d-0411dd1c44bd",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "23",
+    "24",
+    "31"
+   ],
+   "sections": 32
   },
   {
    "code": "CHRISTIANMARRIAGE",
@@ -5464,7 +5564,14 @@
     "succession act",
     "indian succession act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SUCCESSION.pdf",
+   "url": "https://indiacode.gov.in/items/3eeb6aec-1e1f-42d4-9673-c04d21829663",
+   "as_on": "19th June, 2026",
+   "parsed_as": "sections",
    "sections": 392
   },
   {
@@ -5635,7 +5742,14 @@
     "pwdva",
     "घरेलू हिंसा"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "DV.pdf",
+   "url": "https://indiacode.gov.in/items/4311e86f-7d98-40b6-8a80-2195278207cb",
+   "as_on": "27th September, 2026",
+   "parsed_as": "sections",
    "sections": 37
   },
   {

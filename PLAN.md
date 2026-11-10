@@ -2,6 +2,27 @@
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
 
+## Version 3.5 (10 Nov 2026): the most-cited Acts in their official text
+
+The model test showed that the open dataset behind the first 101 Acts can be wrong. Two of three models repeated its wrong amendment year. So the most-cited Acts were swapped for the official India Code text.
+
+- **`scripts/officialise_acts.py`** downloads the official PDF and reads its sections in each way the reader knows. It keeps the reading that best matches what the library had. The Act is swapped only if all of these hold:
+  - 98%+ of the sections are found;
+  - 85%+ of the titles agree;
+  - the texts are really there and about as long as before (a reading of only the table of contents is refused);
+  - every new "section" is named in the PDF's own list of sections. India Code prints State amendments under the sections they change (e.g. Hindu Succession Act "6B", "29A"); those are left out.
+- **Kept as before:**
+  - schedules added earlier (CPC Orders, Limitation Articles, BNSS First Schedule);
+  - repealed sections that the PDF lists as one range;
+  - a section the PDF doesn't have (NI Act s. 81A), marked "from dataset".
+- **Replaced (15):** BNS, BNSS, BSA, Limitation, Specific Relief, Hindu Marriage, Hindu Succession, Domestic Violence, Consumer Protection, POCSO, NDPS, SC/ST Atrocities, Indian Succession, RTI, IT Act. Each now has its "as on" date, page numbers and India Code's own footnotes. NDPS gained ss. 68I and 68O, which the dataset lacked.
+- **Not replaced:**
+  - IPC, CrPC and Evidence Act: India Code lists them but no longer offers their PDFs. The search used to fall back to *another* document (a 2019 notification, an 1891 amending Act); a title check now refuses that.
+  - CPC, NI Act, Contract, TPA and Arbitration: the readings fell short of the checks.
+  - Motor Vehicles Act: a scan.
+- **A mistake caught on the way:** the first run replaced 20 Acts. Six of them had matched only the PDF's table of contents, with every number and title but no text, because the first checks didn't look at the text. They were rolled back from Git, and the text checks were added before anything else was replaced.
+- **Library:** still 268 books, now 27,130 provisions (new sections and schedules). **Tests:** 218 pass (5 new). The model test's law questions still score 100% on the new texts.
+
 ## Version 3.4 (10 Nov 2026): the model test, and the bugs it found
 
 You wanted the best results at the lowest cost. To choose a model by measurement instead of guessing:
@@ -267,7 +288,11 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 
 ## Honest limits
 
-- **The Act texts** come from an open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence). That dataset was built from India Code, but it isn't the official PDF the way our Constitution is. Some texts still contain footnote digits. The official India Code website timed out from this PC; the plan is to cross-check against it later.
+- **The Act texts.** 86 of the first 101 Acts still come from an open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence), built from India Code but not the official PDF. Some of their texts contain footnote digits, and at least one footnote gave a wrong year (corrected).
+  - 15 of the most-cited Acts now use the official India Code text (v3.5).
+  - IPC, CrPC and the Evidence Act can't be replaced: India Code no longer offers their PDFs.
+  - The CPC, NI Act, Contract, TPA and Arbitration PDFs didn't read cleanly enough yet.
+  - NI Act s. 81A is in the dataset but not in India Code's PDF; it's kept, marked "from dataset", to be checked.
 - **Court rules still missing** (v3.1, end of 10 Nov 2026):
   - Bombay (the site doesn't answer this network), Madras (refuses automated downloads, HTTP 429) and Punjab & Haryana (HTTP 403): their main rule books. Download them in a browser and drop them in the inbox.
   - Calcutta, Tripura and the Uttarakhand HC Rules: not posted online as files.
@@ -291,7 +316,7 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 - **v5:**
   - Full-text judgment search.
   - Rules of the remaining High Courts once their sites can be reached (or added by users), and State laws (rent, land revenue, police Acts) from India Code's State collections.
-  - Replace the first 101 Acts' open-dataset text with the official India Code text (the same pipeline as v3.1).
+  - Replace the rest of the first 101 Acts' open-dataset text with the official India Code text (`scripts/officialise_acts.py --all`; 15 done in v3.5). Teach the reader the CPC / NI Act / Contract / TPA / Arbitration layouts.
   - A Word add-in.
 
 ---
