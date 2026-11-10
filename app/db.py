@@ -109,6 +109,17 @@ CREATE TABLE IF NOT EXISTS plans (
     updated_at TEXT NOT NULL
 );
 
+-- Files dropped on the home screen (from one case or many): read, sorted into cases and planned -
+-- nothing is created or moved until you press "Approve all"
+CREATE TABLE IF NOT EXISTS intakes (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    status     TEXT NOT NULL DEFAULT 'reading',  -- reading / sorting / ready / applying / applied / closed / discarded / failed
+    progress   TEXT NOT NULL DEFAULT '',
+    data       TEXT NOT NULL DEFAULT '{}',       -- JSON: one group per case, each with its filing plan
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
 -- Organised documents (one upload can become several documents when a PDF is split)
 CREATE TABLE IF NOT EXISTS documents (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,

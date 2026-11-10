@@ -21,10 +21,17 @@ export async function renderHome(root) {
     <p class="muted">${today.length ? `You have ${today.length} item${today.length > 1 ? 's' : ''} today.` : 'Nothing in your calendar today.'}
       ${agenda.overdue.length ? `<span class="warn">${agenda.overdue.length} overdue.</span>` : ''}</p>
     <form class="home-ask"><textarea rows="2" placeholder="Ask anything about Indian law… (starts a general chat)" aria-label="Question"></textarea><button class="btn primary">Ask ➤</button></form>
+    <div class="drop-box" tabindex="0" aria-label="Drop your case files here">
+      <span class="drop-icon">📂</span>
+      <div class="drop-text"><b>Drop your case files here</b> <span class="muted">- from one case or many</span>
+        <div class="muted small">I'll sort them into cases, name and file them, and find the hearing dates for your calendar. Nothing changes until you approve.</div></div>
+      <label class="btn">Choose files<input type="file" multiple hidden accept=".pdf,.docx,.txt,.md,.jpg,.jpeg,.png,.webp,.tif,.tiff,.bmp"></label>
+    </div>
+    <div class="intakes"></div>
     <div class="home-actions">
       <button class="tile" data-new-case><span>📁</span><b>New case</b><small>One case = its own chat, files and dates</small></button>
       <button class="tile" data-go="#/convert"><span>🔁</span><b>IPC → BNS</b><small>Convert old sections to the new laws</small></button>
-      <button class="tile" data-go="#/library"><span>📚</span><b>Law library</b><small>${S.status?.acts || 0} Acts and the Constitution</small></button>
+      <button class="tile" data-go="#/library"><span>📚</span><b>Law library</b><small>${S.status?.acts || 0} Acts and court rule books, and the Constitution</small></button>
       <button class="tile" data-go="#/workflows"><span>⚡</span><b>Workflows</b><small>FIR check, bail, notices, RTI…</small></button>
     </div>
     ${recent.length ? `<h3>Your cases</h3><div class="case-cards">${recent.map((c) => `<a class="case-card" href="#/case/${c.id}">
@@ -33,6 +40,8 @@ export async function renderHome(root) {
   </div>`;
   $('[data-new-case]', root).onclick = () => newCaseDialog();
   $$('[data-go]', root).forEach((b) => { b.onclick = () => { location.hash = b.dataset.go; }; });
+  setupDropBox(root);
+  loadIntakes().catch(() => {});
   const form = $('.home-ask', root);
   const box = $('textarea', form);
   box.onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } };
@@ -45,6 +54,200 @@ export async function renderHome(root) {
     window.addEventListener('chat-ready', () => import('./chat.js').then((m) => m.setComposerText(question, true)), { once: true });
     location.hash = `#/chat/${chat.id}`;
   };
+}
+
+// ---------------------------------------------------------------------------
+// The drop box: a pile of files from one case or many -> sorted into cases -> "Approve all"
+// ---------------------------------------------------------------------------
+function setupDropBox(root) {
+  const box = $('.drop-box', root);
+  const input = $('input[type=file]', box);
+  input.onchange = () => { sendIntake([...input.files]); input.value = ''; };
+  box.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } };
+  let depth = 0;
+  const home = $('.home', root);
+  home.addEventListener('dragenter', (e) => { if (e.dataTransfer.types.includes('Files')) { depth += 1; box.classList.add('over'); } });
+  home.addEventListener('dragleave', () => { depth = Math.max(0, depth - 1); if (!depth) box.classList.remove('over'); });
+  home.addEventListener('dragover', (e) => { if (e.dataTransfer.types.includes('Files')) e.preventDefault(); });
+  home.addEventListener('drop', (e) => {
+    if (!e.dataTransfer.files.length) return;
+    e.preventDefault(); depth = 0; box.classList.remove('over');
+    sendIntake([...e.dataTransfer.files]);
+  });
+}
+
+async function sendIntake(fileList) {
+  if (!fileList.length) return;
+  const max = (S.status?.max_upload_mb || 60) * 1024 * 1024;
+  const big = fileList.filter((f) => f.size > max);
+  if (big.length) toast(`Too large (over ${S.status?.max_upload_mb || 60} MB): ${big.map((f) => f.name).join(', ')}`, 'warn');
+  const form = new FormData();
+  fileList.filter((f) => f.size <= max).forEach((f) => form.append('uploads', f, f.name));
+  if (!form.has('uploads')) return;
+  try {
+    const response = await fetch('/api/intake', { method: 'POST', body: form });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || 'The upload failed.');
+    (data.data.skipped || []).forEach((s) => toast(`${s.name}: ${s.reason}`, 'warn', 8000));
+    showIntake(data);
+  } catch (error) { toastError(error); }
+}
+
+async function loadIntakes() {
+  const list = $('.home .intakes');
+  if (!list) return;
+  const intakes = await api('/api/intake');
+  list.innerHTML = '';
+  intakes.forEach(showIntake);
+}
+
+function showIntake(intake) {
+  const list = $('.home .intakes');
+  if (!list) return;
+  const card = intakeCard(intake);
+  const old = $(`[data-intake="${intake.id}"]`, list);
+  if (['discarded', 'closed'].includes(intake.status)) { old?.remove(); return; }
+  if (old) old.replaceWith(card); else list.prepend(card);
+}
+
+export async function onIntake(event) {
+  if (!$('.home .intakes')) return;
+  const card = $(`[data-intake="${event.intake_id}"]`);
+  // While you are checking a sorted pile, don't redraw it under your hands
+  if (card && card.dataset.status === 'ready' && event.status === 'ready') return;
+  try { showIntake(await api(`/api/intake/${event.intake_id}`)); } catch (_) { /* gone */ }
+}
+
+const INTAKE_BADGE = { reading: 'Reading the files', sorting: 'Sorting into cases', applying: 'Filing', failed: 'Problem' };
+
+function intakeCard(intake) {
+  const data = intake.data || {};
+  const fileCount = (data.files || []).length;
+  const card = document.createElement('div');
+  card.className = 'intake-card';
+  card.dataset.intake = intake.id;
+  card.dataset.status = intake.status;
+  if (['reading', 'sorting', 'applying'].includes(intake.status)) {
+    card.innerHTML = `<div class="plan-head"><h3>📂 ${fileCount} file${fileCount === 1 ? '' : 's'}</h3>
+      <span class="badge info">${esc(INTAKE_BADGE[intake.status])}</span></div>
+      <p>${spinner(intake.progress)}</p>
+      <p class="muted small">You can keep working - this card updates by itself.</p>`;
+    return card;
+  }
+  if (intake.status === 'failed') {
+    card.innerHTML = `<div class="plan-head"><h3>📂 ${fileCount} file${fileCount === 1 ? '' : 's'}</h3><span class="badge bad">Problem</span></div>
+      <p>${esc(intake.progress)}</p><div class="plan-actions"><button class="btn" data-discard>Remove</button></div>`;
+    $('[data-discard]', card).onclick = () => discardIntake(intake.id);
+    return card;
+  }
+  if (intake.status === 'applied') {
+    const rows = (data.result || []).map((r) => r.error
+      ? `<li class="warn">${r.case_id ? `<a href="#/case/${r.case_id}">${esc(r.title)}</a>` : esc(r.title)}: ${esc(r.error)}</li>`
+      : `<li><a href="#/case/${r.case_id}">${esc(r.title)}</a> <span class="badge ${r.new ? 'info' : ''}">${r.new ? 'new case' : 'existing case'}</span>
+         <span class="muted small">· ${r.documents} document${r.documents === 1 ? '' : 's'} filed${r.events ? ` · ${r.events} date${r.events === 1 ? '' : 's'} added to your calendar` : ''}</span></li>`).join('');
+    card.innerHTML = `<div class="plan-head"><h3>✓ Filed</h3><span class="badge good">Done</span></div>
+      <ul class="intake-result">${rows}</ul>
+      <div class="plan-actions"><button class="btn small" data-close>OK</button></div>`;
+    $('[data-close]', card).onclick = async () => { await api(`/api/intake/${intake.id}/close`, { method: 'POST' }).catch(() => {}); card.remove(); };
+    return card;
+  }
+  // ready: the sorted pile, waiting for "Approve all"
+  const groups = data.groups || [];
+  const names = Object.fromEntries((data.files || []).map((f) => [f.id, f.name]));
+  const caseOptions = (selected) => `<option value="0" ${selected ? '' : 'selected'}>➕ New case</option>`
+    + (S.cases || []).map((c) => `<option value="${c.id}" ${c.id === selected ? 'selected' : ''}>📁 ${esc(c.title)}</option>`).join('');
+  const moveOptions = (group) => `<option value="">Move to…</option>`
+    + groups.filter((g) => g.key !== group.key).map((g) => `<option value="${esc(g.key)}">${esc(g.title)}</option>`).join('')
+    + '<option value="new">A new case</option>';
+  const groupHtml = (group) => {
+    const plan = group.plan || {};
+    const files = group.upload_ids.map((uid) => {
+      const docs = (plan.documents || []).filter((d) => d.upload_id === uid);
+      const lines = docs.map((d) => `<div class="small ${d.include === false ? 'muted' : ''}">${esc(d.title)}
+        <span class="muted">→ ${esc(d.folder)}${d.date ? ` · ${esc(niceDate(d.date, false))}` : ''}${d.include === false ? ' · left out' : ''}</span></div>`).join('');
+      return `<div class="ig-file"><div class="ig-file-main">📄 <b>${esc(names[uid] || 'file')}</b>${lines}</div>
+        <select data-move="${uid}" aria-label="Move this file">${moveOptions(group)}</select></div>`;
+    }).join('');
+    const events = (plan.events || []).map((e) => `<label class="plan-event ${e.include ? '' : 'off'}">
+        <input type="checkbox" data-event="${esc(e.key)}" ${e.include ? 'checked' : ''}>
+        <b>${esc(niceDate(e.date))}${e.time ? ` · ${esc(e.time)}` : ''}</b> ${esc(e.title)}
+        <span class="badge">${esc(e.kind)}</span>${e.exists ? ' <span class="badge">already in calendar</span>' : ''}
+        ${e.quote ? `<div class="quote small">“${esc(e.quote)}”</div>` : ''}</label>`).join('');
+    const details = ['court', 'case_number', 'cnr'].map((f) => plan.case?.[f]?.value).filter(Boolean);
+    const notes = (plan.notes || []).map((n) => `<p>⚠ ${esc(n)}</p>`).join('');
+    return `<div class="intake-group" data-key="${esc(group.key)}">
+      <div class="ig-head">
+        <input type="checkbox" data-include checked title="File this case" aria-label="File this case">
+        <input class="ig-title" value="${esc(group.title)}" aria-label="Case name" ${group.case_id ? 'disabled' : ''}>
+        <select data-case aria-label="New or existing case">${caseOptions(group.case_id)}</select>
+      </div>
+      ${group.reason ? `<p class="muted small">${esc(group.reason)}</p>` : ''}
+      ${details.length && !group.case_id ? `<p class="small">${details.map(esc).join(' · ')}</p>` : ''}
+      <div class="ig-files">${files}</div>
+      ${events ? `<div class="ig-dates"><div class="small"><b>Dates for your calendar</b> (untick any that are wrong)</div>${events}</div>`
+        : '<p class="muted small">No hearing date or deadline found in these files.</p>'}
+      ${notes ? `<div class="plan-notes">${notes}</div>` : ''}
+    </div>`;
+  };
+  const topNotes = (data.notes || []).map((n) => `<p>⚠ ${esc(n)}</p>`).join('');
+  card.innerHTML = `<div class="plan-head"><h3>📂 ${fileCount} file${fileCount === 1 ? '' : 's'} → ${groups.length} case${groups.length === 1 ? '' : 's'}</h3>
+      <span class="badge">${data.made_by === 'ai' ? 'Sorted by AI' : 'Sorted by case numbers'}</span>
+      <span class="muted small">Nothing is created or moved until you approve.</span></div>
+    ${topNotes ? `<div class="plan-notes">${topNotes}</div>` : ''}
+    ${groups.map(groupHtml).join('')}
+    <div class="plan-actions"><button class="btn primary" data-approve>✓ Approve all</button><button class="btn" data-discard>Discard</button>
+      <span class="muted small">Creates the new cases, files every document and adds the ticked dates to your calendar.</span></div>`;
+
+  $$('[data-case]', card).forEach((select) => {
+    select.onchange = () => {
+      const group = select.closest('.intake-group');
+      const title = $('.ig-title', group);
+      const chosen = (S.cases || []).find((c) => c.id === Number(select.value));
+      title.disabled = Boolean(chosen);
+      if (chosen) title.value = chosen.title;
+    };
+  });
+  $$('[data-include]', card).forEach((box) => { box.onchange = () => box.closest('.intake-group').classList.toggle('off', !box.checked); });
+  $$('[data-event]', card).forEach((box) => { box.onchange = () => box.closest('.plan-event').classList.toggle('off', !box.checked); });
+  $$('[data-move]', card).forEach((select) => {
+    select.onchange = async () => {
+      if (!select.value) return;
+      select.disabled = true;
+      try {
+        showIntake(await api(`/api/intake/${intake.id}/move`, { method: 'POST', body: { upload_id: Number(select.dataset.move), to: select.value } }));
+      } catch (error) { toastError(error); select.disabled = false; select.value = ''; }
+    };
+  });
+  $('[data-discard]', card).onclick = () => discardIntake(intake.id);
+  $('[data-approve]', card).onclick = async (event) => {
+    const button = event.currentTarget;
+    const edits = $$('.intake-group', card).map((g) => ({
+      key: g.dataset.key,
+      title: $('.ig-title', g).value.trim(),
+      include: $('[data-include]', g).checked,
+      case_id: Number($('[data-case]', g).value) || 0,
+      events: Object.fromEntries($$('[data-event]', g).map((b) => [b.dataset.event, b.checked])),
+    }));
+    if (!edits.some((e) => e.include)) { toast('Tick at least one case, or press Discard.', 'warn'); return; }
+    button.disabled = true;
+    button.innerHTML = spinner('Filing…');
+    try {
+      const done = await api(`/api/intake/${intake.id}/apply`, { method: 'POST', body: { groups: edits } });
+      showIntake(done);
+      toast('Files sorted and filed. Dates added to your calendar.', 'success');
+      loadSidebar().catch(() => {});
+      window.dispatchEvent(new Event('case-files-changed'));
+    } catch (error) { toastError(error); button.disabled = false; button.textContent = '✓ Approve all'; }
+  };
+  return card;
+}
+
+async function discardIntake(intakeId) {
+  if (!(await confirmBox('Discard these files? Nothing will be filed; they are moved to the workspace\'s _deleted folder.', 'Discard'))) return;
+  try {
+    await api(`/api/intake/${intakeId}/discard`, { method: 'POST' });
+    $(`[data-intake="${intakeId}"]`)?.remove();
+  } catch (error) { toastError(error); }
 }
 
 export function onboarding() {

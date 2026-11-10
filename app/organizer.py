@@ -227,13 +227,32 @@ def vision_reader():
 
 
 def process_batch(batch: str) -> None:
-    uploads = store.batch_uploads(batch)
+    uploads = read_batch(batch)
     if not uploads:
         return
+    ready = [u for u in uploads if u["status"] == "ready"]
+    first = uploads[0]
+    if not ready:
+        post(first["chat_id"], "notice", "None of the files could be read. Try a PDF, Word file or a clear photo.")
+        return
+    if first["case_id"]:
+        make_plan(batch)
+    else:
+        attach_to_chat(batch)
+
+
+def read_batch(batch: str, on_file=None) -> list[dict]:
+    """Read every upload of a batch (text layer, OCR, Claude for hard pages); returns the uploads afterwards.
+    on_file(number, total, upload) is called before each file (progress for the home-screen drop box)."""
+    uploads = store.batch_uploads(batch)
+    if not uploads:
+        return []
     vision = vision_reader()
-    for upload in uploads:
+    for number, upload in enumerate(uploads, 1):
         if upload["status"] in ("ready", "filed"):
             continue
+        if on_file:
+            on_file(number, len(uploads), upload)
         store.update_upload(upload["id"], status="reading", progress="Reading the file")
         publish_upload(store.get_upload(upload["id"]))
         try:
@@ -256,16 +275,7 @@ def process_batch(batch: str) -> None:
             traceback.print_exc()
             publish_upload(store.update_upload(upload["id"], status="failed", error=str(error)[:300],
                                                progress="Couldn't read this file"))
-    uploads = store.batch_uploads(batch)
-    ready = [u for u in uploads if u["status"] == "ready"]
-    first = uploads[0]
-    if not ready:
-        post(first["chat_id"], "notice", "None of the files could be read. Try a PDF, Word file or a clear photo.")
-        return
-    if first["case_id"]:
-        make_plan(batch)
-    else:
-        attach_to_chat(batch)
+    return store.batch_uploads(batch)
 
 
 # ---------------------------------------------------------------------------
@@ -340,25 +350,37 @@ def snippet_for_ai(pages: list[dict], budget: int) -> str:
     return "\n".join(out)
 
 
-def plan_prompt(case: dict, uploads: list[dict], pages_by_upload: dict[int, list[dict]]) -> str:
-    total_pages = sum(len(p) for p in pages_by_upload.values()) or 1
-    budget_total = 90_000
+def file_blocks(uploads: list[dict], pages_by_upload: dict[int, list[dict]], budget_total: int = 90_000) -> str:
+    """The files as <file> blocks for the AI: page starts and ends, shared out by page count."""
+    total_pages = sum(len(pages_by_upload.get(u["id"], [])) for u in uploads) or 1
     blocks = []
     for upload in uploads:
         pages = pages_by_upload[upload["id"]]
         budget = max(1200, int(budget_total * len(pages) / total_pages))
         blocks.append(f'<file id="{upload["id"]}" name="{upload["original_name"]}" kind="{upload["kind"]}" '
                       f'pages="{len(pages)}">\n{snippet_for_ai(pages, budget)}\n</file>')
-    existing = store.list_documents(case_id=case["id"])
+    return "\n\n".join(blocks)
+
+
+def plan_prompt(case: dict, uploads: list[dict], pages_by_upload: dict[int, list[dict]]) -> str:
+    # case["id"] is None for a case that does not exist yet (files sorted from the home-screen drop box)
+    existing = store.list_documents(case_id=case["id"]) if case.get("id") else []
     existing_text = "\n".join(f"- {d['folder']}/{d['filename']} ({d['doc_type']}, {d['doc_date'] or 'no date'})"
                               for d in existing[:80]) or "(none yet)"
     details = {k: case.get(k, "") for k in CASE_SUGGESTION_FIELDS}
     return (
         f"<case_details>{db.dumps(details)}</case_details>\n"
         f"<already_filed>\n{existing_text}\n</already_filed>\n\n"
-        + "\n\n".join(blocks)
+        + file_blocks(uploads, pages_by_upload)
         + "\n\nPropose the organisation plan for these files."
     )
+
+
+def plan_rules_text() -> str:
+    """The filing rules of the plan prompt (numbered 1-12), filled in - shared with the drop box's sorting prompt."""
+    rules = PLAN_SYSTEM.split("Rules:", 1)[1]
+    return rules.format(types=", ".join(t for t, _, _ in DOC_TYPES) + ", Document",
+                        folders=", ".join(files.DEFAULT_FOLDERS), today=date.today().isoformat())
 
 
 def rules_plan(case: dict, uploads: list[dict], pages_by_upload: dict[int, list[dict]]) -> dict:
@@ -481,7 +503,7 @@ def normalise_plan(raw: dict, case: dict, uploads: list[dict], pages_by_upload: 
         page = int(event.get("page") or 1)
         doc_key = next((d["key"] for d in documents if d["upload_id"] == file_id and d["first_page"] <= page <= d["last_page"]),
                        next((d["key"] for d in documents if d["upload_id"] == file_id), ""))
-        exists = store.event_exists(case["id"], day, kind, title)
+        exists = store.event_exists(case["id"], day, kind, title) if case.get("id") else False
         events.append({
             "key": f"e{len(events) + 1}", "title": title, "kind": kind, "date": day,
             "time": clean_time(event.get("time")), "location": str(event.get("location") or "").strip()[:160],
@@ -533,8 +555,19 @@ def make_plan(batch: str) -> dict | None:
     plan = store.create_plan(case["id"], chat_id, batch, status="making")
     message = post(chat_id, "plan", "", {"plan_id": plan["id"], "status": "making"})
     bus.publish("plan", {"plan_id": plan["id"], "chat_id": chat_id, "status": "making"})
-    made_by = "rules"
-    raw = None
+    data, made_by = build_plan(case, uploads, pages_by_upload)
+    plan = store.update_plan(plan["id"], status="draft", data=data, made_by=made_by)
+    if message:
+        updated = store.update_message(message["id"], data={"plan_id": plan["id"], "status": "draft"})
+        bus.publish("message", {"chat_id": chat_id, "message": updated})
+    bus.publish("plan", {"plan_id": plan["id"], "chat_id": chat_id, "status": "draft"})
+    return plan
+
+
+def build_plan(case: dict, uploads: list[dict], pages_by_upload: dict[int, list[dict]]) -> tuple[dict, str]:
+    """The filing plan for these files: by the AI, or by keywords when AI is off or fails.
+    Returns (normalised plan, "ai" or "rules"). case["id"] may be None (a case not created yet)."""
+    raw, made_by, ai_error = None, "rules", ""
     if llm.available():
         try:
             system = PLAN_SYSTEM.format(
@@ -545,23 +578,12 @@ def make_plan(batch: str) -> dict | None:
             made_by = "ai"
         except Exception as error:
             traceback.print_exc()
-            raw = None
-            ai_error = str(error)[:200]
-        else:
-            ai_error = ""
-    else:
-        ai_error = ""
+            raw, ai_error = None, str(error)[:200]
     if raw is None:
         raw = rules_plan(case, uploads, pages_by_upload)
         if ai_error:
             raw["notes"].insert(0, f"The AI could not make the plan ({ai_error}), so it was made with keywords.")
-    data = normalise_plan(raw, case, uploads, pages_by_upload)
-    plan = store.update_plan(plan["id"], status="draft", data=data, made_by=made_by)
-    if message:
-        updated = store.update_message(message["id"], data={"plan_id": plan["id"], "status": "draft"})
-        bus.publish("message", {"chat_id": chat_id, "message": updated})
-    bus.publish("plan", {"plan_id": plan["id"], "chat_id": chat_id, "status": "draft"})
-    return plan
+    return normalise_plan(raw, case, uploads, pages_by_upload), made_by
 
 
 REVISE_SYSTEM = PLAN_SYSTEM + """

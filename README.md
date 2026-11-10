@@ -23,6 +23,21 @@ The first time, the app asks your name, your courts and your reminder times.
 
 ## 2. How a lawyer uses it
 
+**The fastest way: drop a pile of files on the home screen.** Drag the files of one case, or of many cases mixed together, onto **📂 Drop your case files here** (or click **Choose files**). In about half a minute the app:
+1. reads every page (scans and photos too);
+2. **sorts the files into cases**, by CNR, case numbers (FIR, bail application, suit…) and party names. A file that belongs to a case you already have goes into that case, so no duplicate case is made;
+3. names and files each document, and finds the **hearing dates and deadlines**, each with the sentence it came from.
+
+You see one card: each case with its files, its dates and any warnings. You can:
+- rename a new case;
+- choose **📁 an existing case** instead;
+- **Move to…** a file that landed in the wrong case;
+- untick a wrong date, or a whole case.
+
+Then press **✓ Approve all**: the new cases are created, every file goes into its folder, and the dates go into your calendar. Nothing happens before you approve, and **Discard** keeps nothing.
+
+The steps below are the same thing, one case at a time.
+
 **1. New case.** Click **+ New case** on the left. Only a title is needed, and "New case" is fine because the AI fills the details in from the files. Each case gets:
 - its own chat,
 - its own folder on your PC (`workspace\cases\<case name>\`),
@@ -176,6 +191,7 @@ D:\lawyers-ai\
 │  ├─ files.py                safe file names, case folders, PDF splitting
 │  ├─ extract.py              reading files: PDF text, Word, OCR, Claude for hard pages
 │  ├─ organizer.py            the organisation plan: make, revise, approve, file
+│  ├─ intake.py               the home-screen drop box: sort a pile of files into cases, then "Approve all"
 │  ├─ dates.py                Indian date formats, hearing dates and deadlines in text
 │  ├─ casesearch.py           searching one case's own pages
 │  ├─ laws.py                 the Acts and rules library, references, IPC → BNS, law search

@@ -306,6 +306,25 @@ table.kv td { border: 0; padding: 3px 8px 3px 0; } table.kv td:first-child { col
 .home-ask { display: flex; gap: 8px; margin: 18px 0; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 8px; box-shadow: var(--shadow); }
 .home-ask textarea { border: 0; box-shadow: none; resize: none; }
 .home-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin: 10px 0 20px; }
+/* The drop box: a pile of case files -> sorted into cases */
+.drop-box { display: flex; align-items: center; gap: 14px; border: 2px dashed #c9cfdd; border-radius: 14px; background: #fbfbf9; padding: 16px 18px; margin: 0 0 14px; transition: border-color .15s, background .15s; }
+.drop-box:hover, .drop-box:focus-visible { border-color: var(--navy-2); }
+.drop-box.over { border-color: var(--navy-2); background: var(--blue-bg); }
+.drop-icon { font-size: 2rem; } .drop-text { flex: 1; }
+.intakes { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.intake-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+.intake-group { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 10px 0; background: #fcfcfa; }
+.intake-group.off { opacity: .5; }
+.ig-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ig-head input[type=checkbox] { width: auto; }
+.ig-head .ig-title { flex: 1 1 260px; font-weight: 600; }
+.ig-head select { width: auto; max-width: 280px; }
+.ig-file { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 6px 0; border-top: 1px dashed var(--line); }
+.ig-file:first-child { border-top: 0; }
+.ig-file-main { flex: 1; min-width: 0; }
+.ig-file select { width: auto; max-width: 200px; font-size: .84rem; padding: 3px 6px; }
+.ig-dates { margin-top: 6px; }
+.intake-result { margin: 6px 0; padding-left: 18px; } .intake-result li { margin: 4px 0; }
 .tile { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 14px; cursor: pointer; font: inherit; }
 .tile:hover { border-color: var(--navy-2); box-shadow: var(--shadow); }
 .tile span { font-size: 1.4rem; } .tile small { color: var(--muted); }

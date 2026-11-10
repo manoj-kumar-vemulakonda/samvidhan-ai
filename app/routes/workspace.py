@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from app import assistant, config, exports, files, llm, organizer, retrieval, store
+from app import assistant, config, exports, files, intake, llm, organizer, retrieval, store
 from app.bus import bus
 from app.language import english_query
 from app.routes.common import SSE_HEADERS, need_case, need_chat, need_document, sse, state
@@ -278,6 +278,91 @@ async def upload_files(chat_id: int, uploads: list[UploadFile] = File(...)) -> d
     bus.publish("message", {"chat_id": chat_id, "message": _expand(message)})
     organizer.start_batch(batch)
     return {"batch": batch, "uploads": saved, "skipped": skipped, "message": _expand(message)}
+
+
+# ---------------------------------------------------------------------------
+# The home-screen drop box: a pile of files from one case or many (app/intake.py)
+# ---------------------------------------------------------------------------
+@router.post("/api/intake")
+async def intake_upload(uploads: list[UploadFile] = File(...)) -> dict:
+    if len(uploads) > config.MAX_FILES_PER_UPLOAD:
+        raise HTTPException(status_code=400, detail=f"Please drop at most {config.MAX_FILES_PER_UPLOAD} files at once.")
+    record = store.create_intake()
+    folder = intake.folder(record["id"])
+    batch = intake.batch_name(record["id"])
+    saved, skipped = [], []
+    for upload in uploads:
+        name = upload.filename or "file"
+        kind = files.file_kind(name)
+        if not kind:
+            skipped.append({"name": name, "reason": "This kind of file can't be read (use PDF, Word .docx, images or text)."})
+            continue
+        try:
+            path, size, digest = await run_in_threadpool(files.save_upload, upload.file, folder, name,
+                                                         config.MAX_UPLOAD_MB * 1024 * 1024)
+        except ValueError as error:
+            skipped.append({"name": name, "reason": str(error)})
+            continue
+        saved.append(store.add_upload(None, None, batch, name, files.relative(path), size, digest, kind))
+    if not saved:
+        store.update_intake(record["id"], status="discarded")
+        raise HTTPException(status_code=400, detail=skipped[0]["reason"] if skipped else "No files received.")
+    data = {"files": [{"id": u["id"], "name": u["original_name"], "status": u["status"], "pages": 0, "error": ""}
+                      for u in saved], "skipped": skipped, "groups": [], "notes": []}
+    record = store.update_intake(record["id"], data=data, progress=f"Reading {len(saved)} file{'s' if len(saved) != 1 else ''}…")
+    intake.start(record["id"])
+    return record
+
+
+@router.get("/api/intake")
+def intake_list() -> list[dict]:
+    return store.open_intakes()
+
+
+def _intake_call(function, *args):
+    try:
+        return function(*args)
+    except LookupError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+
+@router.get("/api/intake/{intake_id}")
+def intake_get(intake_id: int) -> dict:
+    found = store.get_intake(intake_id)
+    if not found:
+        raise HTTPException(status_code=404, detail="This upload was not found.")
+    return found
+
+
+class IntakeMove(BaseModel):
+    upload_id: int
+    to: str = Field(min_length=1, max_length=20)        # a group key ("g2") or "new"
+
+
+@router.post("/api/intake/{intake_id}/move")
+async def intake_move(intake_id: int, request: IntakeMove) -> dict:
+    return await run_in_threadpool(_intake_call, intake.move_file, intake_id, request.upload_id, request.to)
+
+
+class IntakeApply(BaseModel):
+    groups: list[dict] = Field(default_factory=list)
+
+
+@router.post("/api/intake/{intake_id}/apply")
+async def intake_apply(intake_id: int, request: IntakeApply | None = None) -> dict:
+    return await run_in_threadpool(_intake_call, intake.apply, intake_id, request.model_dump() if request else None)
+
+
+@router.post("/api/intake/{intake_id}/discard")
+def intake_discard(intake_id: int) -> dict:
+    return _intake_call(intake.discard, intake_id)
+
+
+@router.post("/api/intake/{intake_id}/close")
+def intake_close(intake_id: int) -> dict:
+    return _intake_call(intake.close, intake_id)
 
 
 @router.get("/api/uploads/{upload_id}/file")

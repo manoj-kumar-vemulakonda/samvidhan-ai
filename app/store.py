@@ -382,6 +382,53 @@ def update_plan(plan_id: int, status: str | None = None, data: dict | None = Non
 
 
 # ---------------------------------------------------------------------------
+# Intakes: a pile of files dropped on the home screen (see app/intake.py)
+# ---------------------------------------------------------------------------
+INTAKE_OPEN = ("reading", "sorting", "ready", "applying", "applied", "failed")   # still shown on the home screen
+
+
+def create_intake() -> dict:
+    stamp = db.now()
+    intake_id = db.run("INSERT INTO intakes (status, progress, data, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+                       ("reading", "Reading the files", "{}", stamp, stamp))
+    return get_intake(intake_id)
+
+
+def get_intake(intake_id: int) -> dict | None:
+    intake = db.one("SELECT * FROM intakes WHERE id = ?", (intake_id,))
+    if intake:
+        intake["data"] = db.loads(intake["data"], {})
+    return intake
+
+
+def update_intake(intake_id: int, status: str | None = None, progress: str | None = None,
+                  data: dict | None = None) -> dict | None:
+    fields: dict = {}
+    if status:
+        fields["status"] = status
+    if progress is not None:
+        fields["progress"] = progress[:300]
+    if data is not None:
+        fields["data"] = db.dumps(data)
+    db.update("intakes", intake_id, fields, {"status", "progress", "data"})
+    return get_intake(intake_id)
+
+
+def open_intakes() -> list[dict]:
+    marks = ", ".join("?" * len(INTAKE_OPEN))
+    rows = db.rows(f"SELECT id FROM intakes WHERE status IN ({marks}) ORDER BY id DESC LIMIT 10", INTAKE_OPEN)
+    return [get_intake(r["id"]) for r in rows]
+
+
+def filed_upload_with_hash(sha256: str) -> dict | None:
+    """A file that is already filed in some case (the same bytes), or None."""
+    if not sha256:
+        return None
+    return db.one("SELECT * FROM uploads WHERE sha256 = ? AND status = 'filed' AND case_id IS NOT NULL ORDER BY id LIMIT 1",
+                  (sha256,))
+
+
+# ---------------------------------------------------------------------------
 # Documents (organised files) and their pages
 # ---------------------------------------------------------------------------
 DOCUMENT_FIELDS = {"title", "doc_type", "folder", "filename", "path", "doc_date", "summary"}

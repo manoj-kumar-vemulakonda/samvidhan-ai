@@ -1,5 +1,5 @@
 // main.js - starts the page and switches between screens (the part after # in the address).
-//   #/                      home
+//   #/                      home (with the drop box: a pile of files -> sorted into cases -> "Approve all")
 //   #/chat/7                a general chat
 //   #/case/3                a case (its chat)      #/case/3/chat/9  #/case/3/files  /review/2  /timeline  /details
 //   #/library               law library            #/library/act/BNS  #/library/constitution  #/library/judgments
@@ -11,7 +11,7 @@
 import { $, S, api, closeReader, esc, spinner, toastError } from './core.js';
 import { onMessage, onPlan, onRun, onUpload } from './chat.js';
 import { onReview, refreshFilesIfOpen, renderCase } from './case.js';
-import { onLibrary, onboarding, renderConvert, renderHome, renderLibrary, renderSettings, renderWorkflows } from './pages.js';
+import { onIntake, onLibrary, onboarding, renderConvert, renderHome, renderLibrary, renderSettings, renderWorkflows } from './pages.js';
 import { connectLive, initRight, initSidebar, loadAgenda, loadSidebar, renderSidebar } from './side.js';
 
 function parseRoute() {
@@ -81,6 +81,7 @@ async function start() {
     run: onRun,
     review: onReview,
     library: onLibrary,
+    intake: onIntake,
     documents: () => refreshFilesIfOpen(),
     settings: async () => { S.settings = await api('/api/settings'); },
   });

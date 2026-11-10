@@ -2,6 +2,21 @@
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
 
+## Version 3.2 (10 Nov 2026): the drop box on the home screen
+
+You asked: a lawyer opens the site, drops a bunch of case files, and the app makes the plan and fills the calendar by itself, clean and simple.
+
+- **📂 Drop your case files here** sits on the home screen. The lawyer drops files from one case or many, and doesn't make a case first.
+- **One AI call** reads the whole pile and does three things:
+  - sorts the files into cases, by CNR, case numbers and parties (an order citing both the FIR and the bail application ties them together);
+  - recognises cases the lawyer already has, so no duplicates are made;
+  - makes each case's filing plan: types, new names, folders, hearing dates and deadlines with their source sentence, and warnings.
+- **Without AI,** the files are grouped by CNR, case numbers and "A v. B" titles, with keyword filing plans.
+- **One card, one button.** The card shows each case. **Move to…** puts a file into another case instantly, with no AI call. Wrong dates can be unticked. **✓ Approve all** creates the cases, files everything and fills the calendar, using the same code as a case's own filing plan.
+- **If filing fails for one case,** that case's plan waits in the case chat, ready to try again.
+- **Checked live with Claude Code.** 6 mixed files (an FIR, a bail application, a court order, a cheque-bounce notice, a bank return memo and a divorce summons) were sorted into the right 3 cases in about 30 seconds. After Approve all, the 3 cases were created, the 6 documents filed and 2 hearings added to the calendar. Then the same steps were clicked in headless Edge, with no JavaScript errors.
+- **Tests:** 192 pass (5 new).
+
 ## Version 3.1 (10 Nov 2026): official texts and court rules
 
 You asked for every rule of the Supreme Court, the High Courts and the lower (including mobile) courts. Here is what was added, all from official sources:
