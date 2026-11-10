@@ -146,6 +146,8 @@ Each kind of job uses the model that fits it, so you pay for the strong model on
 
 **Prompt caching (API only).** The parts of a request that repeat are marked for Claude's prompt cache: the rules (the same for every question that day) and, in a case, the case details and file index (the same for every question in that case). If the next question comes within 5 minutes, those parts are read back from the cache for a tenth of the price or less ($0.20 per million instead of $2 on Sonnet). The pages and law picked for each question are different every time, so they are paid in full. The cost under each answer counts all of this. Claude Code does its own caching.
 
+**Which model is good enough? Test it.** `.venv\Scripts\python.exe scripts\eval_models.py` runs the app's own code on files and questions whose right answers are known, once per model (haiku, sonnet, opus), and reports each model's score, time and cost. It tests two jobs: sorting a pile of files, and answering law questions with the right citations. Made-up sample files are included. Your own real files give a better answer; they stay on your PC in `evals\private\`. See [evals/README.md](evals/README.md).
+
 ## 5. How it works
 
 ```
@@ -187,9 +189,11 @@ D:\lawyers-ai\
 ├─ .env / .env.example        your settings (AI engine, models)
 ├─ workspace\                 YOUR cases, files, calendar (created on first start; private)
 ├─ skills\                    the task recipes (plain English, editable)
+├─ evals\                     the model test: sample files + questions with right answers (yours go in evals\private)
 ├─ data\laws\                 the Acts library     data\constitution.json, data\cases.json
 ├─ scripts\                   build_constitution.py (official PDF), build_laws.py (Acts),
-│                             build_official.py + official_books.py + official.py (India Code, court websites)
+│                             build_official.py + official_books.py + official.py (India Code, court websites),
+│                             eval_models.py (the model test)
 ├─ app\
 │  ├─ main.py                 the web server; starts the reminder service
 │  ├─ routes\                 the web API: workspace.py, calendar.py, library.py, tools.py

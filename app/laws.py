@@ -50,7 +50,11 @@ LEGAL_HINTS: dict[str, list[str]] = {
     "charge sheet": ["BNSS:193"], "chargesheet": ["BNSS:193"], "plea bargaining": ["BNSS:290"],
     "proclaimed offender": ["BNSS:84"], "absconding": ["BNSS:84"], "mercy petition": ["BNSS:472"],
     "victim compensation": ["BNSS:396"], "maintenance": ["BNSS:144", "HAMA:18", "HMA:24", "HMA:25"],
-    "cheque bounce": ["NIA:138", "NIA:142"], "dishonour of cheque": ["NIA:138"], "cheque dishonour": ["NIA:138"],
+    "cheque bounce": ["NIA:138", "NIA:142"], "dishonour of cheque": ["NIA:138", "NIA:142"],
+    "cheque dishonour": ["NIA:138", "NIA:142"], "cheque bounced": ["NIA:138", "NIA:142"],
+    "bounced cheque": ["NIA:138", "NIA:142"], "dishonoured cheque": ["NIA:138", "NIA:142"],
+    "cheque was dishonoured": ["NIA:138", "NIA:142"], "cheque was returned": ["NIA:138", "NIA:142"],
+    "cheque returned": ["NIA:138", "NIA:142"], "returned unpaid": ["NIA:138", "NIA:142"],
     "murder": ["BNS:103", "BNS:101"], "attempt to murder": ["BNS:109"], "rape": ["BNS:64", "BNS:63"],
     "cruelty": ["BNS:85", "BNS:86"], "498a": ["BNS:85", "BNS:86"], "dowry death": ["BNS:80", "BSA:118"],
     "dowry": ["DPA:3", "DPA:4", "BNS:80"], "stalking": ["BNS:78"], "cheating": ["BNS:318"], "fraud": ["BNS:318"],
@@ -506,6 +510,8 @@ class LawLibrary:
         found: list[str] = list(rule_ids)
 
         def add(code: str, numbers: str) -> None:
+            # "318(4)" is section 318: the (4) is a sub-section, not "section 4"
+            numbers = re.sub(r"\(\s*\w{1,4}\s*\)", " ", numbers)
             for raw in re.findall(r"\d{1,4}\s?-?[A-Za-z]{0,3}", numbers):
                 number = norm_number(raw)
                 base = re.match(r"\d+", number).group(0)
@@ -551,6 +557,9 @@ class LawLibrary:
             return {"from": f"{code}:{number}", "mappings": [], "error": "Only IPC, CrPC, Evidence Act, BNS, BNSS and BSA can be converted."}
         table = self.concordance.get(f"{code}>{target}", {})
         entries = table.get(number) or table.get(re.match(r"\d+", number).group(0) if re.match(r"\d+", number) else "", [])
+        if not entries and "(" not in number:
+            # Some sections are mapped sub-section by sub-section: BNS 318 = 318(1) ... 318(4) -> IPC 415 ... 420
+            entries = [entry for key, rows in table.items() if key.startswith(number + "(") for entry in rows]
         source = self.sections.get(f"{code}:{number}")
         mappings = []
         for entry in entries:

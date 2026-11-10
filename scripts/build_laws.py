@@ -193,6 +193,26 @@ CATEGORY_GUESS = [
 ]
 
 
+# Known errors in the dataset's text, fixed on every build: (Act code, section) -> [(wrong, right)].
+# Add one here when you find a mistake (and keep it until the Act is replaced by the official text).
+CORRECTIONS: dict[tuple[str, str], list[tuple[str, str]]] = {
+    # The notice period went from 15 to 30 days in 2002 (Act 55 of 2002, s. 7), not 2015. Found by the model
+    # test (scripts/eval_models.py): two of three models repeated the wrong year.
+    ("NIA", "138"): [("1 Changed from fifteen by amendment act of 2015",
+                      "1 Changed from fifteen by the Negotiable Instruments (Amendment and Miscellaneous Provisions) "
+                      "Act, 2002 (55 of 2002), s. 7, from 6 February 2003")],
+}
+
+
+def apply_corrections(code: str, sections: list[dict]) -> None:
+    for section in sections:
+        for wrong, right in CORRECTIONS.get((code, section["number"]), []):
+            if wrong in section["text"]:
+                section["text"] = section["text"].replace(wrong, right)
+            else:
+                print(f"WARNING: correction for {code} s. {section['number']} no longer matches the text")
+
+
 def tidy(text: str) -> str:
     """Light clean-up of the raw text: context labels, chapter headings, extra spaces."""
     text = (text or "").replace("\r", "")
@@ -317,6 +337,7 @@ def build_acts() -> list[dict]:
             new_name = ACTS[replaced_by][1]
             note = CRIMINAL_NOTE_OLD.format(new=new_name)
         sections = merge_duplicates(sections)
+        apply_corrections(code, sections)
         for section in sections:
             section["status"] = status_of(section)
         acts.append({

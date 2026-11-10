@@ -1,0 +1,37 @@
+{
+  "note": "Each question: 'cite' = provisions the answer must cite (each line: any one of them, as library ids); 'mention' = facts it must state (each line: any one of the wordings); 'avoid' = wrong statements it must not make. Keep 'avoid' specific: 'is non-cognizable' alone also matches a correct answer that explains why OTHER sub-sections are non-cognizable.",
+  "questions": [
+    {
+      "question": "What is the punishment for cheating under section 318(4) of the BNS, and what was the old IPC section for it?",
+      "cite": [["BNS:318"], ["IPC:420"]],
+      "mention": [["7 years", "seven years"]]
+    },
+    {
+      "question": "Is cheating under section 318(4) BNS bailable and cognizable, and which court tries it?",
+      "cite": [["BNSS:FS_318(4)"]],
+      "mention": [["non-bailable"], ["cognizable"], ["magistrate"]],
+      "avoid": ["318(4) is non-cognizable", "318(4) is bailable", "318(4) is a bailable"]
+    },
+    {
+      "question": "My client's cheque was returned unpaid. Within how many days must the legal notice be sent, how long does the drawer get to pay, and by when must the complaint be filed?",
+      "cite": [["NIA:138"], ["NIA:142"]],
+      "mention": [["30 days", "thirty days"], ["15 days", "fifteen days"], ["one month", "1 month", "a month"]],
+      "avoid": ["2015 amendment", "amendment act of 2015", "amended in 2015"]
+    },
+    {
+      "question": "What is the limitation period for a suit to recover money lent, and from when does it run?",
+      "cite": [["LIMITATION:ART19", "LIMITATION:ART21"]],
+      "mention": [["three years", "3 years"], ["loan is made", "loan was made", "date of the loan", "date of loan", "when the loan", "loan is advanced", "loan was advanced"]]
+    },
+    {
+      "question": "Within how many hours must a person arrested without a warrant be produced before a magistrate?",
+      "cite": [["BNSS:58", "22"]],
+      "mention": [["24 hours", "twenty-four hours", "twenty four hours"]]
+    },
+    {
+      "question": "On what grounds can a plaint be rejected under the CPC?",
+      "cite": [["CPC:O7R11"]],
+      "mention": [["cause of action"], ["undervalued", "valuation", "valued"], ["barred"]]
+    }
+  ]
+}

@@ -12,6 +12,10 @@ data/raw/
 # YOUR cases, files, chats and calendar - private, never commit
 workspace/
 
+# The model test: your own real files and the result reports stay on this PC
+evals/private/
+evals/results/
+
 # Python / test leftovers
 __pycache__/
 *.pyc

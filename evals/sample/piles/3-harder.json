@@ -1,0 +1,30 @@
+{
+  "title": "Harder: a Hindi FIR with an English bail order (scan errors), a date slip, and two different cheque cases between the same parties",
+  "note": "Made-up documents. The FIR is in Hindi and its number appears in the order as 'Case Crime No.' (as in Uttar Pradesh). The order has typical scanning errors (0 for O). The two Mumbai complaints have the same parties but different complaint numbers and cheques, so they are two separate cases. Dates are written three ways.",
+  "files": {
+    "FIR hindi.pdf": "प्रथम सूचना रिपोर्ट (धारा 173 भारतीय नागरिक सुरक्षा संहिता)\nज़िला: लखनऊ   थाना: कोतवाली   एफआईआर सं.: 112/2026   दिनांक: {d-30}\nसूचनाकर्ता: मोहन लाल\nअभियुक्त: राकेश यादव\nधारा: 303(2) भारतीय न्याय संहिता\nसूचनाकर्ता ने बताया कि अभियुक्त ने उसकी दुकान से ₹45,000 नकद और एक मोबाइल फ़ोन चुरा लिया।",
+    "bail order lko.pdf": "IN THE C0URT OF THE CHIEF JUDICIAL MAGISTRATE, LUCKN0W\nBail Applicati0n No. 2209/2026\nRakesh Yadav vs. State of U.P.\nCase Crime No. 112/2026, P.S. Kotwali, u/s 303(2) BNS\nDated: {d-6}\nHeard the Ld. counsel for the applicant and the Ld. APO. Rep0rt from the P.S. is awaited.\nList for orders on {d+6:long} at 2.00 PM.",
+    "date slip.pdf": "Kotwali matter - Rakesh Yadav (bail)\nCJM court, Lucknow\nNext date {d+6:slash} - orders on bail\nCarry: copy of FIR, custody certificate",
+    "cc 1543 of 2025.pdf": "IN THE COURT OF THE METROPOLITAN MAGISTRATE, 12TH COURT, BANDRA, MUMBAI\nC.C. No. 1543/SS/2025\nSunrise Textiles ... Complainant\nVersus\nVikas Mehta ... Accused\nComplaint under Section 138 of the Negotiable Instruments Act, 1881, for cheque No. 778812 for Rs. 3,00,000.\nRoznama dated {d-12}: Complainant present. Accused present on bail. Adjourned to {d+20:slash} for the evidence of the complainant.",
+    "cc 2271 of 2026.pdf": "IN THE COURT OF THE METROPOLITAN MAGISTRATE, 12TH COURT, BANDRA, MUMBAI\nC.C. No. 2271/SS/2026\nSunrise Textiles ... Complainant\nVersus\nVikas Mehta ... Accused\nComplaint under Section 138 of the Negotiable Instruments Act, 1881, for cheque No. 778990 for Rs. 5,50,000, returned unpaid on {d-60}.\nOrder dated {d-3}: Verification recorded. Issue process against the accused under Section 138, returnable on {d+27}."
+  },
+  "expected": {
+    "groups": [
+      ["FIR hindi.pdf", "bail order lko.pdf", "date slip.pdf"],
+      ["cc 1543 of 2025.pdf"],
+      ["cc 2271 of 2026.pdf"]
+    ],
+    "types": {
+      "FIR hindi.pdf": ["FIR", "first information", "प्रथम सूचना"],
+      "bail order lko.pdf": ["order"],
+      "date slip.pdf": ["note", "slip", "date", "memo", "reminder", "diary"],
+      "cc 1543 of 2025.pdf": ["roznama", "order", "complaint", "proceedings"],
+      "cc 2271 of 2026.pdf": ["order", "complaint", "process", "summons"]
+    },
+    "dates": [
+      {"date": "{d+6}", "time": "14:00", "what": "orders on the bail application"},
+      {"date": "{d+20}", "what": "complainant's evidence in C.C. 1543/SS/2025"},
+      {"date": "{d+27}", "what": "process returnable in C.C. 2271/SS/2026"}
+    ]
+  }
+}

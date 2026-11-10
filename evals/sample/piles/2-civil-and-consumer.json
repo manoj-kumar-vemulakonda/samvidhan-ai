@@ -1,0 +1,30 @@
+{
+  "title": "A money-recovery suit (plaint, eCourts status, order, the notice before the suit) and a consumer complaint",
+  "note": "Made-up documents. The pre-suit notice has no case number: it belongs to the suit only through the parties. The consumer notice writes the number as 'C.C. No.' instead of 'Consumer Complaint No.'. A past hearing date must not be put in the calendar as a coming hearing.",
+  "files": {
+    "plaint.pdf": "IN THE COURT OF THE CIVIL JUDGE (SENIOR DIVISION), PUNE\nRegular Civil Suit No. 214/2026\nMeera Joshi ... Plaintiff\nVersus\nAnil Deshpande ... Defendant\nSUIT FOR RECOVERY OF RS. 6,50,000 WITH INTEREST\nThe plaintiff lent Rs. 6,50,000 to the defendant on {d-400}, repayable within six months. Despite a legal notice dated {d-120}, the defendant has not repaid any amount.",
+    "case status.pdf": "eCourts Services - Case Status\nCNR Number: MHPU010045672026\nCase Type/No.: R.C.S. 214/2026\nPetitioner: Meera Joshi\nRespondent: Anil Deshpande\nCourt: Civil Judge Senior Division, Pune\nFirst Hearing Date: {d-30}\nNext Hearing Date: {d+9}\nCase Stage: Written Statement",
+    "IMG_4410.pdf": "R.C.S. No. 214/2026\nMeera Joshi Vs. Anil Deshpande\nDate: {d-5}\nPresent: Adv. for the plaintiff. Defendant absent; his advocate seeks time.\nThe defendant seeks time to file the written statement. Last opportunity granted, subject to costs of Rs. 2,000.\nAdjourned to {d+9} for the written statement.",
+    "notice june.pdf": "LEGAL NOTICE\nDate: {d-120}\nTo: Shri Anil Deshpande, Flat 7, Kothrud, Pune\nUnder instructions from my client Smt. Meera Joshi, you are called upon to repay the loan of Rs. 6,50,000 taken on {d-400}, with interest at 12% per annum, within 15 days of receipt of this notice, failing which my client shall file a suit for recovery.",
+    "complaint.pdf": "BEFORE THE DISTRICT CONSUMER DISPUTES REDRESSAL COMMISSION, PUNE\nConsumer Complaint No. 88/2026\nKavita Rao ... Complainant\nVersus\nQuickFix Electronics Pvt. Ltd. ... Opposite Party\nCOMPLAINT UNDER SECTION 35 OF THE CONSUMER PROTECTION ACT, 2019\nThe complainant bought a refrigerator on {d-90} for Rs. 48,000. It stopped working within a week, and the opposite party refused to repair or replace it.",
+    "commission notice.pdf": "DISTRICT CONSUMER DISPUTES REDRESSAL COMMISSION, PUNE\nC.C. No. 88/2026\nNOTICE TO OPPOSITE PARTY\nTo: QuickFix Electronics Pvt. Ltd.\nTake notice that the complaint filed by Kavita Rao is listed on {d+15} at 11:00 AM. You are directed to file your written version within 30 days of receipt of this notice, failing which the matter will proceed ex parte."
+  },
+  "expected": {
+    "groups": [
+      ["plaint.pdf", "case status.pdf", "IMG_4410.pdf", "notice june.pdf"],
+      ["complaint.pdf", "commission notice.pdf"]
+    ],
+    "types": {
+      "plaint.pdf": ["plaint", "suit"],
+      "case status.pdf": ["status", "ecourts"],
+      "IMG_4410.pdf": ["order"],
+      "notice june.pdf": ["notice"],
+      "complaint.pdf": ["complaint"],
+      "commission notice.pdf": ["notice"]
+    },
+    "dates": [
+      {"date": "{d+9}", "what": "written statement in the suit"},
+      {"date": "{d+15}", "time": "11:00", "what": "first listing of the consumer complaint"}
+    ]
+  }
+}

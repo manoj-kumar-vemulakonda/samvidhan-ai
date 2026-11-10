@@ -1,0 +1,31 @@
+{
+  "title": "Three matters in one pile: a cheating FIR with its bail matter, a cheque bounce, a divorce summons",
+  "note": "Made-up documents. {d-21} means 21 days before the day the test runs, {d+4} four days after.",
+  "files": {
+    "scan_0012.pdf": "FIRST INFORMATION REPORT (Under Section 173 BNSS)\nDistrict: South Delhi  P.S.: Saket  FIR No. 345/2026  Date: {d-21}\nInformant: Suresh Malhotra\nAccused: Ramesh Kumar\nSections: 318(4), 316(2), 3(5) BNS\nThe informant states that the accused took Rs. 8,50,000 for a flat booking in Noida and issued a fake allotment letter.",
+    "order 2 nov.pdf": "IN THE COURT OF SH. VIKRAM SINGH, ADDITIONAL SESSIONS JUDGE-04, SAKET COURTS, NEW DELHI\nBail Application No. 1987/2026\nState v. Ramesh Kumar\nFIR No. 345/2026, P.S. Saket\n{d-8}\nPresent: Ld. APP for the State. Sh. A. Verma, Ld. counsel for the applicant.\nArguments heard in part. IO is directed to file a status report on recovery before the next date.\nPut up for further arguments on {d+4} at 10:30 AM.",
+    "IMG_2231.pdf": "IN THE COURT OF THE ADDITIONAL SESSIONS JUDGE, SAKET\nBail Application No. 1987/2026\nRamesh Kumar ... Applicant\nVersus\nState (NCT of Delhi) ... Respondent\nAPPLICATION UNDER SECTION 483 BNSS FOR REGULAR BAIL\nThe applicant is in custody since {d-16}.",
+    "notice.pdf": "LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881\nDate: {d-13}\nTo: Sunil Gupta, Proprietor, Gupta Hardware, Lajpat Nagar\nUnder instructions from my client M/s Priya Traders, your cheque No. 004512 dated {d-40} for Rs. 2,40,000 drawn on HDFC Bank was returned unpaid with the remark 'Funds Insufficient' on {d-26}. You are called upon to pay the amount within 15 days of receipt of this notice.",
+    "cheque memo.pdf": "HDFC BANK - CHEQUE RETURN MEMO\nDate: {d-26}\nDrawer: Sunil Gupta (Gupta Hardware)\nPayee: Priya Traders\nCheque No. 004512  Amount: Rs. 2,40,000\nReason for return: FUNDS INSUFFICIENT",
+    "summons.pdf": "IN THE COURT OF THE PRINCIPAL JUDGE, FAMILY COURT, TIS HAZARI, DELHI\nHMA Petition No. 512/2026\nAnita Sharma ... Petitioner\nVersus\nRohit Sharma ... Respondent\nSUMMONS TO RESPONDENT\nYou are hereby summoned to appear in this Court on {d+12} at 10:00 AM to answer the petition for divorce under Section 13(1)(ia) of the Hindu Marriage Act, 1955."
+  },
+  "expected": {
+    "groups": [
+      ["scan_0012.pdf", "order 2 nov.pdf", "IMG_2231.pdf"],
+      ["notice.pdf", "cheque memo.pdf"],
+      ["summons.pdf"]
+    ],
+    "types": {
+      "scan_0012.pdf": ["FIR", "first information"],
+      "order 2 nov.pdf": ["order"],
+      "IMG_2231.pdf": ["bail application", "application"],
+      "notice.pdf": ["notice"],
+      "cheque memo.pdf": ["memo", "return"],
+      "summons.pdf": ["summons"]
+    },
+    "dates": [
+      {"date": "{d+4}", "time": "10:30", "what": "further arguments on the bail application"},
+      {"date": "{d+12}", "time": "10:00", "what": "appearance in the divorce petition"}
+    ]
+  }
+}

@@ -2,6 +2,32 @@
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
 
+## Version 3.4 (10 Nov 2026): the model test, and the bugs it found
+
+You wanted the best results at the lowest cost. To choose a model by measurement instead of guessing:
+
+- **`scripts/eval_models.py`** runs the app's own code, once per model, on files and questions with known right answers. It scores two jobs and records the time, the cost and which model actually answered:
+  - **sorting a pile of files:** grouping, document types and hearing dates;
+  - **answering law questions:** the right provisions cited, the key facts stated, wrong claims avoided, and no made-up citations.
+- **The test sets.** `evals/sample/` holds 3 made-up piles, 18 documents in all: Hindi, scan errors, dates written three ways, and two different cases between the same parties. It also has 6 questions. The lawyer's own real files go in `evals/private/`, which never reaches GitHub. See `evals/README.md`.
+- **Bugs it found in the app** (all fixed, each with a regression test):
+  - "section 318(4)" was read as sections 318 **and 4**;
+  - BNS sections mapped sub-section by sub-section had **no IPC equivalent** at all (BNS 318 ↔ IPC 415/417/418/420);
+  - "cheque returned unpaid" didn't bring up **NI Act s. 142**;
+  - the open dataset's footnote to **NI Act s. 138** gave the wrong year (2015 instead of 2002). Haiku and Sonnet repeated it; only Opus doubted it. It's now corrected on every build (`CORRECTIONS` in `scripts/build_laws.py`).
+- **Bugs in the test itself:** two "wrong statement" checks also matched correct answers, so they were narrowed. A lesson: read a sample of answers, not only the scores.
+- **Results through Claude Code** (sample set, after the fixes):
+
+  | Model | Sorting | Answers | Cost per pile / per answer (API prices) |
+  |---|---|---|---|
+  | no AI (rules) | 73% | – | free |
+  | Haiku 5.5 | 100% | 100% | ₹0.42 / ₹0.07 |
+  | Sonnet 5.5 | 100% | 100% | ₹2.42 / ₹0.90 |
+  | Opus 5.5 | 100% | 100% | ₹5.91 / ₹2.62 |
+
+  On clean, typed files and textbook questions even Haiku is enough, at a tenth of Sonnet's cost. But the sample is small and easy, and only Opus doubted the dataset's wrong year. So don't switch the everyday model on these results alone. Run the test on 20–50 real files first.
+- **Tests:** 213 pass (13 new).
+
 ## Version 3.3 (10 Nov 2026): simple tasks, Deep answers, cheaper AI
 
 You said workflows were confusing for you and for lawyers, and asked for the most cost-efficient AI with the best results.
