@@ -5,6 +5,7 @@ Replace an Act's open-dataset text with the official India Code text - only when
     .venv\\Scripts\\python.exe scripts\\officialise_acts.py                  the Acts lawyers use most (PRIORITY)
     .venv\\Scripts\\python.exe scripts\\officialise_acts.py NIA HMA          just these
     .venv\\Scripts\\python.exe scripts\\officialise_acts.py --all            every Act still from the dataset
+    .venv\\Scripts\\python.exe scripts\\officialise_acts.py --redo NIA       read an Act made official before again
 
 Why: the first 101 Acts came from an open dataset (scripts/build_laws.py). Its text is mostly right, but the model
 test found a wrong amendment footnote that two of three AI models repeated. India Code's PDFs are the official text,
@@ -15,7 +16,11 @@ the library has now. The Act is replaced only if
   * at least 98% of its section numbers are found (citations, the IPC <-> BNS table and the topic hints use them);
     the few not found keep their old text, marked "from_dataset";
   * at least 85% of the section titles agree (otherwise the PDF was probably misread);
-  * there are not many extra "sections" (a sign of misreading).
+  * there are not many extra "sections" (a sign of misreading);
+  * the texts are there and about as long as before (not just the table of contents);
+  * no Illustrations go missing (India Code prints them small, like footnotes);
+  * the sections point at pages of the Act itself, not of its table of contents.
+The PDF is read with rulebook's notes="shape": footnotes are found by their shape, not their size.
 Schedules added before (CPC Orders, Limitation Articles, BNSS First Schedule) are kept as they are.
 """
 
@@ -35,6 +40,7 @@ sys.path.insert(0, str(PROJECT))
 from app import rulebook  # noqa: E402
 from scripts import official  # noqa: E402
 from scripts.build_official import INDIA_CODE, LAWS, as_on, to_sections, write_index  # noqa: E402
+from scripts.official_books import BOOKS  # noqa: E402
 
 DATASET = "Open dataset"
 # The Acts lawyers cite most, first
@@ -42,8 +48,22 @@ PRIORITY = ["BNS", "BNSS", "BSA", "IPC", "CRPC", "IEA", "CPC", "NIA", "LIMITATIO
             "DV", "CONSUMER", "ARBITRATION", "POCSO", "NDPS", "SCST", "MVA", "HSA", "SUCCESSION", "RTI", "ITACT"]
 MIN_COVERAGE, MIN_TITLES, MAX_EXTRA = 0.98, 0.85, 0.05
 MAX_EMPTY, MIN_LENGTH, MAX_MUCH_SHORTER = 0.02, 0.7, 0.10   # the text must really be there, about as long as before
+MAX_LOST_ILLUSTRATIONS = 0.05
+ILLUSTRATED = re.compile(r"\bIllustrations?\b")
+# The label on a line of its own - not a note such as "1. The Illustrations omitted by Act 20 of 1929, s. 11."
+ILLUSTRATION_LABEL = re.compile(r"(?m)^\s*Illustrations?\s*[.:—–-]?\s*$")
 BODY_START = r"^\s*ACT\s+NO\.?\s*\d+\s+OF\s+\d{4}"           # where an India Code PDF's Act begins (after its contents)
 MAX_SCANNED_PAGES = 30   # an Act whose PDF is a scan needs hours of OCR: left for scripts/build_official.py
+
+
+def illustration_words(text: str) -> list[str]:
+    """The first words of each Illustration block in a text, to look for in another reading."""
+    found = []
+    for label in ILLUSTRATION_LABEL.finditer(text):
+        words = re.sub(r"\W+", " ", text[label.end():label.end() + 200]).lower().split()
+        if len(words) >= 6:
+            found.append(" ".join(words[:8]))
+    return found
 
 
 def contents_numbers(lines) -> set[str]:
@@ -132,6 +152,19 @@ def compare(old: list[dict], new: list[dict]) -> dict:
         problems.append(f"{len(empty)} sections have no text (e.g. s. {', '.join(empty[:5])}) - probably the table of contents")
     if median < MIN_LENGTH or much_shorter > MAX_MUCH_SHORTER:
         problems.append(f"the texts are too short (typically {median:.0%} of the old length; {much_shorter:.0%} under half)")
+    # Illustrations are law too (and often printed small, like footnotes): none may go missing, nor their
+    # label. An old text can hold another section's Illustrations (the dataset ran TPA ss. 114-137
+    # together): those count as found when their words are in a labelled section of the new reading.
+    everything = re.sub(r"\W+", " ", " ".join(s["text"] or "" for s in new if ILLUSTRATED.search(s["text"] or ""))).lower()
+    illustrated = [n for n in common if ILLUSTRATION_LABEL.search(old_by[n]["text"] or "")]
+    def found_elsewhere(text: str) -> bool:
+        blocks = illustration_words(text)
+        return bool(blocks) and all(words in everything for words in blocks)
+
+    lost = [n for n in illustrated if not ILLUSTRATED.search(new_by[n]["text"] or "")
+            and not found_elsewhere(old_by[n]["text"])]
+    if len(lost) > max(1, MAX_LOST_ILLUSTRATIONS * len(illustrated)):
+        problems.append(f"the Illustrations of {len(lost)} of {len(illustrated)} sections are missing (e.g. s. {', '.join(lost[:5])})")
     old_all = {number_key(s["number"]): s for s in old}
     details = ([f"+ s. {n} {new_by[n]['title'][:50]}" for n in extra]
                + [f"= s. {n} {old_all[n]['title'][:50]} (not in the PDF: old text kept)" for n in missing])
@@ -141,8 +174,10 @@ def compare(old: list[dict], new: list[dict]) -> dict:
                       - len(extra) / max(1, len(old_by)) - duplicates / max(1, len(old_by)))}
 
 
-def merge(official_sections: list[dict], old: list[dict], missing: list[str]) -> list[dict]:
-    """The official sections in their order; each section the PDF reading missed keeps its old text, in its place."""
+def merge(official_sections: list[dict], old: list[dict], missing: list[str], old_is_official: bool = False) -> list[dict]:
+    """The official sections in their order; each section the PDF reading missed keeps its old text, in its place.
+    old_is_official (--redo): the old text came from an earlier reading of the PDF, so it is "from_dataset"
+    only where it already was."""
     out = []
     seen = set()
     for s in official_sections:
@@ -152,7 +187,10 @@ def merge(official_sections: list[dict], old: list[dict], missing: list[str]) ->
         out.append(s)
     order = [number_key(s["number"]) for s in old]
     for number in missing:
-        kept = {**next(s for s in old if number_key(s["number"]) == number), "number": number, "from_dataset": True}
+        old_section = next(s for s in old if number_key(s["number"]) == number)
+        kept = {**old_section, "number": number}
+        if not old_is_official:
+            kept["from_dataset"] = True
         before = order[:order.index(number)]
         anchor = next((n for n in reversed(before) if n in seen), None)
         position = next((i for i, s in enumerate(out) if number_key(s["number"]) == anchor), -1) + 1 if anchor else 0
@@ -161,11 +199,17 @@ def merge(official_sections: list[dict], old: list[dict], missing: list[str]) ->
     return out
 
 
-def officialise(code: str, check_only: bool) -> tuple[str, dict | None]:
+def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, dict | None]:
     path = LAWS / "acts" / f"{code}.json"
     act = json.loads(path.read_text(encoding="utf-8"))
+    again = False
     if not act.get("source", "").startswith(DATASET):
-        return "already official", None
+        # --redo: read again an Act this script made official before (after the reader improved).
+        # Books that scripts/build_official.py makes are left to it - its next run would undo the change.
+        if not (redo and act.get("source") == INDIA_CODE and act.get("parsed_as") == "sections"
+                and code not in {book["code"] for book in BOOKS}):
+            return "already official", None
+        again = True
     old = [s for s in act["sections"] if not s.get("official_part")]
     added = [s for s in act["sections"] if s.get("official_part")]          # schedules added before: kept
     name = act["name"]
@@ -192,17 +236,21 @@ def officialise(code: str, check_only: bool) -> tuple[str, dict | None]:
         scanned = sum(1 for page in doc if rulebook.needs_ocr(page.get_text()))
     if scanned > MAX_SCANNED_PAGES and not (official.RAW / f"{code}.ocr.json").exists():
         return f"skipped: the PDF is a scan ({scanned} pages need OCR)", None
-    lines = rulebook.pdf_lines(pdf, ocr="auto", cache=official.RAW / f"{code}.ocr.json")
+    # notes="shape": India Code prints Illustrations (and some whole pages) in small type - see rulebook.clean_lines
+    lines = rulebook.pdf_lines(pdf, ocr="auto", cache=official.RAW / f"{code}.ocr.json", notes="shape")
     # Read it the ways the reader knows (bold headings or not) and keep the reading that matches the sections
     # the library already has best; schedules added before (CPC Orders ...) are not read again
     best = None
     listed = contents_numbers(lines)
     known = {number_key(s["number"]) for s in old}
     use_list = len(listed & known) >= 0.8 * len(known)        # the list was read well enough to rely on
-    for start in (None, BODY_START):
+    # The page where the Act itself begins ("ACT NO. 26 OF 1881"): a section said to be on an earlier page
+    # was taken from the list of sections, and its link would open the contents instead of the section
+    body_page = next((line.page for line in lines if re.search(BODY_START, line.text, re.I)), 0)
+    for start in (BODY_START, None):                          # on a tie, the reading that starts at the Act
         for bold in (None, False, True):
             try:
-                provisions = rulebook.parse(lines, numbering="sections", bold=bold, start=start)
+                provisions = rulebook.parse(lines, numbering="sections", bold=bold, start=start, numbered_schedules=True)
             except Exception:
                 continue
             if not provisions:
@@ -223,6 +271,11 @@ def officialise(code: str, check_only: bool) -> tuple[str, dict | None]:
                 new = keep
             result = compare(old, new)
             result["details"] += left_out
+            in_contents = sum(1 for s in new if s.get("page") and s["page"] < body_page) / max(1, len(new))
+            result["score"] -= in_contents
+            if in_contents > 0.1:
+                result["problems"].append(f"{in_contents:.0%} of the sections point at pages before the Act begins "
+                                          f"(p. {body_page}) - read from the list of sections")
             if best is None or result["score"] > best[1]["score"]:
                 best = (new, result)
     if best is None:
@@ -246,9 +299,11 @@ def officialise(code: str, check_only: bool) -> tuple[str, dict | None]:
     record = {**{k: v for k, v in act.items() if k not in ("sections",)},
               "source": INDIA_CODE, "kind": "act", "court": act.get("court", ""), "jurisdiction": act.get("jurisdiction", "Central"),
               "pdf": pdf.name, "url": info.get("page") or info.get("url", ""), "as_on": as_on(pdf), "parsed_as": how,
-              "sections": merge(new, old, result["missing"]) + added}
-    if result["missing"]:
-        record["dataset_sections_kept"] = result["missing"]
+              "sections": merge(new, old, result["missing"], old_is_official=again) + added}
+    still_dataset = [number_key(s["number"]) for s in record["sections"] if s.get("from_dataset")]
+    record.pop("dataset_sections_kept", None)
+    if still_dataset:
+        record["dataset_sections_kept"] = still_dataset
     path.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
     return "replaced: " + summary, record
 
@@ -259,6 +314,8 @@ def main() -> int:
     parser.add_argument("codes", nargs="*", help="only these Acts (default: the most used ones)")
     parser.add_argument("--all", action="store_true", help="every Act still from the dataset")
     parser.add_argument("--check", action="store_true", help="compare only; change nothing")
+    parser.add_argument("--redo", action="store_true",
+                        help="also read again the named Acts this script made official before (after a reader fix)")
     args = parser.parse_args()
     index = json.loads((LAWS / "index.json").read_text(encoding="utf-8"))
     dataset = [a["code"] for a in index["acts"] if a.get("source", "").startswith(DATASET)]
@@ -267,7 +324,7 @@ def main() -> int:
     for code in codes:
         started = time.time()
         try:
-            outcome, record = officialise(code, args.check)
+            outcome, record = officialise(code, args.check, args.redo)
         except Exception as error:
             outcome, record = f"FAILED: {error}", None
         if record:

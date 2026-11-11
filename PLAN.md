@@ -2,6 +2,39 @@
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
 
+## Version 3.6 (11 Nov 2026): five more official Acts, and the Illustrations back
+
+Teaching the reader the CPC and NI Act layouts showed that it lost or mixed up text in five ways. One of them had quietly damaged v3.5.
+
+- **What was wrong:**
+  - **Illustrations were dropped.** India Code prints Illustrations in small type, like footnotes, and the reader threw small type away.
+    - In v3.5 the Indian Succession Act lost its Illustrations' text, and the BNS and BSA lost the word "Illustration(s)" above them (it's on so many pages that it looked like a page header).
+    - The Contract Act would have lost all of them, and v3.5's checks would not have noticed.
+  - **Footnotes in normal type stayed in the law.** Some pages print a note ("1. Subs. by Act 20 of 1929 …") as large as the law: TPA had 28 such notes inside its sections, Arbitration 18, Contract 12.
+  - **Pages printed small were lost.** CPC ss. 52–60 are in 9 pt, so the reader dropped them.
+  - **Headings that aren't headings, and headings it missed.**
+    - "the Schedule I." at the start of a wrapped line (NI Act s. 2) was taken for a Schedule heading, and the rest of the Act became one "Schedule".
+    - The Succession Act's "SCHEDULE I … VIII" were glued onto s. 392 (or s. 5).
+  - **Page links into the table of contents.** For the Succession, NI and Contract Acts, the reading that won took its page numbers from the list of sections.
+- **The fixes** (`app/rulebook.py`, switched on by `scripts/officialise_acts.py`):
+  - Footnotes are found by their shape: the numbered block at the foot of a page, worded like notes ("Subs.", "Ins.", "Act 20 of 1929", "ibid.", "see … supra"). Their size doesn't matter. A numbered list in the law (a Schedule's items) is not mistaken for notes.
+  - Small type right after an "Illustration(s)" label is kept, and the label is no longer a "page header".
+  - On a page where most of the law is small, small type is kept.
+  - "the Schedule" in lower case is not a heading; "SCHEDULE III" is.
+- **Court-rule books keep the old reading.** Tried on them, the new one changed 34 books, some for the better, some not (see Honest limits). The full rebuild of every book is unchanged.
+- **New checks before an Act is replaced:**
+  - No more than 5% of the sections may lose their Illustrations or the label. Illustrations that the old text had in the wrong section count if they are in a labelled section now. This check would have stopped v3.5's loss.
+  - Readings that start at the Act ("ACT NO. 26 OF 1881") win ties. A reading whose sections point at pages before the Act begins is refused.
+  - `--redo` reads again an Act this script made official before.
+- **Replaced: 5 more, 20 in all.** CPC (its sections; the Orders stay as they were), NI Act, Contract, Transfer of Property, Arbitration.
+  - CPC s. 95 (its heading is printed word by word) and NI Act s. 81A (not in the PDF) keep the dataset text, marked "from dataset".
+  - Arbitration gained 18 sections the dataset lacked (ss. 76–87 and others).
+  - Many dataset "sections" were really several sections run together (TPA "s. 114" held ss. 114–137), so some texts are shorter now and correct.
+  - The NI Act now has its Illustrations (s. 4's promissory notes, the maturity-date examples …), which the dataset never had.
+- **Re-read: the 15 of v3.5.** Illustrations back (BNS 72 sections, BSA 57, Succession 128), 6 leftover footnotes gone, and the Succession Act's 8 Schedules split off. Every section of the 20 Acts now points at a page of the Act itself.
+- **Footnotes are not in the text.** v3.5's notes said the official texts carry India Code's footnotes; they don't. The PDF page, one click away, has them.
+- **Library:** still 268 books, now 27,157 provisions; 81 of the first 101 Acts are still from the dataset. **Tests:** 228 pass (10 new, including one per problem above). The full rebuild of all court-rule books gives exactly the same books as before.
+
 ## Version 3.5 (10 Nov 2026): the most-cited Acts in their official text
 
 The model test showed that the open dataset behind the first 101 Acts can be wrong. Two of three models repeated its wrong amendment year. So the most-cited Acts were swapped for the official India Code text.
@@ -15,7 +48,7 @@ The model test showed that the open dataset behind the first 101 Acts can be wro
   - schedules added earlier (CPC Orders, Limitation Articles, BNSS First Schedule);
   - repealed sections that the PDF lists as one range;
   - a section the PDF doesn't have (NI Act s. 81A), marked "from dataset".
-- **Replaced (15):** BNS, BNSS, BSA, Limitation, Specific Relief, Hindu Marriage, Hindu Succession, Domestic Violence, Consumer Protection, POCSO, NDPS, SC/ST Atrocities, Indian Succession, RTI, IT Act. Each now has its "as on" date, page numbers and India Code's own footnotes. NDPS gained ss. 68I and 68O, which the dataset lacked.
+- **Replaced (15):** BNS, BNSS, BSA, Limitation, Specific Relief, Hindu Marriage, Hindu Succession, Domestic Violence, Consumer Protection, POCSO, NDPS, SC/ST Atrocities, Indian Succession, RTI, IT Act. Each now has its "as on" date and page numbers. *(This line also said "India Code's own footnotes": wrong, the reader leaves footnotes out. And v3.6 found Illustrations missing and some page numbers pointing at the contents. See v3.6.)* NDPS gained ss. 68I and 68O, which the dataset lacked.
 - **Not replaced:**
   - IPC, CrPC and Evidence Act: India Code lists them but no longer offers their PDFs. The search used to fall back to *another* document (a 2019 notification, an 1891 amending Act); a title check now refuses that.
   - CPC, NI Act, Contract, TPA and Arbitration: the readings fell short of the checks.
@@ -288,11 +321,11 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 
 ## Honest limits
 
-- **The Act texts.** 86 of the first 101 Acts still come from an open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence), built from India Code but not the official PDF. Some of their texts contain footnote digits, and at least one footnote gave a wrong year (corrected).
-  - 15 of the most-cited Acts now use the official India Code text (v3.5).
+- **The Act texts.** 81 of the first 101 Acts still come from an open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence), built from India Code but not the official PDF. Some of their texts contain footnote digits, and at least one footnote gave a wrong year (corrected).
+  - 20 of the most-cited Acts now use the official India Code text (15 in v3.5, 5 more in v3.6). Their amendment footnotes are not in the text; the PDF page, one click away, has them.
   - IPC, CrPC and the Evidence Act can't be replaced: India Code no longer offers their PDFs.
-  - The CPC, NI Act, Contract, TPA and Arbitration PDFs didn't read cleanly enough yet.
-  - NI Act s. 81A is in the dataset but not in India Code's PDF; it's kept, marked "from dataset", to be checked.
+  - NI Act s. 81A is in the dataset but not in India Code's PDF; it's kept, marked "from dataset", to be checked. CPC s. 95 also keeps the dataset text (its heading is printed word by word).
+  - Court-rule books still use the old reading of small type. The v3.6 reading (Illustrations kept, footnotes found by their shape) changed 34 of them when tried, some for the better. Each needs checking before it is switched on for them. Two would gain rules from the "the Schedule" fix (Allahabad 1952 +239, Uttarakhand e-Nyaya Shruti +25), but a forms book got worse. Reading "SCHEDULE I" headings would split the Schedules off the last section in 7 State court-fees and personal-law Acts (e.g. Court Fees Act s. 36 now holds 68,000 characters of Schedules), but the Kerala Court Fees Act came out empty, so it's left off for them too.
 - **Court rules still missing** (v3.1, end of 10 Nov 2026):
   - Bombay (the site doesn't answer this network), Madras (refuses automated downloads, HTTP 429) and Punjab & Haryana (HTTP 403): their main rule books. Download them in a browser and drop them in the inbox.
   - Calcutta, Tripura and the Uttarakhand HC Rules: not posted online as files.
@@ -316,7 +349,8 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 - **v5:**
   - Full-text judgment search.
   - Rules of the remaining High Courts once their sites can be reached (or added by users), and State laws (rent, land revenue, police Acts) from India Code's State collections.
-  - Replace the rest of the first 101 Acts' open-dataset text with the official India Code text (`scripts/officialise_acts.py --all`; 15 done in v3.5). Teach the reader the CPC / NI Act / Contract / TPA / Arbitration layouts.
+  - Replace the rest of the first 101 Acts' open-dataset text with the official India Code text (`scripts/officialise_acts.py --all`; 20 done by v3.6).
+  - Check the court-rule books one by one with the v3.6 reading, and switch it on where it's better.
   - A Word add-in.
 
 ---

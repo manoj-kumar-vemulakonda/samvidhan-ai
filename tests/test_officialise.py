@@ -58,3 +58,39 @@ def test_only_sections_in_the_acts_own_list_count():
         "6B. Interest to devolve by survivorship.—...")]
     assert officialise.contents_numbers(lines) == {"6", "29", "SCHEDULE"}   # 6B (a State amendment) is not in it
     assert officialise.plain_title("The Hindu Succession Act, 1956") == officialise.plain_title("Hindu Succession Act,  1956")
+
+
+ILLUSTRATION = "\nIllustration\nA promises to paint a picture for B by a certain day, at a certain price."
+
+
+def test_lost_illustrations_are_refused():
+    # India Code prints Illustrations small, like footnotes: a reading that drops them must not replace the text
+    old = [section(str(n), f"Title of section {n}", TEXT + (ILLUSTRATION if n % 4 == 0 else "")) for n in range(1, 41)]
+    without = [section(str(n), f"Title of section {n}") for n in range(1, 41)]
+    assert any("Illustrations of 10 of 10" in p for p in officialise.compare(old, without)["problems"])
+    with_them = [section(str(n), f"Title of section {n}", TEXT + (ILLUSTRATION.replace("\n", " ") if n % 4 == 0 else ""))
+                 for n in range(1, 41)]
+    assert officialise.compare(old, with_them)["problems"] == []
+    # the words without their label (dropped as a "running head") are not enough
+    unlabelled = [dict(s, text=s["text"].replace("Illustration", "")) for s in with_them]
+    assert any("Illustrations of 10 of 10" in p for p in officialise.compare(old, unlabelled)["problems"])
+
+
+def test_illustrations_in_another_section_or_in_a_note_are_not_lost():
+    # the dataset ran s. 5 and s. 6 together (TPA ss. 114-137); and "The Illustrations omitted by ..." is a note
+    old = ([section(str(n), f"Title of section {n}") for n in range(1, 5)]
+           + [section("5", "Title of section 5", TEXT + "\n6. Next.—More text." + ILLUSTRATION),
+              section("6", "Title of section 6", TEXT + "\n1. The Illustrations omitted by Act 20 of 1929, s. 11.")]
+           + [section(str(n), f"Title of section {n}") for n in range(7, 41)])
+    new = ([section(str(n), f"Title of section {n}") for n in range(1, 6)]
+           + [section("6", "Title of section 6", TEXT + ILLUSTRATION)]
+           + [section(str(n), f"Title of section {n}") for n in range(7, 41)])
+    assert officialise.compare(old, new)["problems"] == []
+
+
+def test_reading_an_official_act_again_keeps_it_official():
+    old = [section(str(n), f"Title of section {n}") for n in range(1, 5)] + [section("4A", "Kept before", from_dataset=True)]
+    new = [section(str(n), f"Title of section {n}") for n in (1, 2, 4)]
+    merged = officialise.merge(new, old, ["3", "4A"], old_is_official=True)
+    flags = {s["number"]: s.get("from_dataset", False) for s in merged}
+    assert flags == {"1": False, "2": False, "3": False, "4": False, "4A": True}

@@ -37,6 +37,8 @@ HEADING_ALONE = re.compile(r"^(?P<pre>)(?P<kind>Order|Chapter|Part)\s*[-–—]?
                            r"\.?(?P<rest>)$")
 SCHEDULE = re.compile(r"^\[?\s*THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH)\s+)?SCHEDULE\b",
                       re.I)
+# "SCHEDULE III" or "1[SCHEDULE II" (with its note number), alone on the line, in capitals
+SCHEDULE_NUMBERED = re.compile(r"^(?:\d{1,2}\s*)?\[?\s*SCHEDULE\s+((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))\s*\.?\]?\s*$")
 APPENDIX = re.compile(r"^APPENDIX\b", re.I)
 PROVISION = re.compile(r"^(?:\d{1,2}(?=\s*\[)|\*{1,3})?\s*\[?\s*(?:Rule\s+)?(\d{1,4}(?:\s?-?[A-Z]{1,3})?)\s*\.\s*(\S.*)?$")
 TITLE_END = re.compile(r"^(.{2,220}?[^\s(])\s*[.:]?\s*[—–]+\s*|^(.{2,220}?)\.\s*-{1,2}\s*(?=[A-Z(\[“\"\d])|^(.{2,220}?)\s*:-\s*")
@@ -128,9 +130,10 @@ def needs_ocr(text: str) -> bool:
 
 
 def pdf_lines(path: str | Path, ocr: str = "auto", progress=None, first_page: int = 1, last_page: int | None = None,
-              cache: str | Path | None = None) -> list[Line]:
+              cache: str | Path | None = None, notes: str = "size") -> list[Line]:
     """Every text line of the PDF. ocr: 'auto' (only pages without usable text), 'always' or 'never'.
-    cache: a JSON file where OCR results are kept, so a scanned book is only read once."""
+    cache: a JSON file where OCR results are kept, so a scanned book is only read once.
+    notes: how footnotes are found - see clean_lines."""
     import json
 
     import pymupdf
@@ -168,7 +171,7 @@ def pdf_lines(path: str | Path, ocr: str = "auto", progress=None, first_page: in
             progress(index + 1, last)
     if cache and changed:
         Path(cache).write_text(json.dumps(saved, ensure_ascii=False), encoding="utf-8")
-    return clean_lines(lines)
+    return clean_lines(lines, notes)
 
 
 def body_size(lines: list[Line]) -> float:
@@ -179,25 +182,126 @@ def body_size(lines: list[Line]) -> float:
     return sizes.most_common(1)[0][0] if sizes else 0.0
 
 
-def clean_lines(lines: list[Line]) -> list[Line]:
-    """Drop footnotes, page numbers, watermarks and running heads/feet."""
+FOOTNOTE_START = re.compile(r"^(\d{1,3})\.\s+\S")
+# The words amendment notes are made of: "Subs. by Act 46 of 1999, s. 5", "Ins. by s. 22, ibid.", "the A.O. 1950"
+NOTE_WORDS = re.compile(r"\b(?:Subs|Ins|Omitted|Added|Rep|Renumbered|Inserted|Substituted|Repealed|ibid|w\.e\.f|"
+                        r"supra|infra|See)\b|\bAct\s+\d+\s+of\s+\d{4}|\bA\.\s?O\.", re.I)
+
+
+def footnote_block(page: list[Line], body: float = 0.0) -> int | None:
+    """Where the numbered notes at the foot of a page begin ("1. Subs. by Act 3 of 1921...", "2. Ins. by...").
+
+    Returns the index in `page` of the "1." line, or None. Every line from there to the end of the page
+    must be the next note number at the same left edge, or a note's next line (indented, or in another
+    type size than `body`, the usual size, when given), and most notes must use the words of notes - so a
+    numbered list in the law (a Schedule's items "1. The arbitrator is an employee ...") is not mistaken
+    for notes."""
+    for i, line in enumerate(page):
+        start = FOOTNOTE_START.match(line.text.strip())
+        if not start or start.group(1) != "1" or line.bold:
+            continue
+        expected, ok, notes = 2, True, [line.text]
+        for later in page[i + 1:]:
+            number = FOOTNOTE_START.match(later.text.strip())
+            if later.bold:
+                ok = False
+            elif number and int(number.group(1)) == expected and abs(later.x - line.x) < 3:
+                expected += 1
+                notes.append(later.text)
+            elif later.x <= line.x + 3 and not (body and later.size and abs(later.size - body) >= 0.9):
+                ok = False
+            else:
+                notes[-1] += " " + later.text            # a note's next line
+            if not ok:
+                break
+        if ok and sum(1 for note in notes if NOTE_WORDS.search(note)) >= 0.6 * len(notes):
+            return i
+    return None
+
+
+ILLUSTRATION = re.compile(r"^\s*Illustrations?\s*[.:—–-]?\s*$", re.I)
+# The first words of an amendment note: "3. Subs. by Act 46 of 1999, s. 5 ...", "1. Ins. by ..."
+AMENDMENT_NOTE = re.compile(r"^\d{1,3}\.\s*(?:Subs|Ins|Omitted|Added|Rep|Renumbered|Inserted|Substituted|"
+                            r"The\s+words|Certain\s+words|Vide)\b", re.I)
+
+
+def clean_lines(lines: list[Line], notes: str = "size") -> list[Line]:
+    """Drop footnotes, page numbers, watermarks and running heads/feet.
+
+    notes="size" (court rules and handbooks): a line printed smaller than the usual size is a footnote.
+    notes="shape" (India Code Acts, scripts/officialise_acts.py): India Code prints some of the law itself
+    in small type - every Illustration in the Contract and Succession Acts, whole pages of the CPC - and
+    some notes in the usual type, so size alone would throw law away and keep notes:
+      * the numbered block of amendment notes at the foot of a page ("1. Subs. by Act 3 of 1921 ...",
+        "2. Ins. by ...") is dropped whatever its size;
+      * small lines after an "Illustration(s)" label are kept, up to the next line in the usual size;
+      * on a page where most of the law is small, nothing else is dropped for being small;
+      * "Illustrations", printed on many pages, is not taken for a running head.
+    "shape" is checked against the text the library already has before an Act is replaced; the court-rule
+    books keep "size" until each is checked the same way."""
     if not lines:
         return []
+    shape = notes == "shape"
     size = body_size(lines)
     pages = {line.page for line in lines}
     # Running heads: the same short text on many pages ("THE GAZETTE OF INDIA : EXTRAORDINARY")
     counts = Counter(re.sub(r"\d+", "#", line.text.strip().upper()) for line in lines if len(line.text) < 90)
+    kept_words = r"^(\(|PROVIDED|EXPLANATION|ILLUSTRATION)" if shape else r"^(\(|PROVIDED|EXPLANATION)"
     repeated = {text for text, n in counts.items() if len(pages) >= 6 and n >= max(4, len(pages) * 0.3)
-                and not HEADING.match(text) and not re.match(r"^(\(|PROVIDED|EXPLANATION)", text)}
-    kept = []
-    for line in lines:
+                and not HEADING.match(text) and not re.match(kept_words, text)}
+
+    def noise(line: Line) -> bool:
         text = line.text.strip()
-        if WATERMARK.match(text) or PAGE_NUMBER.match(text):
+        return bool(WATERMARK.match(text) or PAGE_NUMBER.match(text) or re.sub(r"\d+", "#", text.upper()) in repeated)
+
+    def small(line: Line) -> bool:
+        return bool(size and line.size and line.size < size - 1.2)
+
+    small_pages: set[int] = set()                  # pages where most of the law is in small type
+    note_ids: set[int] = set()                     # id() of the lines in each page's block of numbered notes
+    if shape and size:
+        by_page: dict[int, list[Line]] = {}
+        for line in lines:
+            # a short note ("2. Ins. by s. 27, ibid.") can repeat as often as a running head: it stays in
+            # its page's list, or the gap in the numbering would hide the whole block
+            if not noise(line) or (FOOTNOTE_START.match(line.text.strip()) and not PAGE_NUMBER.match(line.text.strip())):
+                by_page.setdefault(line.page, []).append(line)
+        blocks = {page: footnote_block(page_lines, size) for page, page_lines in by_page.items()}
+        for page, page_lines in by_page.items():
+            block = blocks[page]
+            law = page_lines[:block] if block is not None else page_lines
+            if block is not None:
+                note_ids |= {id(line) for line in page_lines[block:]}
+            sizes = Counter()
+            for line in law:
+                if line.size:
+                    sizes[line.size] += len(line.text)
+            if sum(sizes.values()) >= 500 and sizes.most_common(1)[0][0] < size - 1.2:
+                small_pages.add(page)
+        if small_pages:
+            # In such a book, pages printed partly in small type are read the same way - but only where
+            # the notes were found by their shape, so nothing small is kept unless the notes are known
+            small_pages |= {page for page, block in blocks.items()
+                            if block is not None and any(small(line) for line in by_page[page][:block])}
+
+    kept = []
+    illustrating = False                           # inside the small-type Illustrations under a section
+    paused_on = None                               # ... but at the notes at the foot of this page
+    for line in lines:
+        if noise(line):
             continue
-        if size and line.size and line.size < size - 1.2:
-            continue                                              # footnote
-        if re.sub(r"\d+", "#", text.upper()) in repeated:
-            continue
+        text = line.text.strip()
+        if shape:
+            if ILLUSTRATION.match(text):
+                illustrating, paused_on = True, None
+            elif not small(line):
+                illustrating = False
+            elif illustrating and paused_on != line.page and (id(line) in note_ids or AMENDMENT_NOTE.match(text)):
+                paused_on = line.page              # the Illustrations go on overleaf, after the notes
+        if id(line) in note_ids:
+            continue                                              # footnote, found by its shape
+        if line.page not in small_pages and small(line) and not (illustrating and paused_on != line.page):
+            continue                                              # footnote, found by its size
         if LIGATURE.search(line.text):
             line = replace(line, text=fix_ligatures(line.text))
         kept.append(line)
@@ -286,7 +390,8 @@ class Group:
 
 def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = None, only_schedule: bool = False,
           stop: str | None = None, start: str | None = None, schedules: str = "whole",
-          allow_restart: bool = True, title_headings: bool = False, _skip: frozenset[int] = frozenset()) -> list[dict]:
+          allow_restart: bool = True, title_headings: bool = False, numbered_schedules: bool = False,
+          _skip: frozenset[int] = frozenset()) -> list[dict]:
     """
     lines -> provisions.
       numbering: "sections" (s. 12), "orders" (O. VII r. 11), "chapters" (Ch. IV r. 3), "rules" (r. 12),
@@ -295,6 +400,7 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
       only_schedule: keep only what comes after THE FIRST SCHEDULE heading (the CPC's Orders)
       stop / start: regex of a heading line where the useful part ends / begins
       schedules: "whole" = each Schedule becomes one provision; "skip" = ignore schedules
+      numbered_schedules: also take "SCHEDULE III" (no "THE") for a Schedule heading (sections only)
     """
     candidates = [line for line in lines if PROVISION.match(line.text)]
     if bold is None:
@@ -381,19 +487,30 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
                 pending_title_for = g
                 continue
         sched = SCHEDULE.match(text) if len(text) < 80 else None
-        if sched and (provisions or current or (only_schedule and body_seen)):
+        if sched and numbering == "sections" and text.lstrip("[ 0123456789")[:1].islower():
+            # "the Schedule I." wrapped from the line above - not a heading (NI Act s. 2). Acts only for now:
+            # court-rule books were checked with the old reading (two would gain rules, two would change).
+            sched = None
+        # "SCHEDULE III" alone on its line (the Succession Act's style). Only when asked (officialise_acts.py,
+        # whose checks refuse a bad reading): in the court-fees Acts it split most Schedules off the last
+        # section, but the Kerala one lists "SCHEDULE I" in its contents and every section came out empty.
+        numbered_sched = SCHEDULE_NUMBERED.match(text) if numbered_schedules and numbering == "sections" and not sched else None
+        if (sched or numbered_sched) and (provisions or current or (only_schedule and body_seen)):
             flush()
-            ordinal = ORDINALS.get((sched.group(1) or "").upper(), 0)
+            if sched:
+                ordinal = ORDINALS.get((sched.group(1) or "").upper(), 0)
+                title = "The " + ((sched.group(1) or "").title() + " Schedule" if sched.group(1) else "Schedule")
+            else:
+                ordinal = roman_to_int(numbered_sched.group(1))
+                title = f"Schedule {numbered_sched.group(1)}"
             schedule = Group("schedule", ordinal, "", "", line.page)
             in_schedule = True
             if only_schedule:
                 group, last_key = None, None
             if schedules == "whole" and not only_schedule:
                 current = {"kind": "schedule", "number": f"SCH{ordinal or ''}",
-                           "ref": f"Sch. {int_to_roman(ordinal)}" if ordinal else "Sch.",
-                           "title": (sched.group(1) or "").title() + (" Schedule" if sched.group(1) else "Schedule"),
+                           "ref": f"Sch. {int_to_roman(ordinal)}" if ordinal else "Sch.", "title": title,
                            "chapter": "", "chapter_title": "", "page": line.page, "status": "in_force"}
-                current["title"] = ("The " + current["title"]).strip()
                 pending_title_for = None
             continue
         if APPENDIX.match(text) and text.isupper() and len(text) < 40 and only_schedule and in_schedule:
@@ -481,7 +598,7 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
         # looked like going backwards: read again without that line and keep whichever finds more
         again = parse(lines, numbering=numbering, bold=bold, only_schedule=only_schedule, stop=stop, start=start,
                       schedules=schedules, allow_restart=allow_restart, title_headings=title_headings,
-                      _skip=_skip | {first_line})
+                      numbered_schedules=numbered_schedules, _skip=_skip | {first_line})
         if len(again) > len(found):
             return again
     return found

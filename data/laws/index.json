@@ -19,8 +19,7 @@
     "civil procedure code",
     "सिविल प्रक्रिया संहिता"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 886,
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
    "official_parts": [
     {
      "label": "First Schedule - Orders and Rules",
@@ -30,7 +29,18 @@
      "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
      "as_on": "10th January, 2026"
     }
-   ]
+   ],
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CPC.pdf",
+   "url": "https://indiacode.gov.in/items/3d38ec80-965e-4df0-a2d2-3d97cb1dc702",
+   "as_on": "10th January, 2026",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "95"
+   ],
+   "sections": 886
   },
   {
    "code": "COMMCOURTS",
@@ -256,8 +266,15 @@
     "transfer of property act",
     "t p act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 148
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "TPA.pdf",
+   "url": "https://indiacode.gov.in/items/2b436b95-ae89-4c5f-ab70-3d5ef5ffd8e8",
+   "as_on": "",
+   "parsed_as": "sections",
+   "sections": 149
   },
   {
    "code": "BRA",
@@ -872,8 +889,15 @@
     "arbitration act",
     "arbitration and conciliation act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 92
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ARBITRATION.pdf",
+   "url": "https://indiacode.gov.in/items/51601006-0e76-4a81-83ce-739f3a021112",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
+   "sections": 110
   },
   {
    "code": "CONSUMER",
@@ -917,7 +941,14 @@
     "indian contract act",
     "ica"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CONTRACT.pdf",
+   "url": "https://indiacode.gov.in/items/0e782442-f035-4d53-aace-81b1552a8cf2",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 268
   },
   {
@@ -956,7 +987,17 @@
     "negotiable instrument act",
     "cheque bounce act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "NIA.pdf",
+   "url": "https://indiacode.gov.in/items/38b01c2d-f1b8-4b1f-a8bf-86b4da3b72a0",
+   "as_on": "",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "81A"
+   ],
    "sections": 156
   },
   {
@@ -5572,7 +5613,7 @@
    "url": "https://indiacode.gov.in/items/3eeb6aec-1e1f-42d4-9673-c04d21829663",
    "as_on": "19th June, 2026",
    "parsed_as": "sections",
-   "sections": 392
+   "sections": 400
   },
   {
    "code": "MWPSC",

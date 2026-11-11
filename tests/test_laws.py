@@ -17,9 +17,20 @@ def test_library_has_the_main_acts(law_library):
 
 
 def test_known_dataset_errors_stay_corrected(law_library):
-    # The 15 -> 30 days change in NI Act s. 138 was made in 2002, not 2015 (scripts/build_laws.py CORRECTIONS)
-    text = law_library.get("NIA:138").text
-    assert "55 of 2002" in text and "amendment act of 2015" not in text
+    # The dataset's footnote put the 15 -> 30 days change in NI Act s. 138 in 2015; it was 2002. Since v3.6
+    # s. 138 is India Code's text: no footnotes in the text (the PDF page has them) and no wrong year
+    section = law_library.get("NIA:138")
+    assert "within thirty days" in section.text and "2015" not in section.text
+    assert law_library.act("NIA").source.startswith("India Code") and section.page and section.page >= 8
+
+
+def test_official_acts_keep_their_illustrations(law_library):
+    # India Code prints Illustrations small, like footnotes; v3.5 lost them (v3.6 found and fixed it)
+    assert "Illustration" in law_library.get("BNS:110").text
+    assert "A makes a contract with B to buy B’s horse" in law_library.get("CONTRACT:32").text
+    assert "I promise to pay B or order Rs. 500" in law_library.get("NIA:4").text
+    succession = law_library.get("SUCCESSION:5").text
+    assert "Illustrations" in succession and "SCHEDULE" not in succession   # Schedules no longer glued on
 
 
 @pytest.mark.parametrize("text, expected", [

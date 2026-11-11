@@ -1,4 +1,4 @@
-﻿"""Court rules and official schedules: parsing PDFs, citing rules, the bail table, adding your own rule book."""
+"""Court rules and official schedules: parsing PDFs, citing rules, the bail table, adding your own rule book."""
 
 import time
 
@@ -99,6 +99,112 @@ def test_pages_fallback_when_there_is_no_numbering():
 
 def test_roman_numbers():
     assert rulebook.roman_to_int("XXXIX") == 39 and rulebook.int_to_roman(47) == "XLVII"
+
+
+def test_a_wrapped_the_schedule_is_not_a_schedule_heading():
+    # NI Act s. 2: "... Rep. by the Repealing and Amending Act, 1891, s. 2 and / the Schedule I." made
+    # everything after it one big "Schedule"
+    found = rulebook.parse(lines([
+        "1. Short title.—This Act may be called the Test Act.",
+        "2. [Repeal of enactments.] Rep. by the Repealing and Amending Act, 1891 (12 of 1891), s. 2 and",
+        "the Schedule I.",
+        "3. Interpretation-clause.—In this Act, unless there is anything repugnant",
+        "THE SCHEDULE", "Enactments repealed",
+    ]), numbering="sections", bold=False)
+    assert [p["number"] for p in found] == ["1", "2", "3", "SCH"]
+
+
+def test_schedules_headed_by_a_roman_number_are_not_glued_to_the_last_section():
+    # Succession Act: "SCHEDULE I", "1[SCHEDULE II" ... ended up in s. 392 (or, read another way, in s. 5)
+    found = rulebook.parse(lines([
+        "390. Provisions with respect to certificates.—Notwithstanding anything in Bombay Regulation",
+        "391. Saving.—Nothing in Part VIII, Part IX or Part X shall validate any disposition",
+        "392. [Repeals].—Rep. by the Repealing Act, 1927 (12 of 1927), s. 2 and Sch.",
+        "SCHEDULE I", "(See section 28)", "TABLE OF CONSANGUINITY",
+        "1[SCHEDULE II", "PART I", "(See section 54)", "(1) Father and mother.",
+        "SCHEDULE III", "5. In applying any of the following sections, namely, sections seventy-five",
+    ]), numbering="sections", bold=False, numbered_schedules=True)
+    by_number = {p["number"]: p for p in found}
+    assert list(by_number) == ["390", "391", "392", "SCH1", "SCH2", "SCH3"]
+    assert "Father and mother" in by_number["SCH2"]["text"] and "In applying" in by_number["SCH3"]["text"]
+    assert "SCHEDULE" not in by_number["392"]["text"] and by_number["SCH3"]["ref"] == "Sch. III"
+
+
+# India Code prints Illustrations (and some whole pages) in small type, and some notes in the usual type
+def page_of(page, rows):
+    """rows: (text, size, bold, x) -> Lines, one below the other."""
+    return [Line(text, page, size, bold, x, 100.0 + 12 * i) for i, (text, size, bold, x) in enumerate(rows)]
+
+
+LAW = "The person who makes the proposal is called the promisor and the person accepting it is the promisee, "
+
+
+def illustrated_page(page=1):
+    return page_of(page, [
+        ("2. Interpretation-clause.—In this Act the following words are used in the following senses,", 11.0, True, 90.0),
+        (LAW, 11.0, False, 72.0), (LAW, 11.0, False, 72.0), (LAW, 11.0, False, 72.0),
+        ("Illustrations", 11.0, False, 280.0),
+        ("(a) A makes a contract with B to buy B's horse if A survives C. This contract cannot be", 9.0, False, 90.0),
+        ("enforced by law unless and until C dies in A's lifetime.", 9.0, False, 72.0),
+        ("3. Communication of proposals.—The communication of proposals is deemed to be made", 11.0, True, 90.0),
+        (LAW, 11.0, False, 72.0),
+        ("1. Subs. by Act 3 of 1951, s. 3 and Sch., for “Part A States”.", 11.0, False, 72.0),   # a note, usual size
+        ("2. Ins. by s. 4, ibid.", 9.0, False, 72.0),
+        ("3. The words “and Berar” omitted by", 9.0, False, 72.0),
+        ("the A.O. 1950.", 9.0, False, 72.0),                        # a note's next line, back at the left edge
+    ])
+
+
+def test_shape_keeps_small_illustrations_and_drops_notes_of_any_size():
+    kept = [line.text for line in rulebook.clean_lines(illustrated_page(), notes="shape")]
+    assert "Illustrations" in kept and any(t.startswith("(a) A makes a contract") for t in kept)
+    assert "enforced by law unless and until C dies in A's lifetime." in kept
+    assert not any("Subs. by" in t or "Ins. by" in t or "omitted by" in t or "A.O. 1950" in t for t in kept)
+    # court-rule books keep the old reading: small lines go, whatever they are
+    by_size = [line.text for line in rulebook.clean_lines(illustrated_page(), notes="size")]
+    assert not any(t.startswith("(a) A makes a contract") for t in by_size)
+
+
+def test_a_numbered_list_in_the_law_is_not_taken_for_notes():
+    schedule = page_of(1, [
+        ("THE FIFTH SCHEDULE", 11.0, True, 250.0),
+        ("1. The arbitrator is an employee, consultant, advisor or has any other past or present", 11.0, False, 72.0),
+        ("business relationship with a party.", 11.0, False, 90.0),
+        ("2. The arbitrator currently represents or advises one of the parties.", 11.0, False, 72.0),
+    ])
+    assert rulebook.footnote_block(schedule, 11.0) is None
+    notes = page_of(1, [(LAW, 11.0, False, 72.0), ("1. Ins. by Act 33 of 2019, s. 5 (w.e.f. 30-8-2019).", 9.0, False, 72.0),
+                        ("2. But see s. 135, infra.", 9.0, False, 72.0)])
+    assert rulebook.footnote_block(notes, 11.0) == 1
+
+
+def test_a_short_note_repeated_on_many_pages_does_not_hide_its_block():
+    # "2. Ins. by s. 27, ibid." is on most pages, so it looks like a running head; without it the
+    # numbering 1, 3 had a gap and the notes in the usual size stayed in the law
+    pages = []
+    for page in range(1, 8):
+        pages += page_of(page, [
+            (f"{page}. Short title.—This Act may be called the Test Act, {page}.", 11.0, True, 90.0),
+            (LAW, 11.0, False, 72.0), (LAW, 11.0, False, 72.0),
+            (f"1. Subs. by Act 20 of 1929, s. {page + 20}, for “at the same rate of interest {page}”.", 11.0, False, 72.0),
+            ("2. Ins. by s. 27, ibid.", 9.0, False, 72.0),
+            (f"3. The words “for a term of years {page}” omitted by s. 28, ibid.", 11.0, False, 72.0),
+        ])
+    kept = [line.text for line in rulebook.clean_lines(pages, notes="shape")]
+    assert not any("Subs. by" in t or "omitted by" in t for t in kept)
+    assert sum(t == LAW for t in kept) == 14
+
+
+def test_a_page_printed_in_small_type_is_kept():
+    # CPC ss. 52-60 on India Code: the law in 9 pt on a few pages, the notes in the same size
+    normal = page_of(1, [("51. Powers of Court to enforce execution.—Subject to such conditions", 11.0, True, 90.0)]
+                     + [(LAW, 11.0, False, 72.0)] * 30)
+    small = page_of(2, [("52. Enforcement of decree against legal representative.—(1) Where a decree", 9.0, True, 90.0)]
+                    + [(LAW, 9.0, False, 72.0)] * 6
+                    + [("1. Subs. by Act 3 of 1921, s. 2, for “will be discharged”.", 9.0, False, 72.0)])
+    kept = [line.text for line in rulebook.clean_lines(normal + small, notes="shape")]
+    assert kept[31].startswith("52. Enforcement of decree") and sum(t == LAW for t in kept) == 36
+    assert not any("Subs. by" in t for t in kept)
 
 
 # ---------------------------------------------------------------------------
