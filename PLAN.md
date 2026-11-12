@@ -2,6 +2,46 @@
 
 *(Working name, easy to change in one place: `APP_NAME` in `app/config.py`.)*
 
+## Version 3.8 (12 Nov 2026): 97 of the first 101 Acts official, titles whole, State law kept
+
+The Motor Vehicles, Stamp and Water Acts are official now. Only the IPC, CrPC, Evidence Act and Income-tax Act, 2025 still come from the dataset, because India Code has no PDF of them. Checking the three found five more faults, and three of them were in the whole library.
+
+- **What was wrong:**
+  - **Water Act:** India Code prints ss. 3, 13 and 31 with the number of the section before ("2. Constitution of Central Boards" right after "2. Definitions"). After a Chapter heading the reader took the repeat for numbering that starts again, and the heading was lost.
+  - **Stamp Act:**
+    - Schedule I is printed "SCHEDULE 1", which wasn't read as a heading.
+    - 260 pages of the States' own Schedules follow it, one of them a substituted "SCHEDULE I".
+    - Karnataka's own "9A. Power of State Government to consolidate duties" and Orissa's "77A" are printed before the Act's own ss. 9A and 77A, and were taken for them.
+  - **Motor Vehicles Act:**
+    - Its 51 scanned pages are the First Schedule's pictures of road signs; the sections are text.
+    - The Schedule heading has two note numbers: "1[2[THE FIRST SCHEDULE]]".
+  - **State law dropped, everywhere:** a State's own section that the reader took for a heading ("47-A. Instruments under-valued" in the Stamp Act; Registration ss. 18A, 80B–80G for Tripura; HSA ss. 6B, 29A–29C …) was "left out", and its text went with it, about 43,000 characters in 14 sections.
+  - **Central sections missing:** India Code's list of sections lacks Companies ss. 393A and 418A (Act 29 of 2020) and IBC ss. 67B and 67C (Act 6 of 2026), so they were dropped too.
+  - **Titles cut short, everywhere:**
+    - When a heading wrapped onto the next line before its ".—", the title was its first line and the heading stayed in the text: 647 sections (42 in the BNS, e.g. s. 196 "Promoting enmity … place of birth,").
+    - Ten more had no title at all (TPA s. 33, SC/ST s. 14A …).
+- **The fixes:**
+  - `app/rulebook.py`:
+    - A heading that wraps is the whole title (sections only; the full offline rebuild changed only titles, in 41 court-book Acts).
+    - "SCHEDULE 1" and "1[2[THE FIRST SCHEDULE]]" are read as headings when officialising.
+  - `scripts/officialise_acts.py`:
+    - A heading printed with its neighbour's number gets its own, when its title is the next section's (in sequence only).
+    - A State's own section stays in the text of the section before, among its State amendments, where India Code prints it.
+    - A State's same-numbered section printed first goes back there.
+    - The States' Schedules become "State amendments to Schedule I", and an omitted Schedule printed as a note (MV Act Second Schedule) becomes a Schedule of its own.
+    - Blank titles are taken from the text.
+    - A PDF whose scanned pages all come after its Schedules begin is read without OCR.
+    - `UNLISTED` has the four central sections; `HOLD_BACK` is empty.
+- **The official texts corrected the dataset:**
+  - MV Act s. 192A is a penalty since the Jan Vishwas Act 2026; the dataset still had imprisonment.
+  - MV Act s. 26 was replaced in 2019; the dataset kept the old sub-sections.
+  - Stamp Act s. 9A is the 2019 stock-exchange duty section.
+- **Checked:**
+  - The 94 other official Acts read again change only as intended: titles completed, State text put back, the four new sections.
+  - No Illustration lost, no footnote added.
+  - Water and Stamp lost only footnotes and repeated headings. Stamp's Schedule I is the central one (39,000 characters, no State in it).
+- **Library:** 268 books, 27,316 provisions. **Tests:** 248 pass (10 new).
+
 ## Version 3.7 (12 Nov 2026): 94 of the first 101 Acts official
 
 Running `officialise_acts.py --all` over the 81 Acts still from the dataset showed seven more ways the reader lost or mixed up text. Two of them had damaged Acts made official earlier.
@@ -356,12 +396,10 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 
 ## Honest limits
 
-- **The Act texts.** 94 of the first 101 Acts use the official India Code text (15 in v3.5, 5 in v3.6, 74 in v3.7). Their amendment footnotes are not in the text; the PDF page, one click away, has them.
-  - 7 still come from the open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence), built from India Code but not the official PDF, with footnote digits and State amendments in the text:
-    - IPC, CrPC, the Evidence Act and the Income-tax Act, 2025: India Code has no PDF of the Act itself.
-    - Motor Vehicles Act: a scan (51 pages need OCR).
-    - Water Act: India Code's PDF misnumbers ss. 3, 13 and 31.
-    - Stamp Act: India Code prints the States' substituted Schedules after it; read as they are, one would pass for the Act's Schedule I.
+- **The Act texts.** 97 of the first 101 Acts use the official India Code text (15 in v3.5, 5 in v3.6, 74 in v3.7, 3 in v3.8). Their amendment footnotes are not in the text; the PDF page, one click away, has them.
+  - 4 still come from the open dataset (GSMS-B/indian-legal-mcp, MIT/Apache licence): IPC, CrPC, the Evidence Act and the Income-tax Act, 2025, because India Code has no PDF of the Act itself. That text was built from India Code but not from the official PDF, so it has footnote digits and State amendments in it.
+  - Motor Vehicles Act: the First Schedule's road signs are pictures (scanned pages 122–172). The library has the Schedule's heading and notes; the PDF page shows the signs.
+  - States' amendments stay in the text of the section they change, as India Code prints them. For the Stamp Act's Schedule I they are a provision of their own.
   - Single sections kept from the dataset, marked "from dataset", where the PDF lacks them: NI Act s. 81A (to be checked), Insurance ss. 65A and 114C, IBC ss. 74 and 76 (omitted), WPA s. 10 (omitted), and repealed ones in HSA and SRA.
   - Small leftovers: a few amendment notes inside Schedules (RBI's list of banks, Companies Schedule III) and two in LLP (ss. 2 and 67B).
   - Court-rule books still use the old reading of small type. The v3.6 reading (Illustrations kept, footnotes found by their shape) changed 34 of them when tried, some for the better. Each needs checking before it is switched on for them. Two would gain rules from the "the Schedule" fix (Allahabad 1952 +239, Uttarakhand e-Nyaya Shruti +25), but a forms book got worse. Reading "SCHEDULE I" headings would split the Schedules off the last section in 7 State court-fees and personal-law Acts (e.g. Court Fees Act s. 36 now holds 68,000 characters of Schedules), but the Kerala Court Fees Act came out empty, so it's left off for them too.
@@ -388,7 +426,7 @@ workspace/       YOUR cases and files (never shared; delete = start fresh)
 - **v5:**
   - Full-text judgment search.
   - Rules of the remaining High Courts once their sites can be reached (or added by users), and State laws (rent, land revenue, police Acts) from India Code's State collections.
-  - The last 7 of the first 101 Acts from official texts (94 done by v3.7): IPC, CrPC and the Evidence Act from the Gazette, the Motor Vehicles Act with OCR, Water and Stamp by hand.
+  - The last 4 of the first 101 Acts from official texts (97 done by v3.8): IPC, CrPC and the Evidence Act from the Gazette, and the Income-tax Act, 2025 once India Code has its PDF.
   - Check the court-rule books one by one with the v3.6 reading, and switch it on where it's better.
   - A Word add-in.
 

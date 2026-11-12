@@ -379,7 +379,7 @@
    "url": "https://indiacode.gov.in/items/f5bbbf6b-4247-400f-80fa-38c605132a8f",
    "as_on": "1st September, 2026",
    "parsed_as": "sections",
-   "sections": 530
+   "sections": 532
   },
   {
    "code": "COMPETITION",
@@ -482,7 +482,7 @@
     "74",
     "76"
    ],
-   "sections": 295
+   "sections": 297
   },
   {
    "code": "INSURANCE",
@@ -5701,7 +5701,14 @@
    "aliases": [
     "water prevention and control of pollution act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "WATER.pdf",
+   "url": "https://indiacode.gov.in/items/16ffc39d-110a-4a34-91e9-f4e78d8cafa8",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 75
   },
   {
@@ -6587,8 +6594,16 @@
     "mva",
     "motor vehicle act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 256
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MVA.pdf",
+   "url": "https://indiacode.gov.in/items/2bbbcc40-38f1-4b15-ae94-646b85db4ee7",
+   "as_on": "15th August, 2026",
+   "parsed_as": "sections",
+   "scanned_pages_not_read": "pp. 122-172",
+   "sections": 259
   },
   {
    "code": "PCPNDT",
@@ -6752,8 +6767,15 @@
     "stamp act",
     "indian stamp act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 97
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "STAMP.pdf",
+   "url": "https://indiacode.gov.in/items/445b5e9e-e4c5-4973-8bef-c9e057d57d5f",
+   "as_on": "",
+   "parsed_as": "sections",
+   "sections": 100
   },
   {
    "code": "IGST",

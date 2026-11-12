@@ -161,6 +161,31 @@ def test_schedules_with_a_note_number_in_front_and_the_bills_reasons():
     assert rulebook.OBJECTS_AND_REASONS.match("STATEMENT OF OBJECTS AND REASONSES")      # IBC's misprint
 
 
+def test_a_heading_that_wraps_onto_the_next_line_is_the_whole_title():
+    # 647 sections (42 in the BNS) had the first line of a long heading as their title and the heading again
+    # in their text; a sentence that runs into "Explanation.—" is not a heading
+    texts = ["195. Assaulting public servant.—Whoever assaults.",
+             "196. Promoting enmity between different groups on grounds of religion, race, place of birth,",
+             "residence, language, etc., and doing acts prejudicial to maintenance of harmony.—(1) Whoever,—",
+             "(a) by words promotes enmity.",
+             "197. Every agreement in restraint of the marriage of any person is void",
+             "unless made by a minor. Explanation.—This applies to all."]
+    found = {p["number"]: p for p in rulebook.parse(lines(texts), numbering="sections", bold=False)}
+    assert found["196"]["title"] == ("Promoting enmity between different groups on grounds of religion, race, place of "
+                                     "birth, residence, language, etc., and doing acts prejudicial to maintenance of harmony")
+    assert found["196"]["text"].startswith("(1) Whoever")
+    assert found["197"]["title"].startswith("Every agreement") and found["197"]["text"].startswith("Every agreement")
+
+
+def test_a_schedule_numbered_in_figures():
+    # Stamp Act: "SCHEDULE 1" (not "I") stayed glued to s. 79; a State's "SCHEDULE I-A" is not a heading
+    texts = ["78. Act to be translated.—Every State Government shall provide.", "79. [Repealed.] Rep. by Act 10 of 1914.",
+             "SCHEDULE 1", "STAMP-DUTY ON INSTRUMENTS", "13. BILL OF EXCHANGE", "SCHEDULE I-A", "RATES IN HIMACHAL PRADESH"]
+    found = {p["number"]: p for p in rulebook.parse(lines(texts), numbering="sections", bold=False, numbered_schedules=True)}
+    assert list(found) == ["78", "79", "SCH1"] and found["SCH1"]["ref"] == "Sch. I" and found["SCH1"]["title"] == "Schedule I"
+    assert "SCHEDULE" not in found["79"]["text"] and "SCHEDULE I-A" in found["SCH1"]["text"]
+
+
 def test_a_bold_note_in_note_type_is_still_a_note():
     # IBC p. 15: the commencement note prints its dates in bold; "2. 5th August, 2016 ..." became section 2
     page = page_of(1, [(LAW, 11.0, False, 72.0), ("1. The proviso omitted by the A.O. 2020.", 9.0, False, 72.0),

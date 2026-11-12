@@ -34,9 +34,9 @@ def test_official_acts_keep_their_illustrations(law_library):
 
 
 def test_the_dataset_acts_are_official_now(law_library):
-    # v3.7: every first-101 Act that India Code has as a readable PDF uses its text; these 7 can't (yet)
+    # v3.8: every first-101 Act that India Code has a PDF of uses its text; it has none of these 4
     dataset = sorted(code for code, act in law_library.acts.items() if act.source.startswith("Open dataset"))
-    assert dataset == ["CRPC", "IEA", "INCOMETAX", "IPC", "MVA", "STAMP", "WATER"]
+    assert dataset == ["CRPC", "IEA", "INCOMETAX", "IPC"]
     # sections the dataset lacked, which India Code writes "45-IA" or leaves out of its own list (DPA s. 8A)
     assert law_library.get("RBI:45IA").title == "Requirement of registration and net owned fund"
     assert law_library.get("DPA:8A").title == "Burden of proof in certain cases"
@@ -45,6 +45,37 @@ def test_the_dataset_acts_are_official_now(law_library):
     # the Bill's Statement of Objects and Reasons and the Schedules are not glued to the last section
     assert "OBJECTS AND REASONS" not in law_library.get("BNS:358").text
     assert len(law_library.get("RBI:61").text) < 200 and law_library.get("RBI:SCH2") is not None
+
+
+def test_the_water_and_stamp_acts_read_right(law_library):
+    # v3.8. Water Act: India Code prints ss. 3, 13 and 31 with the number of the section before
+    assert law_library.get("WATER:3").title == "Constitution of Central Boards"
+    assert law_library.get("WATER:13").title == "Constitution of Joint Board"
+    assert law_library.get("WATER:31").title.startswith("Furnishing of information to State Board")
+    # Stamp Act: the Act's own Schedule I, then the States' Schedules as a provision of their own
+    schedule, states = law_library.get("STAMP:SCH1"), law_library.get("STAMP:SCH1STATES")
+    assert "BILL OF EXCHANGE" in schedule.text and "Assam" not in schedule.text and len(schedule.text) < 60000
+    assert states.title == "State amendments to Schedule I" and "Assam" in states.text
+    assert law_library.get("STAMP:79").status == "omitted" and len(law_library.get("STAMP:79").text) < 200
+    # the Act's own s. 9A, not Karnataka's (printed before it); the States' s. 47A kept in the text of s. 47
+    assert law_library.get("STAMP:9A").title.startswith("Instruments chargeable with duty for transactions in stock")
+    assert "Power of State Government to consolidate duties" in law_library.get("STAMP:9").text
+    assert "Instruments under-valued" in law_library.get("STAMP:47").text
+    # central sections India Code's own list of sections leaves out
+    assert law_library.get("COMPANIES:393A").title == "Exemptions under this Chapter"
+    assert law_library.get("IBC:67B").title == "Contravention of moratorium or resolution plan"
+    assert law_library.get("TPA:33").title.startswith("Transfer conditional on performance of act")   # title was blank
+    # a long heading that wraps is the whole title, not its first line
+    assert law_library.get("BNS:196").title.endswith("doing acts prejudicial to maintenance of harmony")
+
+
+def test_the_motor_vehicles_act_is_the_law_as_it_stands(law_library):
+    # v3.8: its 51 scanned pages are pictures of road signs (First Schedule); the sections are text. The dataset had
+    # the 1988 punishment in s. 192A (now a penalty, Jan Vishwas Act 2026) and old sub-sections of s. 26 (replaced 2019)
+    assert "penalty of ten thousand rupees" in law_library.get("MVA:192A").text
+    assert "supply to the Central Government" not in law_library.get("MVA:26").text
+    assert law_library.get("MVA:217A") is not None and law_library.get("MVA:SCH2").status == "omitted"
+    assert law_library.act("MVA").source.startswith("India Code")
 
 
 @pytest.mark.parametrize("text, expected", [

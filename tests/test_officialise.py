@@ -96,9 +96,101 @@ def test_a_section_whose_heading_was_not_read_is_cut_off_the_one_before():
     assert "41D" not in by_number and "Consultative Committee constituted" in by_number["41C"]["text"]
 
 
+def test_a_section_printed_with_the_number_before_it_gets_its_own():
+    # Water Act: India Code prints s. 3 as "2. Constitution of Central Boards" (after "2. Definitions"), and
+    # ss. 13 and 31 the same way; in sequence only - rule "1. Definitions" of an Order further on is not s. 2
+    old = [section("1", "Short title and commencement"), section("2", "Definitions"),
+           section("3", "Constitution of Central Boards"), section("4", "Constitution of State Board")]
+    lines = [SimpleNamespace(text=t) for t in (
+        "1. Short title and commencement.", "2. Definitions.", "3. Constitution of Central Boards.",
+        "ACT NO. 6 OF 1974", "1. Short title and commencement.—(1) This Act may be called ...",
+        "2. Definitions.—In this Act, unless the context otherwise requires,—", "CHAPTER II",
+        "2. Constitution of Central Boards.—(1) The Central Government shall ...",
+        "4. Constitution of State Board.—(1) The State Government shall ...",
+        "ORDER XVI A", "1. Definitions.—In this Order,—")]
+    assert officialise.correct_misprints(lines, old) == [("2", "3")]
+    assert lines[7].text.startswith("3. Constitution of Central Boards.—(1)")
+    assert lines[2].text == "3. Constitution of Central Boards." and lines[10].text.startswith("1. Definitions")
+
+
+def test_the_states_schedules_printed_after_the_acts_own_are_a_provision_of_their_own():
+    # Stamp Act: 260 pages of the States' Schedules (one a substituted "SCHEDULE I") after Schedule I, and the
+    # repealed Schedule II at the very end
+    central = "STAMP-DUTY ON INSTRUMENTS (See section 3) 13. BILL OF EXCHANGE ... Two annas."
+    states = "Assam Amendment of Schedule I of Act II of 1899.—In Schedule I, for item 5 ... " * 300
+    new = [section("79", "[Repealed.]", "[Repealed.] Rep. by Act 10 of 1914."),
+           {**section("SCH1", "Schedule I", central + "\nSTATE AMENDMENT " + states + "[Vide Uttarakhand Act 20 of "
+                      "2013, s. 2] SCHEDULE II.—[Enactments repealed.] Rep. by the Repealing and Amending Act, 1914."),
+            "ref": "Sch. I", "page": 72}]
+    assert len(officialise.split_state_amendments(new)) == 2
+    by_number = {s["number"]: s for s in new}
+    assert list(by_number) == ["79", "SCH1", "SCH1STATES", "SCH2"] and by_number["SCH1"]["text"] == central
+    assert by_number["SCH1STATES"]["ref"] == "Sch. I, State amendments" and "Uttarakhand Act 20" in by_number["SCH1STATES"]["text"]
+    assert by_number["SCH2"]["status"] == "omitted" and "Enactments" not in by_number["SCH1STATES"]["text"]
+    # a Schedule with a short State amendment keeps it (as sections do)
+    short = [{**section("SCH1", "Schedule I", central + "\nSTATE AMENDMENT Maharashtra: item 2 omitted."), "ref": "Sch. I"}]
+    assert officialise.split_state_amendments(short) == [] and "Maharashtra" in short[0]["text"]
+
+
+def test_an_omitted_schedule_printed_at_the_end_of_another_is_a_schedule_of_its_own():
+    # Motor Vehicles Act: lawyers still cite the Second Schedule (compensation), omitted in 2019
+    new = [{**section("SCH1", "The First Schedule", "MANDATORY SIGNS ... Explanatory Notes (i) Normal size. "
+                      "[THE SECOND SCHEDULE.—[Schedule for compensation for third party fatal accidents/injury cases "
+                      "claims] Omitted by the Motor Vehicles (Amendment) Act, 2019 (32 of 2019), s. 93 (w.e.f. 1-4-2022).]"),
+            "ref": "Sch. I"}]
+    assert len(officialise.split_omitted_schedules(new)) == 1
+    assert new[0]["text"] == "MANDATORY SIGNS ... Explanatory Notes (i) Normal size."
+    assert new[1]["number"] == "SCH2" and new[1]["status"] == "omitted" and new[1]["ref"] == "Sch. II"
+    assert new[1]["text"].startswith("[Schedule for compensation") and "Omitted by" in new[1]["text"]
+
+
+def test_a_states_own_section_numbered_like_the_next_goes_back_among_the_state_amendments():
+    # Stamp Act: Karnataka's "9A. Power of State Government to consolidate duties ..." is printed before the
+    # Act's own "9A. Instruments chargeable with duty for transactions in stock exchanges ..."
+    old = OLD + [section("41B", "Power to reduce, remit or compound duties"),
+                 section("41C", "Instruments chargeable with duty for transactions in stock exchanges")]
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [
+        section("41A", "Notice of appearance"),
+        section("41B", "Power to reduce, remit or compound duties", TEXT + "\nSTATE AMENDMENTS Karnataka Insertion "
+                "of new section 41C.—The following section shall be inserted, namely:—"),
+        section("41C", "Power of State Government to consolidate duties", "Subject to such conditions as may be "
+                "specified, the State Government may consolidate duties. [Vide Karnataka Act 29 of 1978, s. 2] "
+                "4[41C. Instruments chargeable with duty for transactions in stock exchanges.—(1) Notwithstanding ...")]
+    assert officialise.state_section_first(new, old) == ["41C"]
+    assert new[-1]["title"] == "Instruments chargeable with duty for transactions in stock exchanges"
+    assert new[-1]["text"] == "(1) Notwithstanding ..."
+    assert new[-2]["text"].endswith("namely:—\n41C. Power of State Government to consolidate duties.—Subject to such "
+                                    "conditions as may be specified, the State Government may consolidate duties. "
+                                    "[Vide Karnataka Act 29 of 1978, s. 2]")
+    assert officialise.compare(old, new)["titles"] == 1
+
+
+def test_a_title_printed_below_its_number_is_taken_out_of_the_text():
+    # TPA s. 33, SC/ST Act s. 14A ...: "33." on a line of its own left the section without a title
+    old = OLD[:-1] + [section("41A", "Transfer conditional on performance of act")]
+    new = [section("41A", "", "Transfer conditional on performance of act.—Where, on a transfer of property ..."),
+           section("41B", "", "Appeals.—(1) An appeal shall lie ..."),
+           section("41C", "", "Notwithstanding anything in section 5, the following, namely:—(a) ...")]
+    assert officialise.fill_titles(new, old) == ["41A", "41B"]        # 41B: no title in the library (an earlier reading)
+    assert new[0]["title"] == "Transfer conditional on performance of act" and new[0]["text"].startswith("Where, on")
+    assert new[1]["title"] == "Appeals" and new[2]["title"] == ""       # "namely:—" is not a heading
+
+
+def test_a_states_own_section_is_written_out_with_its_heading_and_does_not_swell_the_section():
+    # Stamp Act s. 47: the States' "47-A. Instruments under-valued ..." (36,000 characters) is kept in the text of
+    # s. 47, among its State amendments, where India Code prints it - not dropped, and not a sign of misreading
+    assert officialise.as_printed(section("47A", "Instruments under-valued", "(1) If the Registering Officer ...")) \
+        == "47A. Instruments under-valued.—(1) If the Registering Officer ..."
+    assert officialise.as_printed(section("91A", "(1) The State Government", "(1) The State Government may ...")) \
+        == "91A. (1) The State Government may ..."
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [section(
+        "41A", "Notice of appearance", TEXT + "\nSTATE AMENDMENT Karnataka\n47A. Instruments under-valued.—" + "x " * 20000)]
+    assert not any("much longer" in p for p in officialise.compare(OLD, new)["problems"])
+
+
 def test_a_missed_section_found_inside_another_is_refused():
-    # Water Act: India Code prints s. 3 as "2. Constitution of Central Boards"; its heading is lost, its law ends
-    # up in s. 2 - keeping the dataset's s. 3 as well would give the law twice
+    # Water Act: India Code prints s. 3 as "2. Constitution of Central Boards"; its heading was lost, its law ended
+    # up in s. 2 - keeping the dataset's s. 3 as well would give the law twice (correct_misprints now finds it)
     law = ("The Central Government shall, with effect from such date being a date not later than six months of "
            "the commencement of this Act in the States, constitute a Central Board.")
     old = OLD + [section("42", "Constitution of Central Boards", "42. Constitution of Central Boards.—(1) " + law)]

@@ -37,11 +37,13 @@ HEADING_ALONE = re.compile(r"^(?P<pre>)(?P<kind>Order|Chapter|Part)\s*[-–—]?
                            r"\.?(?P<rest>)$")
 SCHEDULE = re.compile(r"^\[?\s*THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH)\s+)?SCHEDULE\b",
                       re.I)
-# "SCHEDULE III", "1[SCHEDULE II" (with its note number), "1[SCHEDULE — I", alone on the line, in capitals
-SCHEDULE_NUMBERED = re.compile(r"^(?:\d{1,2}\s*)?\[?\s*SCHEDULE\s*[—–-]?\s*((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))\s*\.?\]?\s*$")
-# "1[THE FIRST SCHEDULE", "1THE SECOND SCHEDULE": a Schedule substituted by an amending Act, its note number in front
-SCHEDULE_NOTED = re.compile(r"^\d{1,2}\s*\[?\s*THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|"
-                            r"ELEVENTH|TWELFTH)\s+)?SCHEDULE\s*\.?\]?\s*$")
+# "SCHEDULE III", "1[SCHEDULE II" (with its note number), "1[SCHEDULE — I", "SCHEDULE 1" (the Stamp Act), alone on
+# the line, in capitals
+SCHEDULE_NUMBERED = re.compile(r"^(?:\d{1,2}\s*)?\[?\s*SCHEDULE\s*[—–-]?\s*((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})|[1-9]\d?)\s*\.?\]?\s*$")
+# "1[THE FIRST SCHEDULE", "1THE SECOND SCHEDULE": a Schedule substituted by an amending Act, its note number in front;
+# "1[2[THE FIRST SCHEDULE]]" (Motor Vehicles Act: substituted, then renumbered)
+SCHEDULE_NOTED = re.compile(r"^\d{1,2}\s*\[?\s*(?:\d{1,2}\s*\[\s*)?THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|"
+                            r"EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH)\s+)?SCHEDULE\s*\.?\]{0,2}\s*$")
 # India Code prints the Bill's Statement of Objects and Reasons after the Act (and its Schedules): not law
 OBJECTS_AND_REASONS = re.compile(r"^STATEMENT\s+OF\s+OBJECTS\s+AND\s+REASONS[A-Z]{0,2}\s*\.?$")   # IBC: "REASONSES"
 APPENDIX = re.compile(r"^APPENDIX\b", re.I)
@@ -442,6 +444,9 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
         nonlocal current, body
         if current is not None:
             text = strip_markers(join_text(body))
+            if numbering == "sections" and not current.get("_titled") and current.get("kind") == "section":
+                title, text = wrapped_title(current.get("title") or "", text)
+                current["title"] = title
             current["text"] = text
             if in_schedule and schedules == "whole" and current.get("kind") == "schedule":
                 schedule_parts.append(current)
@@ -514,8 +519,9 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
                 ordinal = ORDINALS.get((sched.group(1) or "").upper(), 0)
                 title = "The " + ((sched.group(1) or "").title() + " Schedule" if sched.group(1) else "Schedule")
             else:
-                ordinal = roman_to_int(numbered_sched.group(1))
-                title = f"Schedule {numbered_sched.group(1)}"
+                written = numbered_sched.group(1)
+                ordinal = int(written) if written.isdigit() else roman_to_int(written)
+                title = f"Schedule {int_to_roman(ordinal)}"
             schedule = Group("schedule", ordinal, "", "", line.page)
             in_schedule = True
             if only_schedule:
@@ -653,6 +659,26 @@ def _plausible(key: tuple[int, str], last: tuple[int, str] | None, numbering: st
         return False
     jump = 30 if numbering == "sections" else 15
     return key[0] - last[0] <= jump
+
+
+# A heading that ends on a later line: "Proof of Aadhaar number necessary for receipt of certain subsidies, benefits
+# and services," / "etc.—The Central Government ...". Words up to a full stop and a dash, no colon or new sentence.
+WRAPPED_HEADING = re.compile(r"^([A-Z][^—–\n:;]{2,200}?[^\s(])\s*\.\s*[—–]+\s*")     # the longest seen: 182
+
+
+def wrapped_title(title: str, text: str) -> tuple[str, str]:
+    """A section heading too long for one line: the reader found no '.—' on the heading's line, took its first words
+    for the title and kept the heading in the text (614 sections, 42 in the BNS). When the text starts with those
+    words and the heading ends with '.—' a line or two later, the whole heading is the title and the text starts
+    after it."""
+    start = title.rstrip(".").rstrip()[:40]
+    heading = WRAPPED_HEADING.match(text or "")
+    if not start or not heading or not text.startswith(start):
+        return title, text
+    words = re.sub(r"\s+", " ", heading.group(1)).strip()
+    if re.search(r"\.\s+[A-Z(]|!|\bChapter\b", words) or re.match(r"(?i)(explanation|illustration|provided)\b", words):
+        return title, text                # "... shall be void. Explanation.—": a sentence, not a heading (or OCR noise)
+    return words, text[heading.end():].lstrip()
 
 
 def _first_words(text: str, limit: int = 90) -> str:

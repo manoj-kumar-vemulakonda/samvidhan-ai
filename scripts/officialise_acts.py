@@ -56,12 +56,15 @@ BODY_START = r"^\s*ACT\s+NO\.?\s*\d+\s+OF\s+\d{4}"           # where an India Co
 MAX_SCANNED_PAGES = 30   # an Act whose PDF is a scan needs hours of OCR: left for scripts/build_official.py
 # Real sections that India Code's own list of sections skips (checked by hand: the body has them, inserted by a
 # central Act, not a State amendment) - kept although the list doesn't name them
-UNLISTED = {"DPA": {"8A"}}      # Dowry Prohibition Act s. 8A, inserted by Act 43 of 1986
-# Acts whose PDF passes the checks but reads badly in a way they can't see (checked by hand)
-HOLD_BACK = {
-    "STAMP": "India Code prints the States' substituted Schedules after the Act; one of them would be read as the "
-             "Act's own Schedule I, and Schedule I itself (printed \"SCHEDULE 1\") stays glued to s. 79, as in the dataset",
+UNLISTED = {
+    "DPA": {"8A"},                     # Dowry Prohibition Act s. 8A, inserted by Act 43 of 1986
+    "COMPANIES": {"393A", "418A"},     # inserted by Act 29 of 2020, ss. 55 and 59
+    "IBC": {"67B", "67C"},             # inserted by Act 6 of 2026, s. 48
 }
+# Acts whose PDF passes the checks but reads badly in a way they can't see (checked by hand): {code: why}.
+# Empty since v3.8: the Stamp Act was here until "SCHEDULE 1" was read as a heading and the States' Schedules
+# printed after it became a provision of their own (split_state_amendments).
+HOLD_BACK: dict[str, str] = {}
 
 
 def illustration_words(text: str) -> list[str]:
@@ -178,9 +181,11 @@ def compare(old: list[dict], new: list[dict]) -> dict:
     ratios = sorted(len(new_by[n]["text"]) / len(law[n]) for n in common if len(law[n]) > 50)
     # A section that swells (Stamp Act s. 79, "[Repealed.]", took in Schedule I and the States' Schedules,
     # printed "SCHEDULE 1"): something the reader didn't see as a heading was glued to it
+    # The States' amendments printed under a section don't count: they are not a Schedule (Stamp Act s. 47 holds
+    # 36,000 characters of the States' own s. 47A)
     before = {number_key(s["number"]): (s["text"] or "").split("STATEMENT OF OBJECTS AND REASONS")[0] for s in old}
     swollen = [n for n in new_by if n in before and not n.startswith("SCH")      # repealed ones too (s. 79 was)
-               and len(new_by[n]["text"] or "") > 5 * len(before[n]) + 10000]
+               and len(STATE_AMENDMENT.split(new_by[n]["text"] or "")[0]) > 5 * len(before[n]) + 10000]
     if swollen:
         problems.append(f"s. {', '.join(swollen[:4])} became much longer (a Schedule or other text glued to it)")
     median = ratios[len(ratios) // 2] if ratios else 0.0
@@ -218,6 +223,123 @@ def compare(old: list[dict], new: list[dict]) -> dict:
                       - len(extra) / max(1, len(old_by)) - duplicates / max(1, len(old_by)))}
 
 
+def correct_misprints(lines, old: list[dict]) -> list[tuple[str, str]]:
+    """India Code's Water Act PDF prints ss. 3, 13 and 31 with the number of the section before ("2. Constitution
+    of Central Boards.—" right after "2. Definitions"). The reader takes such a heading for the same section again
+    (after a Chapter heading: numbering that starts again) and the section's heading is lost. A heading in the
+    Act's body whose title is not its number's title in the library, but that of the section just before or after
+    it - the section that comes next after the last heading read - is given that section's number. (In sequence
+    only: rule "1. Definitions" in one of the CPC's Orders is not s. 2.) The lines are corrected in place;
+    returns (printed, corrected) pairs."""
+    body = next((i for i, line in enumerate(lines) if re.search(BODY_START, line.text, re.I)), None)
+    if body is None:
+        return []
+    order = [number_key(s["number"]) for s in old]
+    by_key = {number_key(s["number"]): s for s in old}
+    fixed = []
+    last = None                                   # the last section heading read, as the library numbers it
+    for line in lines[body:]:
+        text = line.text.strip()
+        match = rulebook.PROVISION.match(text)
+        printed = number_key(match.group(1)) if match else ""
+        if printed not in by_key:
+            continue
+        title = rulebook.split_title(match.group(2) or "")[0]
+        if not title:
+            continue
+        if titles_agree(by_key[printed].get("title"), title):
+            last = printed
+            continue
+        if last is None:
+            continue
+        following = next((n for n in order[order.index(last) + 1:] if not is_gone(by_key[n])), None)
+        if following is None or abs(order.index(following) - order.index(printed)) > 1:
+            continue
+        wanted = norm_title(by_key[following].get("title"))
+        if wanted and SequenceMatcher(None, wanted, norm_title(title)).ratio() >= 0.9:
+            line.text = text[:match.start(1)] + str(by_key[following]["number"]).rstrip(".") + text[match.end(1):]
+            fixed.append((match.group(1), following))
+            last = following
+    return fixed
+
+
+def as_printed(section: dict) -> str:
+    """A section read from the PDF written out again with its heading: '47A. Instruments under-valued ....—(1) ...'
+    (a heading without a title gave its first words as the title: those are the start of the text)."""
+    title, text = (section.get("title") or "").strip(), (section.get("text") or "").strip()
+    if not title or text.startswith(title):
+        return f"{section['number']}. {text}"
+    return f"{section['number']}. {title}.—{text}"
+
+
+def number_pattern(number: str) -> str:
+    """'9A' as India Code may print it: '9A', '9 A', '9-A'."""
+    match = re.match(r"(\d+)([A-Z]*)$", number_key(number))
+    if not match:
+        return re.escape(str(number))
+    return match.group(1) + (r"\s*-?\s*" + match.group(2) if match.group(2) else "")
+
+
+def page_of(text: str, page, lines) -> int | None:
+    """The page where these words (a heading) are printed, from the page given on."""
+    start = re.sub(r"\s+", " ", text).strip()[-25:]
+    for line in lines or ():
+        if page and line.page >= page and start and start in line.text:
+            return line.page
+    return page
+
+
+def fill_titles(new: list[dict], old: list[dict]) -> list[str]:
+    """A heading whose number stands on a line of its own ("33." and below it "Transfer conditional on ...—")
+    leaves the section without a title and its text starting with it. The title is taken back out of the text
+    when it is the library's title for that section - or, where the library has none (an earlier reading, --redo),
+    when it is printed as a heading: words, a full stop and a dash ("Appeals.—"), no colon before it."""
+    old_by = {number_key(s["number"]): s for s in old}
+    filled = []
+    for s in new:
+        if (s.get("title") or "").strip() or str(s["number"]).upper().startswith("SCH"):
+            continue
+        heading = re.match(r"^([A-Z][^—–\n:;]{2,200}?)\s*\.\s*[—–]+\s*", s["text"] or "")
+        known = (old_by.get(number_key(s["number"])) or {}).get("title") or ""
+        if heading and (titles_agree(known, heading.group(1)) if known.strip() else True):
+            s["title"], s["text"] = heading.group(1).strip(" ."), s["text"][heading.end():].lstrip()
+            filled.append(number_key(s["number"]))
+    return filled
+
+
+def state_section_first(new: list[dict], old: list[dict], lines=None) -> list[str]:
+    """A State amendment printed under a section may insert a section of its own, numbered like the central one
+    that follows: Karnataka's "9A. Power of State Government to consolidate duties ..." is printed before the
+    Stamp Act's own "9A. Instruments chargeable with duty for transactions in stock exchanges ...", Orissa's
+    "77A. Fractions of five naye paise ..." before "77A. Saving as to certain stamps". The reader takes the
+    State's heading and the central section ends up inside its text. When a section's title is not the library's
+    title for that number, but "<number>. <the library's title>.—" is a heading further on in its text, the
+    section starts there; the State's section goes back to the end of the section before, among its State
+    amendments. Returns the numbers put right."""
+    old_by = {number_key(s["number"]): s for s in old}
+    fixed = []
+    for at, s in enumerate(new):
+        known = old_by.get(number_key(s["number"]))
+        if at == 0 or not known or is_gone(known) or str(s["number"]).upper().startswith("SCH") \
+                or titles_agree(known.get("title"), s.get("title")):
+            continue
+        title = re.sub(r"\s+", " ", known.get("title") or "").strip(" .[]")
+        if len(title) < 10:
+            continue
+        words = r"\s+".join(re.escape(word) for word in title.split())
+        heading = re.search(r"(?:\d{1,2}\s*)?\[?\s*" + number_pattern(s["number"]) + r"\s*\.\s*(" + words
+                            + r"[a-z]{0,3})\s*\.?\s*[—–]+\s*", s["text"] or "")
+        if not heading or heading.start() < 20:
+            continue
+        before = new[at - 1]
+        before["text"] = (before["text"].rstrip() + "\n" + f"{s['number']}. {s['title']}.—"
+                          + s["text"][:heading.start()].strip())
+        s["page"] = page_of(heading.group(0), s.get("page"), lines)
+        s["title"], s["text"] = heading.group(1), s["text"][heading.end():].strip()
+        fixed.append(number_key(s["number"]))
+    return fixed
+
+
 def split_glued(new: list[dict], old: list[dict], missing: list[str], lines=None) -> list[str]:
     """A heading the reader could not see ("60 Application ..." without its dot, "37ZA." printed for 378ZA, a
     heading that lost its number) leaves that section's text at the end of the section before. Its title from
@@ -253,6 +375,88 @@ def split_glued(new: list[dict], old: list[dict], missing: list[str], lines=None
         before["text"] = before["text"][:heading.start(1)].rstrip()
         found.append(number)
     return found
+
+
+# India Code's heading over the States' amendments: a line of its own in the PDF, the start of a line in the text
+STATE_AMENDMENT_LINE = re.compile(r"^\s*STATE\s+AMENDMENTS?\s*$")
+STATE_AMENDMENT = re.compile(r"(?m)^\s*STATE\s+AMENDMENTS?\b\s*")
+# a central Schedule printed after the States' ones: "... s. 2] SCHEDULE II.—[Enactments repealed.] Rep. by ..."
+LATER_SCHEDULE = re.compile(r"(?:^|(?<=[\].]))\s*SCHEDULE\s+([IVX]{1,4})\s*\.?\s*[—–]+\s*(\S.*)", re.S | re.M)
+STATE_PART_MIN = 20000
+
+
+def split_state_amendments(new: list[dict], lines=None) -> list[str]:
+    """India Code prints the States' amendments of a Schedule after it: for the Stamp Act 260 pages of State
+    Schedules (Assam, Himachal Pradesh, Orissa ...), one of them a substituted "SCHEDULE I". Left in the Schedule,
+    a State's rate would be cited as the Act's own Schedule I. When they are longer than the Schedule itself (and
+    long), they become a provision of their own, "State amendments to Schedule I"; a central Schedule printed after
+    them (Stamp Act Schedule II, "[Enactments repealed.]") gets its own too. Returns what was split off."""
+    done = []
+    for s in list(new):
+        number = str(s["number"]).upper()
+        if not number.startswith("SCH") or number.endswith("STATES"):
+            continue
+        mark = STATE_AMENDMENT.search(s["text"] or "")
+        if not mark:
+            continue
+        own, states = s["text"][:mark.start()].rstrip(), s["text"][mark.end():].strip()
+        if len(states) < STATE_PART_MIN or len(states) < len(own):
+            continue
+        at = new.index(s)
+        later = None
+        for found in LATER_SCHEDULE.finditer(states):
+            later = found                      # the last one, if it is at the very end
+        if later and len(states) - later.start() > 2000:
+            later = None
+        roman = s["ref"].replace("Sch.", "").strip()
+        page = next((line.page for line in lines or () if s.get("page") and line.page >= s["page"]
+                     and STATE_AMENDMENT_LINE.match(line.text)), s.get("page"))
+        part = {**s, "number": f"{number}STATES", "ref": f"Sch. {roman}, State amendments".replace("Sch. ,", "Sch.,"),
+                "title": f"State amendments to {s['title']}", "text": "STATE AMENDMENT\n" + states[:later.start()].strip()
+                if later else "STATE AMENDMENT\n" + states, "page": page}
+        s["text"] = own
+        new.insert(at + 1, part)
+        done.append(f"{s['ref']}: the States' amendments printed after it are a provision of their own "
+                    f"({len(part['text']):,} characters, from p. {page})")
+        if later:
+            label = later.group(1)
+            ordinal = rulebook.roman_to_int(label)
+            if ordinal and not any(str(x["number"]).upper() == f"SCH{ordinal}" for x in new):
+                last_page = max((line.page for line in lines or ()), default=page)
+                new.insert(at + 2, {**s, "number": f"SCH{ordinal}", "ref": f"Sch. {label}", "title": f"Schedule {label}",
+                                    "text": later.group(2).strip(), "page": last_page,
+                                    "status": "omitted" if re.search(r"(?i)\brep(?:ealed)?\b", later.group(2)[:120])
+                                    else s.get("status", "in_force")})
+                done.append(f"Sch. {label}, printed after the States' amendments, is a provision of its own")
+    return done
+
+
+OMITTED_SCHEDULE = re.compile(r"\[\s*THE\s+(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH)\s+"
+                              r"SCHEDULE\s*\.?\s*[—–]+(.{0,400}?\b(?:Omitted\b|Repealed\b|Rep\.).{0,300})\]\s*$", re.S)
+
+
+def split_omitted_schedules(new: list[dict]) -> list[str]:
+    """An omitted Schedule printed as a note at the end of the one before: the Motor Vehicles Act's First Schedule
+    ends "[THE SECOND SCHEDULE.—[Schedule for compensation for third party fatal accidents/injury cases claims]
+    Omitted by the Motor Vehicles (Amendment) Act, 2019 ...]". Lawyers still cite it: it becomes a Schedule of its
+    own, marked omitted."""
+    done = []
+    for s in list(new):
+        if not str(s["number"]).upper().startswith("SCH"):
+            continue
+        found = OMITTED_SCHEDULE.search(s["text"] or "")
+        if not found or len(s["text"]) - found.start() > 800:
+            continue
+        ordinal = rulebook.ORDINALS[found.group(1).upper()]
+        if any(str(x["number"]).upper() == f"SCH{ordinal}" for x in new):
+            continue
+        s["text"] = s["text"][:found.start()].rstrip()
+        roman = rulebook.int_to_roman(ordinal)
+        new.insert(new.index(s) + 1, {**s, "number": f"SCH{ordinal}", "ref": f"Sch. {roman}",
+                                      "title": f"The {found.group(1).title()} Schedule", "status": "omitted",
+                                      "text": found.group(2).strip()})
+        done.append(f"Sch. {roman}, omitted, printed at the end of {s['ref']}, is a provision of its own")
+    return done
 
 
 def merge(official_sections: list[dict], old: list[dict], missing: list[str], old_is_official: bool = False) -> list[dict]:
@@ -316,11 +520,23 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
     import pymupdf
 
     with pymupdf.open(str(pdf)) as doc:
-        scanned = sum(1 for page in doc if rulebook.needs_ocr(page.get_text()))
-    if scanned > MAX_SCANNED_PAGES and not (official.RAW / f"{code}.ocr.json").exists():
-        return f"skipped: the PDF is a scan ({scanned} pages need OCR)", None
+        scans = [page.number + 1 for page in doc if rulebook.needs_ocr(page.get_text())]
+    ocr, pictures = "auto", ""
+    if len(scans) > MAX_SCANNED_PAGES and not (official.RAW / f"{code}.ocr.json").exists():
+        # The Motor Vehicles Act's 51 scanned pages are its First Schedule: pictures of the road signs, nothing OCR
+        # can read. When every scanned page comes after the first Schedule heading, no section is on them: the
+        # Act is read without OCR (the Schedule keeps its heading and text pages; the PDF page shows the pictures)
+        plain = rulebook.pdf_lines(pdf, ocr="never", notes="shape")
+        body = next((i for i, line in enumerate(plain) if re.search(BODY_START, line.text, re.I)), None)
+        schedules = next((line.page for line in plain[body or 0:] if body is not None and (
+            rulebook.SCHEDULE.match(line.text.strip()) or rulebook.SCHEDULE_NUMBERED.match(line.text.strip())
+            or rulebook.SCHEDULE_NOTED.match(line.text.strip()))), None)
+        if not schedules or min(scans) < schedules:
+            return f"skipped: the PDF is a scan ({len(scans)} pages need OCR)", None
+        ocr, pictures = "never", f"pp. {min(scans)}-{max(scans)}"
     # notes="shape": India Code prints Illustrations (and some whole pages) in small type - see rulebook.clean_lines
-    lines = rulebook.pdf_lines(pdf, ocr="auto", cache=official.RAW / f"{code}.ocr.json", notes="shape")
+    lines = rulebook.pdf_lines(pdf, ocr=ocr, cache=official.RAW / f"{code}.ocr.json", notes="shape")
+    misprints = correct_misprints(lines, old)          # "2. Constitution of Central Boards" for s. 3 (Water Act)
     # Read it the ways the reader knows (bold headings or not) and keep the reading that matches the sections
     # the library already has best; schedules added before (CPC Orders ...) are not read again
     best = None
@@ -341,7 +557,9 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
             new = to_sections(provisions, pdf.name)
             if added:
                 new = [s for s in new if not s["number"].upper().startswith("SCH")]
-            # A "section" the Act's own list doesn't name is a State amendment (or a misreading): left out
+            # A "section" the Act's own list doesn't name is a State amendment (or a misreading): not a section of
+            # the Act. Its text goes back to the end of the section before, where India Code prints it - among that
+            # section's State amendments (Stamp Act s. 47: the States' own "47-A. Instruments under-valued ...")
             left_out = []
             if use_list:
                 keep = []
@@ -350,15 +568,28 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
                     if key in known or key in listed or key in UNLISTED.get(code, ()) \
                             or (key.startswith("SCH") and "SCHEDULE" in listed):
                         keep.append(s)
+                    elif keep:
+                        keep[-1]["text"] = keep[-1]["text"].rstrip() + "\n" + as_printed(s)
+                        left_out.append(f"- s. {s['number']} {s['title'][:45]} (not in the Act's list of sections: "
+                                        f"kept in the text of s. {keep[-1]['number']})")
                     else:
                         left_out.append(f"- s. {s['number']} {s['title'][:45]} (not in the Act's list of sections: left out)")
                 new = keep
+            states = split_state_amendments(new, lines)      # the Stamp Act's 260 pages of State Schedules
+            states += split_omitted_schedules(new)            # the Motor Vehicles Act's Second Schedule
+            titled = fill_titles(new, old)                    # "33." on a line of its own, the title below it
+            state_first = state_section_first(new, old, lines)   # Karnataka's s. 9A before the Stamp Act's own
             result = compare(old, new)
             split = split_glued(new, old, result["missing"], lines)
             if split:                 # sections whose heading the reader missed, cut off the section before
                 result = compare(old, new)
             result["details"] += left_out + [f"~ s. {n} cut off the end of the section before (its heading was not read)"
-                                             for n in split]
+                                             for n in split] \
+                + [f"~ s. {right} printed as s. {printed} in the PDF (number corrected)" for printed, right in misprints] \
+                + [f"~ {line}" for line in states] \
+                + [f"~ s. {n}: its title was read from the start of its text" for n in titled] \
+                + [f"~ s. {n}: a State's own s. {n}, printed before it, went back among the State amendments of the "
+                   f"section before" for n in state_first]
             in_contents = sum(1 for s in new if s.get("page") and s["page"] < body_page) / max(1, len(new))
             result["score"] -= in_contents
             if in_contents > 0.1:
@@ -373,7 +604,8 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
     summary = (f"{len(old)} -> {len(new)} sections, {result['coverage']:.0%} found, titles {result['titles']:.0%}, "
                f"text {result['median_length']:.0%} of the old length"
                + (f", {len(result['missing'])} kept from the dataset" if result["missing"] else "")
-               + (f", {len(result['extra'])} new" if result["extra"] else ""))
+               + (f", {len(result['extra'])} new" if result["extra"] else "")
+               + (f", the scanned {pictures} (pictures) not read" if pictures else ""))
     if result["problems"]:
         return "KEPT the dataset text: " + "; ".join(result["problems"]), None
     if check_only:
@@ -388,6 +620,9 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
               "source": INDIA_CODE, "kind": "act", "court": act.get("court", ""), "jurisdiction": act.get("jurisdiction", "Central"),
               "pdf": pdf.name, "url": info.get("page") or info.get("url", ""), "as_on": as_on(pdf), "parsed_as": how,
               "sections": merge(new, old, result["missing"], old_is_official=again) + added}
+    record.pop("scanned_pages_not_read", None)
+    if pictures:
+        record["scanned_pages_not_read"] = pictures
     still_dataset = [number_key(s["number"]) for s in record["sections"] if s.get("from_dataset")]
     record.pop("dataset_sections_kept", None)
     if still_dataset:
