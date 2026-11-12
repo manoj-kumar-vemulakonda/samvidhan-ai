@@ -33,6 +33,20 @@ def test_official_acts_keep_their_illustrations(law_library):
     assert "Illustrations" in succession and "SCHEDULE" not in succession   # Schedules no longer glued on
 
 
+def test_the_dataset_acts_are_official_now(law_library):
+    # v3.7: every first-101 Act that India Code has as a readable PDF uses its text; these 7 can't (yet)
+    dataset = sorted(code for code, act in law_library.acts.items() if act.source.startswith("Open dataset"))
+    assert dataset == ["CRPC", "IEA", "INCOMETAX", "IPC", "MVA", "STAMP", "WATER"]
+    # sections the dataset lacked, which India Code writes "45-IA" or leaves out of its own list (DPA s. 8A)
+    assert law_library.get("RBI:45IA").title == "Requirement of registration and net owned fund"
+    assert law_library.get("DPA:8A").title == "Burden of proof in certain cases"
+    assert law_library.get("ARBITRATION:29A").title == "Time limit for arbitral award"     # lost in v3.6, back
+    assert law_library.get("NGT:10A") is not None                   # "1[2[10A.": inserted, then substituted
+    # the Bill's Statement of Objects and Reasons and the Schedules are not glued to the last section
+    assert "OBJECTS AND REASONS" not in law_library.get("BNS:358").text
+    assert len(law_library.get("RBI:61").text) < 200 and law_library.get("RBI:SCH2") is not None
+
+
 @pytest.mark.parametrize("text, expected", [
     ("Is u/s 302 IPC bailable?", ["IPC:302"]),
     ("sections 420, 406 and 120B IPC", ["IPC:420", "IPC:406", "IPC:120B"]),

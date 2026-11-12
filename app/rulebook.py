@@ -37,10 +37,16 @@ HEADING_ALONE = re.compile(r"^(?P<pre>)(?P<kind>Order|Chapter|Part)\s*[-–—]?
                            r"\.?(?P<rest>)$")
 SCHEDULE = re.compile(r"^\[?\s*THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH)\s+)?SCHEDULE\b",
                       re.I)
-# "SCHEDULE III" or "1[SCHEDULE II" (with its note number), alone on the line, in capitals
-SCHEDULE_NUMBERED = re.compile(r"^(?:\d{1,2}\s*)?\[?\s*SCHEDULE\s+((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))\s*\.?\]?\s*$")
+# "SCHEDULE III", "1[SCHEDULE II" (with its note number), "1[SCHEDULE — I", alone on the line, in capitals
+SCHEDULE_NUMBERED = re.compile(r"^(?:\d{1,2}\s*)?\[?\s*SCHEDULE\s*[—–-]?\s*((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))\s*\.?\]?\s*$")
+# "1[THE FIRST SCHEDULE", "1THE SECOND SCHEDULE": a Schedule substituted by an amending Act, its note number in front
+SCHEDULE_NOTED = re.compile(r"^\d{1,2}\s*\[?\s*THE\s+(?:(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|"
+                            r"ELEVENTH|TWELFTH)\s+)?SCHEDULE\s*\.?\]?\s*$")
+# India Code prints the Bill's Statement of Objects and Reasons after the Act (and its Schedules): not law
+OBJECTS_AND_REASONS = re.compile(r"^STATEMENT\s+OF\s+OBJECTS\s+AND\s+REASONS[A-Z]{0,2}\s*\.?$")   # IBC: "REASONSES"
 APPENDIX = re.compile(r"^APPENDIX\b", re.I)
-PROVISION = re.compile(r"^(?:\d{1,2}(?=\s*\[)|\*{1,3})?\s*\[?\s*(?:Rule\s+)?(\d{1,4}(?:\s?-?[A-Z]{1,3})?)\s*\.\s*(\S.*)?$")
+# "12. ...", "1[12. ...", "*[12. ..." - and a section inserted, then substituted: "1[2[10A. ...", "5[ 6[15QA. ..."
+PROVISION = re.compile(r"^(?:\*{1,3})?\s*(?:(?:\d{1,2}\s*)?\[\s*){0,2}(?:Rule\s+)?(\d{1,4}(?:\s?-?[A-Z]{1,3})?)\s*\.\s*(\S.*)?$")
 TITLE_END = re.compile(r"^(.{2,220}?[^\s(])\s*[.:]?\s*[—–]+\s*|^(.{2,220}?)\.\s*-{1,2}\s*(?=[A-Z(\[“\"\d])|^(.{2,220}?)\s*:-\s*")
 # "2. The North Eastern Areas (Reorganisation) Act, 1971 (81 of 1971)." - the list of amending Acts, not a section
 AMENDING_ACT = re.compile(r"^\d{1,3}\.\s+The\s.{3,200}?\b(?:Act|Ordinance|Regulation|Order)\b[^—]*\(\s*\d+\s*of\s*\d{4}\s*\)\.?\s*$")
@@ -203,12 +209,14 @@ def footnote_block(page: list[Line], body: float = 0.0) -> int | None:
         expected, ok, notes = 2, True, [line.text]
         for later in page[i + 1:]:
             number = FOOTNOTE_START.match(later.text.strip())
-            if later.bold:
-                ok = False
+            other_size = bool(body and later.size and abs(later.size - body) >= 0.9)
+            if later.bold and not other_size:
+                ok = False          # a bold heading in the usual size: the law goes on (bold in note type is a
+                                    # note's own emphasis - the dates in the IBC's commencement note)
             elif number and int(number.group(1)) == expected and abs(later.x - line.x) < 3:
                 expected += 1
                 notes.append(later.text)
-            elif later.x <= line.x + 3 and not (body and later.size and abs(later.size - body) >= 0.9):
+            elif later.x <= line.x + 3 and not other_size:
                 ok = False
             else:
                 notes[-1] += " " + later.text            # a note's next line
@@ -400,7 +408,8 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
       only_schedule: keep only what comes after THE FIRST SCHEDULE heading (the CPC's Orders)
       stop / start: regex of a heading line where the useful part ends / begins
       schedules: "whole" = each Schedule becomes one provision; "skip" = ignore schedules
-      numbered_schedules: also take "SCHEDULE III" (no "THE") for a Schedule heading (sections only)
+      numbered_schedules: also take "SCHEDULE III" (no "THE") and "1[THE FIRST SCHEDULE" (a note number in front)
+                 for a Schedule heading (sections only)
     """
     candidates = [line for line in lines if PROVISION.match(line.text)]
     if bold is None:
@@ -451,6 +460,8 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
             stopped = True
         if stopped:
             break
+        if OBJECTS_AND_REASONS.match(text) and (provisions or current):
+            break                   # the Bill's reasons, printed after the Act: they were glued to its last section
         # Title line that follows "ORDER VII" / "CHAPTER IV" headings
         if pending_title_for is not None:
             footnote = re.match(r"^\d*\s*\[?(Subs|Ins|Substituted|Inserted|Added|Amended|Omitted|Vide)\b", text, re.I)
@@ -495,6 +506,8 @@ def parse(lines: list[Line], numbering: str = "sections", bold: bool | None = No
         # whose checks refuse a bad reading): in the court-fees Acts it split most Schedules off the last
         # section, but the Kerala one lists "SCHEDULE I" in its contents and every section came out empty.
         numbered_sched = SCHEDULE_NUMBERED.match(text) if numbered_schedules and numbering == "sections" and not sched else None
+        if numbered_schedules and numbering == "sections" and not sched and not numbered_sched:
+            sched = SCHEDULE_NOTED.match(text)        # "1[THE FIRST SCHEDULE" (RBI, UAPA, IT Act): only when asked too
         if (sched or numbered_sched) and (provisions or current or (only_schedule and body_seen)):
             flush()
             if sched:

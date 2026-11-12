@@ -54,6 +54,14 @@ ILLUSTRATED = re.compile(r"\bIllustrations?\b")
 ILLUSTRATION_LABEL = re.compile(r"(?m)^\s*Illustrations?\s*[.:—–-]?\s*$")
 BODY_START = r"^\s*ACT\s+NO\.?\s*\d+\s+OF\s+\d{4}"           # where an India Code PDF's Act begins (after its contents)
 MAX_SCANNED_PAGES = 30   # an Act whose PDF is a scan needs hours of OCR: left for scripts/build_official.py
+# Real sections that India Code's own list of sections skips (checked by hand: the body has them, inserted by a
+# central Act, not a State amendment) - kept although the list doesn't name them
+UNLISTED = {"DPA": {"8A"}}      # Dowry Prohibition Act s. 8A, inserted by Act 43 of 1986
+# Acts whose PDF passes the checks but reads badly in a way they can't see (checked by hand)
+HOLD_BACK = {
+    "STAMP": "India Code prints the States' substituted Schedules after the Act; one of them would be read as the "
+             "Act's own Schedule I, and Schedule I itself (printed \"SCHEDULE 1\") stays glued to s. 79, as in the dataset",
+}
 
 
 def illustration_words(text: str) -> list[str]:
@@ -74,7 +82,9 @@ def contents_numbers(lines) -> set[str]:
         return set()
     found = set()
     for line in lines[:body]:
-        match = re.match(r"^\s*(\d{1,4}[A-Z]{0,4})\.\s+\S", line.text)
+        # "22E. Award ...", "22E.Award ...", "125A . Penalty ...", "45-IA. ...", "1[53S. ...", "49-I Conditions ..."
+        match = re.match(r"^\s*(?:\d{1,2}\s*\[|\[)?\s*(\d{1,4}\s?-?\s?[A-Z]{0,4})\s*\.\s*\S", line.text) \
+            or re.match(r"^\s*(\d{1,4}\s?-\s?[A-Z]{1,4})\s+[A-Z]", line.text)
         if match:
             found.add(number_key(match.group(1)))
         if re.search(r"\bSCHEDULE\b", line.text, re.I):
@@ -102,15 +112,33 @@ def titles_agree(a: str, b: str) -> bool:
 REPEALED = re.compile(r"^\W*(repealed|omitted|rep\.|\[?\s*rep(?:ealed)?\b)", re.I)
 
 
+# "[Substituted by Act 18 of 2023 ... for sections 15 to 17 ...]": the range became other sections (EPA s. 17)
+MERGED = re.compile(r"\bsubstituted\s+by\s+Act\b[^\]]{0,80}?\bfor\s+sections\b", re.I)
+
+
 def is_gone(section: dict) -> bool:
-    """A section the Act no longer has ([Repealed.], [Omitted.]): the PDF may list a range of them on one line."""
+    """A section the Act no longer has ([Repealed.], [Omitted.], a range substituted by other sections): the PDF
+    may list a range of them on one line, or still name one in its list of sections."""
+    text = section.get("text") or ""
     return section.get("status") == "omitted" or bool(REPEALED.match(section.get("title") or "")) \
-        or (len(section.get("text") or "") < 160 and bool(re.search(r"\b(repealed|omitted)\b", section.get("text") or "", re.I)))
+        or (len(text) < 160 and bool(re.search(r"\b(repealed|omitted)\b", text, re.I))) \
+        or (len(text) < 300 and bool(MERGED.search(text)))
 
 
 def number_key(number: str) -> str:
-    """The dataset writes a few numbers as '21A.': the same section as '21A'."""
-    return re.sub(r"[\s.]+$", "", str(number or "")).upper()
+    """The dataset writes a few numbers as '21A.': the same section as '21A'. India Code (and the dataset, now and
+    then) writes an I or O after a hyphen, '45-I', so it isn't read as 1 or 0: the same section as '45I', which is
+    how the reader and the library (laws.norm_number) spell it."""
+    return re.sub(r"[\s.\-–]+", "", str(number or "")).upper()
+
+
+def opening_words(text: str, count: int = 20) -> str:
+    """The first words of a section's law, after its heading ("3. Constitution of Central Boards.—"): enough
+    to find that text elsewhere; "" when the text is too short to tell."""
+    text = text or ""
+    dash = re.search(r"[—–]", text[:250])
+    words = re.sub(r"\W+", " ", text[dash.end():] if dash else text).lower().split()
+    return " ".join(words[:count]) if len(words) >= count else ""
 
 
 def compare(old: list[dict], new: list[dict]) -> dict:
@@ -145,7 +173,16 @@ def compare(old: list[dict], new: list[dict]) -> dict:
         problems.append(f"{duplicates} section numbers read twice")
     # The text itself: a reading that matched only the table of contents has every number and title but no text
     empty = [n for n in common if len((new_by[n]["text"] or "").strip()) < 20 and len(old_by[n]["text"] or "") >= 20]
-    ratios = sorted(len(new_by[n]["text"]) / len(old_by[n]["text"]) for n in common if len(old_by[n]["text"] or "") > 50)
+    # the dataset glued the Bill's Statement of Objects and Reasons to some last sections: not law, not counted
+    law = {n: (old_by[n]["text"] or "").split("STATEMENT OF OBJECTS AND REASONS")[0] for n in common}
+    ratios = sorted(len(new_by[n]["text"]) / len(law[n]) for n in common if len(law[n]) > 50)
+    # A section that swells (Stamp Act s. 79, "[Repealed.]", took in Schedule I and the States' Schedules,
+    # printed "SCHEDULE 1"): something the reader didn't see as a heading was glued to it
+    before = {number_key(s["number"]): (s["text"] or "").split("STATEMENT OF OBJECTS AND REASONS")[0] for s in old}
+    swollen = [n for n in new_by if n in before and not n.startswith("SCH")      # repealed ones too (s. 79 was)
+               and len(new_by[n]["text"] or "") > 5 * len(before[n]) + 10000]
+    if swollen:
+        problems.append(f"s. {', '.join(swollen[:4])} became much longer (a Schedule or other text glued to it)")
     median = ratios[len(ratios) // 2] if ratios else 0.0
     much_shorter = sum(1 for r in ratios if r < 0.5) / len(ratios) if ratios else 0.0
     if len(empty) > max(1, MAX_EMPTY * len(common)):
@@ -166,12 +203,56 @@ def compare(old: list[dict], new: list[dict]) -> dict:
     if len(lost) > max(1, MAX_LOST_ILLUSTRATIONS * len(illustrated)):
         problems.append(f"the Illustrations of {len(lost)} of {len(illustrated)} sections are missing (e.g. s. {', '.join(lost[:5])})")
     old_all = {number_key(s["number"]): s for s in old}
+    # A section the reading missed may still be in it, inside the section before (its heading not read at all,
+    # e.g. a misprinted number). Keeping the old text too would give the law twice: refused.
+    all_text = re.sub(r"\W+", " ", " ".join(s["text"] or "" for s in new)).lower()
+    inside = [n for n in missing if not is_gone(old_all[n]) and (words := opening_words(old_all[n]["text"]))
+              and words in all_text]
+    if inside:
+        problems.append(f"the text of s. {', '.join(inside[:4])} is inside another section (its heading was not read)")
     details = ([f"+ s. {n} {new_by[n]['title'][:50]}" for n in extra]
                + [f"= s. {n} {old_all[n]['title'][:50]} (not in the PDF: old text kept)" for n in missing])
     return {"coverage": coverage, "titles": titles, "missing": missing, "extra": extra, "duplicates": duplicates,
             "problems": problems, "details": details, "median_length": median,
             "score": (coverage + titles + min(1.0, median) - 2 * len(empty) / max(1, len(common)) - much_shorter
                       - len(extra) / max(1, len(old_by)) - duplicates / max(1, len(old_by)))}
+
+
+def split_glued(new: list[dict], old: list[dict], missing: list[str], lines=None) -> list[str]:
+    """A heading the reader could not see ("60 Application ..." without its dot, "37ZA." printed for 378ZA, a
+    heading that lost its number) leaves that section's text at the end of the section before. Its title from
+    the library, followed by the ".—" that ends a heading, shows where it begins: it is cut off there and gets
+    its official text. Returns the numbers split off (no longer missing)."""
+    order = [number_key(s["number"]) for s in old]
+    found = []
+    for number in missing:
+        old_section = next(s for s in old if number_key(s["number"]) == number)
+        title = re.sub(r"\s+", " ", old_section.get("title") or "").strip(" .[]")
+        if len(title) < 10 or is_gone(old_section):
+            continue
+        keys = [number_key(s["number"]) for s in new]
+        anchor = next((n for n in reversed(order[:order.index(number)]) if n in keys), None)
+        if anchor is None:
+            continue
+        at = keys.index(anchor)
+        before = new[at]
+        words = r"\s+".join(re.escape(word) for word in title.split())
+        # the last word may end differently ("insufficient ground" in the dataset, "grounds" in the PDF: CPC s. 95)
+        heading = re.search(r"(?:^|(?<=[.:;\])—]))\s*((?:\d{1,2}\s*)?\[?\s*(?:\d{1,4}[A-Z]{0,4}\s*\.?\s*)?" + words
+                            + r"[a-z]{0,3})\s*\.?\s*[—–]+\s*", before["text"], re.M)
+        if not heading or heading.start(1) < 20:
+            continue
+        page = before.get("page")
+        start = re.sub(r"\s+", " ", heading.group(1))[:40]
+        for line in lines or ():
+            if page and line.page >= page and start[-25:] in line.text:
+                page = line.page
+                break
+        new.insert(at + 1, {**before, "number": number, "ref": f"s. {number}", "title": title,
+                            "text": before["text"][heading.end():].strip(), "status": "in_force", "page": page})
+        before["text"] = before["text"][:heading.start(1)].rstrip()
+        found.append(number)
+    return found
 
 
 def merge(official_sections: list[dict], old: list[dict], missing: list[str], old_is_official: bool = False) -> list[dict]:
@@ -200,6 +281,8 @@ def merge(official_sections: list[dict], old: list[dict], missing: list[str], ol
 
 
 def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, dict | None]:
+    if code in HOLD_BACK:
+        return f"KEPT the dataset text: {HOLD_BACK[code]}", None
     path = LAWS / "acts" / f"{code}.json"
     act = json.loads(path.read_text(encoding="utf-8"))
     again = False
@@ -264,13 +347,18 @@ def officialise(code: str, check_only: bool, redo: bool = False) -> tuple[str, d
                 keep = []
                 for s in new:
                     key = number_key(s["number"])
-                    if key in known or key in listed or (key.startswith("SCH") and "SCHEDULE" in listed):
+                    if key in known or key in listed or key in UNLISTED.get(code, ()) \
+                            or (key.startswith("SCH") and "SCHEDULE" in listed):
                         keep.append(s)
                     else:
                         left_out.append(f"- s. {s['number']} {s['title'][:45]} (not in the Act's list of sections: left out)")
                 new = keep
             result = compare(old, new)
-            result["details"] += left_out
+            split = split_glued(new, old, result["missing"], lines)
+            if split:                 # sections whose heading the reader missed, cut off the section before
+                result = compare(old, new)
+            result["details"] += left_out + [f"~ s. {n} cut off the end of the section before (its heading was not read)"
+                                             for n in split]
             in_contents = sum(1 for s in new if s.get("page") and s["page"] < body_page) / max(1, len(new))
             result["score"] -= in_contents
             if in_contents > 0.1:

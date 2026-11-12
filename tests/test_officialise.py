@@ -60,6 +60,73 @@ def test_only_sections_in_the_acts_own_list_count():
     assert officialise.plain_title("The Hindu Succession Act, 1956") == officialise.plain_title("Hindu Succession Act,  1956")
 
 
+def test_the_list_of_sections_in_its_untidy_forms():
+    # India Code's lists run the title into the number, space the dot, write I and O after a hyphen, drop the dot
+    lines = [SimpleNamespace(text=t) for t in (
+        "22E.Award of Permanent Lok Adalat to be final.", "125A . Penalty for filing false affidavit, etc.",
+        "45-IA. Requirement of registration.", "49-I Conditions for scheduled specimens.", "1[53S. Right to legal representation.",
+        "ACT NO. 39 OF 1987", "23. Something in the body.—(1) ...")]
+    assert officialise.contents_numbers(lines) == {"22E", "125A", "45IA", "49I", "53S"}
+
+
+def test_a_hyphen_before_i_or_o_is_the_same_section():
+    # the dataset writes SEBI s. 15-I, the reader 15I (as the library does): one section, not one lost and one new
+    old = OLD + [section("15-I", "Power to adjudicate"), section("15-O", "Appeal")]
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [
+        section("41A", "Notice of appearance"), section("15I", "Power to adjudicate"), section("15O", "Appeal")]
+    result = officialise.compare(old, new)
+    assert result["coverage"] == 1 and result["extra"] == [] and result["missing"] == []
+
+
+def test_a_section_whose_heading_was_not_read_is_cut_off_the_one_before():
+    # Benami Act: "60 Application of other laws not barred.—" has no dot, so s. 60 stayed at the end of s. 59;
+    # Companies Act: India Code prints "37ZA." for s. 378ZA; a mere mention of the title is not a heading
+    old = OLD + [section("41B", "Application of other laws not barred"), section("41C", "Annual general meetings"),
+                 section("41D", "Consultative Committee")]
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [section(
+        "41A", "Notice of appearance", TEXT + "functions. 60 Application of other laws not barred.—The provisions of "
+        "this Act shall be in addition to any other law. 37ZA. Annual general meetings.—(1) Every Producer Company "
+        "shall hold a meeting. The Consultative Committee constituted under section 41D shall be consulted.")]
+    missing = officialise.compare(OLD + old[-3:], new)["missing"]
+    assert officialise.split_glued(new, old, missing) == ["41B", "41C"]
+    by_number = {s["number"]: s for s in new}
+    assert by_number["41A"]["text"].endswith("functions.")
+    assert by_number["41B"]["text"] == "The provisions of this Act shall be in addition to any other law."
+    assert by_number["41C"]["title"] == "Annual general meetings" and by_number["41C"]["text"].startswith("(1) Every")
+    assert "41D" not in by_number and "Consultative Committee constituted" in by_number["41C"]["text"]
+
+
+def test_a_missed_section_found_inside_another_is_refused():
+    # Water Act: India Code prints s. 3 as "2. Constitution of Central Boards"; its heading is lost, its law ends
+    # up in s. 2 - keeping the dataset's s. 3 as well would give the law twice
+    law = ("The Central Government shall, with effect from such date being a date not later than six months of "
+           "the commencement of this Act in the States, constitute a Central Board.")
+    old = OLD + [section("42", "Constitution of Central Boards", "42. Constitution of Central Boards.—(1) " + law)]
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [
+        section("41A", "Notice of appearance", TEXT + " (1) " + law)]
+    assert any("inside another section" in p for p in officialise.compare(old, new)["problems"])
+    new[-1]["text"] = TEXT
+    assert not any("inside" in p for p in officialise.compare(old, new)["problems"])   # truly missing: kept
+
+
+def test_a_section_that_swells_is_refused():
+    # Stamp Act s. 79 "[Repealed.]" took in 200,000 characters of Schedules printed "SCHEDULE 1"
+    old = OLD[:-1] + [section("41A", "[Repealed.]", "[Repealed.] Rep. by Act 10 of 1914.")]
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [
+        section("41A", "[Repealed.]", "[Repealed.] Rep. by Act 10 of 1914. SCHEDULE 1 STAMP-DUTY " + "Two annas. " * 2000)]
+    assert any("much longer" in p for p in officialise.compare(old, new)["problems"])
+
+
+def test_a_range_substituted_by_other_sections_is_gone():
+    # EPA s. 17 in the dataset: no longer a section, so the PDF may lack it (still kept, with its note)
+    old = OLD + [section("42", "Offences by Government Departments", "42. Offences by Government Departments. [Substituted "
+                         "by Act 18 of 2023, s. 2 and Schedule, for sections 15 to 17 (w.e.f. 1-4-2024). See section 15B.]")]
+    assert officialise.is_gone(old[-1]) and not officialise.is_gone(OLD[0])
+    new = [section(str(n), f"Title of section {n}") for n in range(1, 41)] + [section("41A", "Notice of appearance")]
+    result = officialise.compare(old, new)
+    assert result["problems"] == [] and result["coverage"] == 1 and result["missing"] == ["42"]
+
+
 ILLUSTRATION = "\nIllustration\nA promises to paint a picture for B by a certain day, at a certain price."
 
 

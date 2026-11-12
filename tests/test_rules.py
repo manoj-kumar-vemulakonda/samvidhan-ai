@@ -76,6 +76,17 @@ def test_a_stray_contents_line_does_not_hide_the_sections_after_it():
     assert [p["number"] for p in found] == ["5", "7", "10", "21", "21A", "22", "23"]
 
 
+def test_a_section_inserted_then_substituted_has_two_note_numbers():
+    # NGT Act s. 10A: inserted in 2017 (note 1), substituted in 2026 (note 2) - "1[2[10A." is still a heading
+    found = rulebook.parse(lines([
+        "10. Removal of Chairperson.—The Chairperson may be removed", "by the President.",
+        "1[2[10A. Selection, qualifications, conditions of service.—Notwithstanding anything",
+        "5[ 6[10B. Other conditions.—The Central Government may", "11. Acting Chairperson.—In the event",
+    ]), numbering="sections", bold=False)
+    assert [p["number"] for p in found] == ["10", "10A", "10B", "11"]
+    assert found[1]["title"].startswith("Selection, qualifications") and "Notwithstanding" not in found[0]["text"]
+
+
 def test_title_case_chapter_headings_only_when_asked():
     texts = ["CHAPTER XXVI", "Contents line", "Chapter I", "1. Title.—These rules", "2. Commencement.—They shall"]
     plain = rulebook.parse(lines(texts, bold=True), numbering="rules", bold=True)
@@ -128,6 +139,37 @@ def test_schedules_headed_by_a_roman_number_are_not_glued_to_the_last_section():
     assert list(by_number) == ["390", "391", "392", "SCH1", "SCH2", "SCH3"]
     assert "Father and mother" in by_number["SCH2"]["text"] and "In applying" in by_number["SCH3"]["text"]
     assert "SCHEDULE" not in by_number["392"]["text"] and by_number["SCH3"]["ref"] == "Sch. III"
+
+
+def test_schedules_with_a_note_number_in_front_and_the_bills_reasons():
+    # RBI, UAPA, IT Act: "1[THE FIRST SCHEDULE" (substituted), "1THE SECOND SCHEDULE"; WPA: "1[SCHEDULE — I";
+    # and the Bill's Statement of Objects and Reasons that India Code prints after the Act is not law
+    texts = [
+        "60. Power to make rules.—The Central Government may make rules.", "61. Repeal.—The Act is repealed.",
+        "1[THE FIRST SCHEDULE", "[See section 9]", "1. The Western Area shall consist of the States of Goa.",
+        "1THE SECOND SCHEDULE", "SCHEDULED BANKS", "Axis Bank Ltd.",
+        "1[SCHEDULE — III", "Blackbuck Antilope cervicapra",
+        "STATEMENT OF OBJECTS AND REASONS", "The Bill seeks to consolidate the law.", "2. Hence this Bill.",
+    ]
+    found = {p["number"]: p for p in rulebook.parse(lines(texts), numbering="sections", bold=False, numbered_schedules=True)}
+    assert list(found) == ["60", "61", "SCH1", "SCH2", "SCH3"]
+    assert found["61"]["text"].strip() == "The Act is repealed." and "Axis Bank" in found["SCH2"]["text"]
+    assert "Bill" not in found["SCH3"]["text"]
+    # court-rule books: the note-numbered headings only when asked, but the Bill's reasons never
+    plain = {p["number"]: p for p in rulebook.parse(lines(texts), numbering="sections", bold=False)}
+    assert list(plain) == ["60", "61"] and "Bill" not in plain["61"]["text"]
+    assert rulebook.OBJECTS_AND_REASONS.match("STATEMENT OF OBJECTS AND REASONSES")      # IBC's misprint
+
+
+def test_a_bold_note_in_note_type_is_still_a_note():
+    # IBC p. 15: the commencement note prints its dates in bold; "2. 5th August, 2016 ..." became section 2
+    page = page_of(1, [(LAW, 11.0, False, 72.0), ("1. The proviso omitted by the A.O. 2020.", 9.0, False, 72.0),
+                       ("2. 5th August, 2016, vide Notifn. No. S.O. 2618(E), see Gazette of India.", 10.0, True, 72.0),
+                       ("19th August, 2016—S. 3, cls. (1), (5), vide notifn. No. S.O. 2746(E).", 9.0, True, 86.0)])
+    assert rulebook.footnote_block(page, 11.0) == 1
+    heading = page_of(1, [(LAW, 11.0, False, 72.0), ("1. Subs. by Act 3 of 1921.", 9.0, False, 72.0),
+                          ("2. Application.—The provisions of this Code shall apply to", 11.0, True, 90.0)])
+    assert rulebook.footnote_block(heading, 11.0) is None      # a bold heading in the usual size is law
 
 
 # India Code prints Illustrations (and some whole pages) in small type, and some notes in the usual type

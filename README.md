@@ -115,7 +115,7 @@ It also:
 
 ![A CPC rule with its official PDF page](docs/v31-rule.png)
 
-**The library now:** 268 books with 27,130 citable provisions:
+**The library now:** 268 books with 27,306 citable provisions:
 - 171 Acts (central, plus State court, civil-court and court-fees Acts).
 - 94 court rule books, from the Supreme Court, High Courts, district courts and Gram Nyayalayas.
 - 3 handbooks and manuals (Supreme Court Handbook, Telangana HC Manual, Kerala HC Compendium).
@@ -168,17 +168,18 @@ Your question ─► (translated to English for the search if needed)
 
 **The data:**
 - **`data/laws/`**
-  - The first 101 Acts and 2,629 old ↔ new section mappings were built by `scripts/build_laws.py` from the open dataset [GSMS-B/indian-legal-mcp](https://github.com/GSMS-B/indian-legal-mcp) (MIT/Apache-2.0 licence), compiled from India Code. Some of those texts still contain footnote digits, and one footnote gave a wrong year (corrected).
-  - **20 of the most-cited of those Acts now use the official India Code text** (`scripts/officialise_acts.py`): BNS, BNSS, BSA, CPC, NI Act, Contract, Transfer of Property, Arbitration, Limitation, Specific Relief, Hindu Marriage, Hindu Succession, Domestic Violence, Consumer Protection, POCSO, NDPS, SC/ST Atrocities, Indian Succession, RTI and the IT Act.
-    - That means the exact wording with its Illustrations, a page number for every section (one click opens the official PDF there), and India Code's notes on State amendments.
-    - The amendment footnotes ("Subs. by Act 55 of 2002 …") are left out of the text. They are on the PDF page.
-    - An Act is swapped only when the PDF reading matches what the library had: every section found, the titles agree, the texts are full length, no Illustrations go missing, and every section points at a page of the Act itself (not its table of contents).
+  - The first 101 Acts and 2,629 old ↔ new section mappings were built by `scripts/build_laws.py` from the open dataset [GSMS-B/indian-legal-mcp](https://github.com/GSMS-B/indian-legal-mcp) (MIT/Apache-2.0 licence), compiled from India Code. Those texts contain footnote digits, State amendments and, in places, wrong years.
+  - **94 of those Acts now use the official India Code text** (`scripts/officialise_acts.py`): BNS, BNSS, BSA, CPC, NI Act, Contract, Companies, IBC, RBI, SEBI, Customs, CGST, the Labour Codes, and the rest.
+    - That means the exact wording with its Illustrations and Schedules, a page number for every section (one click opens the official PDF there), and sections the dataset lacked (e.g. RBI ss. 45-I to 45-IE, Arbitration s. 29A, Dowry Prohibition s. 8A).
+    - The amendment footnotes ("Subs. by Act 55 of 2002 …") and the Bill's Statement of Objects and Reasons are left out of the text. Both are in the PDF.
+    - An Act is swapped only when the PDF reading matches what the library had: every section found, the titles agree, the texts are full length, no Illustrations go missing, every section points at a page of the Act itself (not its table of contents), no section's text sits inside another, and no section suddenly swells.
     - The PDF's own list of sections decides what counts as a section, so State amendments are never taken for central sections.
-    - Still from the dataset:
-      - IPC, CrPC and the Evidence Act: India Code no longer offers their PDFs.
+    - Still from the dataset (7):
+      - IPC, CrPC, the Evidence Act and the Income-tax Act, 2025: India Code has no PDF of the Act itself.
       - Motor Vehicles Act: a scan.
-      - The rest of the 101 Acts: not tried yet (`--all`).
-      - Two single sections: CPC s. 95 (its heading is printed word by word) and NI Act s. 81A (not in the PDF), marked "from dataset".
+      - Water Act: India Code's PDF misnumbers ss. 3, 13 and 31.
+      - Stamp Act: the States' substituted Schedules would be read as the Act's own.
+    - A few single sections keep the dataset text, marked "from dataset", where the PDF lacks them (e.g. NI Act s. 81A).
   - Everything else comes straight from the official sources, through `scripts/build_official.py`:
     - **India Code** (indiacode.gov.in, the Legislative Department's site) for the CPC Orders, the Limitation Schedule, the BNSS First Schedule, about 45 more central Acts, and State civil-courts and court-fees Acts.
     - **The courts' own websites** for court rules (sci.gov.in, delhihighcourt.nic.in, gujarathighcourt.nic.in, hcraj.nic.in, orissahighcourt.nic.in …).
@@ -291,5 +292,5 @@ The search index updates itself on the next start, and only new or changed rules
 - **v5:**
   - Full-text judgment search.
   - The remaining High Courts' rules, and State laws from India Code's State collections.
-  - The rest of the first 101 Acts re-read from the official India Code PDFs (20 done by v3.6).
+  - The last 7 of the first 101 Acts from official texts (94 done by v3.7): IPC, CrPC and the Evidence Act from the Gazette, the Motor Vehicles Act with OCR, and the Water and Stamp Acts once read by hand.
   - A Word add-in.

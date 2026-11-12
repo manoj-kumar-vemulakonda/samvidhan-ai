@@ -37,9 +37,6 @@
    "url": "https://indiacode.gov.in/items/3d38ec80-965e-4df0-a2d2-3d97cb1dc702",
    "as_on": "10th January, 2026",
    "parsed_as": "sections",
-   "dataset_sections_kept": [
-    "95"
-   ],
    "sections": 886
   },
   {
@@ -56,8 +53,15 @@
    "aliases": [
     "commercial courts act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 26
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "COMMCOURTS.pdf",
+   "url": "https://indiacode.gov.in/items/14782d77-dfa1-494f-a277-ac0006c05b7f",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 27
   },
   {
    "code": "EASEMENTS",
@@ -75,7 +79,14 @@
     "indian easements act",
     "easement act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "EASEMENTS.pdf",
+   "url": "https://indiacode.gov.in/items/b020b170-1f08-440a-828f-8559cdc5f062",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 64
   },
   {
@@ -181,7 +192,14 @@
     "real estate regulation and development act",
     "real estate act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RERA.pdf",
+   "url": "https://indiacode.gov.in/items/769e081c-f8d1-4987-ab07-b93a11ae53ad",
+   "as_on": "15th May, 2026",
+   "parsed_as": "sections",
    "sections": 92
   },
   {
@@ -198,7 +216,14 @@
    "aliases": [
     "registration act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "REGISTRATION.pdf",
+   "url": "https://indiacode.gov.in/items/1930ffdb-10f3-4d71-bc42-f91303dae14e",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 96
   },
   {
@@ -218,8 +243,15 @@
     "rfctlarr",
     "larr act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 114
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RFCTLARR.pdf",
+   "url": "https://indiacode.gov.in/items/3de78b3e-dce3-447e-8ef4-eb09d4897a22",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 118
   },
   {
    "code": "SRA",
@@ -248,7 +280,7 @@
     "43",
     "44"
    ],
-   "sections": 48
+   "sections": 49
   },
   {
    "code": "TPA",
@@ -290,8 +322,15 @@
    "aliases": [
     "banking regulation act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 131
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "BRA.pdf",
+   "url": "https://indiacode.gov.in/items/18020586-18bc-4857-91fe-668ed2469876",
+   "as_on": "20th December, 2025",
+   "parsed_as": "sections",
+   "sections": 138
   },
   {
    "code": "CHIT",
@@ -307,8 +346,15 @@
    "aliases": [
     "chit funds act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 90
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CHIT.pdf",
+   "url": "https://indiacode.gov.in/items/55c496a4-0dfa-43bc-9aa8-22e028b695a7",
+   "as_on": "1ST July, 2026",
+   "parsed_as": "sections",
+   "sections": 91
   },
   {
    "code": "COMPANIES",
@@ -325,8 +371,15 @@
     "companies act",
     "company law"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 517
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "COMPANIES.pdf",
+   "url": "https://indiacode.gov.in/items/f5bbbf6b-4247-400f-80fa-38c605132a8f",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
+   "sections": 530
   },
   {
    "code": "COMPETITION",
@@ -342,8 +395,15 @@
    "aliases": [
     "competition act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 95
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "COMPETITION.pdf",
+   "url": "https://indiacode.gov.in/items/679c33d2-a217-4e57-8e28-51dd4208371f",
+   "as_on": "15th September, 2026",
+   "parsed_as": "sections",
+   "sections": 98
   },
   {
    "code": "FCRA",
@@ -359,7 +419,14 @@
    "aliases": [
     "foreign contribution regulation act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "FCRA.pdf",
+   "url": "https://indiacode.gov.in/items/e62ef217-2250-4380-935c-d9ad915454b1",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
    "sections": 56
   },
   {
@@ -376,7 +443,14 @@
    "aliases": [
     "foreign exchange management act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "FEMA.pdf",
+   "url": "https://indiacode.gov.in/items/a972a617-5989-4b2c-a84f-617792137a57",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
    "sections": 52
   },
   {
@@ -396,8 +470,19 @@
     "insolvency code",
     "bankruptcy code"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 281
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "IBC.pdf",
+   "url": "https://indiacode.gov.in/items/37c94edf-7892-4c4f-a284-0c24613a4bf5",
+   "as_on": "2nd July, 2026",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "74",
+    "76"
+   ],
+   "sections": 295
   },
   {
    "code": "INSURANCE",
@@ -413,8 +498,19 @@
    "aliases": [
     "insurance act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 263
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "INSURANCE.pdf",
+   "url": "https://indiacode.gov.in/items/2b69e969-fa80-45d4-8b30-9aab7fc7f47a",
+   "as_on": "15th April, 2026)",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "65A",
+    "114C"
+   ],
+   "sections": 268
   },
   {
    "code": "IRDAI",
@@ -430,8 +526,15 @@
    "aliases": [
     "insurance regulatory and development authority act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 39
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "IRDAI.pdf",
+   "url": "https://indiacode.gov.in/items/2f297648-84a2-493a-888a-9a642a31617f",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
+   "sections": 42
   },
   {
    "code": "LLP",
@@ -447,8 +550,15 @@
    "aliases": [
     "limited liability partnership act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 88
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "LLP.pdf",
+   "url": "https://indiacode.gov.in/items/cd2202d9-0e72-408b-8ae3-d86e2dfaf968",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
+   "sections": 92
   },
   {
    "code": "MSMED",
@@ -464,8 +574,15 @@
    "aliases": [
     "micro small and medium enterprises development act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 32
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MSMED.pdf",
+   "url": "https://indiacode.gov.in/items/86ae7935-56dd-41ee-b005-64e41f8548e3",
+   "as_on": "15th October, 2026",
+   "parsed_as": "sections",
+   "sections": 35
   },
   {
    "code": "PSSA",
@@ -481,7 +598,14 @@
    "aliases": [
     "payment and settlement systems act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PSSA.pdf",
+   "url": "https://indiacode.gov.in/items/0c440dd4-d439-42ba-bced-6945512eb9b0",
+   "as_on": "20th August, 2026",
+   "parsed_as": "sections",
    "sections": 42
   },
   {
@@ -498,7 +622,14 @@
    "aliases": [
     "prohibition of benami property transactions act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PBPTA.pdf",
+   "url": "https://indiacode.gov.in/items/05036056-7dcb-4aeb-9216-b8e1d2a16cdd",
+   "as_on": "21st May, 2025)",
+   "parsed_as": "sections",
    "sections": 75
   },
   {
@@ -518,7 +649,14 @@
     "rdba",
     "drt act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RDBA.pdf",
+   "url": "https://indiacode.gov.in/items/703fcb7e-ff42-4ca7-86de-e701149ad002",
+   "as_on": "25th August, 2026",
+   "parsed_as": "sections",
    "sections": 45
   },
   {
@@ -535,8 +673,15 @@
    "aliases": [
     "reserve bank of india act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 132
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RBI.pdf",
+   "url": "https://indiacode.gov.in/items/3f9f5c4e-dce7-4144-b5ac-d2cc995b1761",
+   "as_on": "23rd June, 2026",
+   "parsed_as": "sections",
+   "sections": 141
   },
   {
    "code": "SCRA",
@@ -552,7 +697,14 @@
    "aliases": [
     "securities contracts regulation act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SCRA.pdf",
+   "url": "https://indiacode.gov.in/items/10636fd5-6643-4655-a119-dcfe5cb3fc1a",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
    "sections": 78
   },
   {
@@ -569,7 +721,14 @@
    "aliases": [
     "securities and exchange board of india act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SEBI.pdf",
+   "url": "https://indiacode.gov.in/items/a646ef79-0891-473c-a048-eb6d37bb5555",
+   "as_on": "25th August, 2026",
+   "parsed_as": "sections",
    "sections": 92
   },
   {
@@ -588,8 +747,15 @@
     "securitisation and reconstruction of financial assets and enforcement of security interest act",
     "sarfaesi"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 61
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SARFAESI.pdf",
+   "url": "https://indiacode.gov.in/items/c0e184ad-4538-4520-8981-3bd47bb7f80e",
+   "as_on": "",
+   "parsed_as": "sections",
+   "sections": 62
   },
   {
    "code": "ATA",
@@ -605,7 +771,14 @@
    "aliases": [
     "administrative tribunals act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ATA.pdf",
+   "url": "https://indiacode.gov.in/items/c15355a2-6cab-4fdb-99db-ebccf7ac5250",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
    "sections": 41
   },
   {
@@ -622,8 +795,15 @@
    "aliases": [
     "advocates act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 85
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ADVOCATES.pdf",
+   "url": "https://indiacode.gov.in/items/417cb82a-692f-46a2-b0e4-dc296a44cf6a",
+   "as_on": "30th July, 2026",
+   "parsed_as": "sections",
+   "sections": 86
   },
   {
    "code": "CITIZENSHIP",
@@ -665,7 +845,14 @@
     "contempt of courts act",
     "contempt act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CONTEMPT.pdf",
+   "url": "https://indiacode.gov.in/items/f27f2e75-5b1c-4e01-aec1-1eacf34e05b0",
+   "as_on": "30th July, 2025)",
+   "parsed_as": "sections",
    "sections": 24
   },
   {
@@ -709,8 +896,15 @@
     "legal services authorities act",
     "lok adalat"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 38
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "LSAA.pdf",
+   "url": "https://indiacode.gov.in/items/a742f03e-3129-4b8d-8dda-af2a36190b18",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 40
   },
   {
    "code": "PASSPORTS",
@@ -751,8 +945,15 @@
    "aliases": [
     "protection of civil rights act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 23
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PCRA.pdf",
+   "url": "https://indiacode.gov.in/items/49c97aa1-20b3-4883-b39a-55283b85909b",
+   "as_on": "15th August 2026",
+   "parsed_as": "sections",
+   "sections": 24
   },
   {
    "code": "PHRA",
@@ -768,7 +969,14 @@
    "aliases": [
     "protection of human rights act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PHRA.pdf",
+   "url": "https://indiacode.gov.in/items/d6e9c3c9-5ac2-413f-90a9-0f49c462c648",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 45
   },
   {
@@ -785,8 +993,15 @@
    "aliases": [
     "representation of the people act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 196
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RPA.pdf",
+   "url": "https://indiacode.gov.in/items/c6952b2d-766b-49df-8217-41b17a026fd5",
+   "as_on": "25 August, 2025)",
+   "parsed_as": "sections",
+   "sections": 197
   },
   {
    "code": "RTE",
@@ -802,8 +1017,15 @@
    "aliases": [
     "right of children to free and compulsory education act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 39
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RTE.pdf",
+   "url": "https://indiacode.gov.in/items/f56d1ae7-9bbb-40cd-95ab-193eb5a5daaa",
+   "as_on": "1st   September, 2026",
+   "parsed_as": "sections",
+   "sections": 40
   },
   {
    "code": "RTI",
@@ -846,8 +1068,15 @@
    "aliases": [
     "rights of persons with disabilities act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 102
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "RPWDA.pdf",
+   "url": "https://indiacode.gov.in/items/a2ccc006-552f-4598-886f-217d79088b9d",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 103
   },
   {
    "code": "TRANSGENDER",
@@ -897,7 +1126,7 @@
    "url": "https://indiacode.gov.in/items/51601006-0e76-4a81-83ce-739f3a021112",
    "as_on": "1st June, 2026",
    "parsed_as": "sections",
-   "sections": 110
+   "sections": 113
   },
   {
    "code": "CONSUMER",
@@ -966,8 +1195,15 @@
     "partnership act",
     "indian partnership act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 74
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PARTNERSHIP.pdf",
+   "url": "https://indiacode.gov.in/items/aa6e4ef4-2b51-420d-aeee-4165cc9174ff",
+   "as_on": "7th July, 2025",
+   "parsed_as": "sections",
+   "sections": 75
   },
   {
    "code": "NIA",
@@ -1014,7 +1250,14 @@
    "aliases": [
     "sale of goods act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SGA.pdf",
+   "url": "https://indiacode.gov.in/items/76ce35a9-34b1-4929-8e21-82befadea2f8",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 67
   },
   {
@@ -2579,7 +2822,14 @@
    "aliases": [
     "arms act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ARMS.pdf",
+   "url": "https://indiacode.gov.in/items/78a46eb4-21bf-49ee-bd08-6b8e8655631c",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 48
   },
   {
@@ -2908,7 +3158,14 @@
     "juvenile justice care and protection of children act",
     "juvenile justice act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "JJ.pdf",
+   "url": "https://indiacode.gov.in/items/bfa75673-9ac9-4ce8-b5cf-836472c94203",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
    "sections": 112
   },
   {
@@ -3029,7 +3286,14 @@
     "prevention of corruption act",
     "anti corruption act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PCA.pdf",
+   "url": "https://indiacode.gov.in/items/5b300920-4878-4e39-8d87-fa87d4953f09",
+   "as_on": "21st May, 2025",
+   "parsed_as": "sections",
    "sections": 35
   },
   {
@@ -3048,8 +3312,15 @@
     "prevention of money laundering act",
     "money laundering act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 81
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PMLA.pdf",
+   "url": "https://indiacode.gov.in/items/3babfe62-c9c8-49b3-8247-052834d2dfa4",
+   "as_on": "27th July, 2025",
+   "parsed_as": "sections",
+   "sections": 82
   },
   {
    "code": "PROBATION",
@@ -3153,7 +3424,7 @@
    "url": "https://indiacode.gov.in/items/f9c8fb04-363a-4779-b628-0d9f9bb997e0",
    "as_on": "21st September, 2025",
    "parsed_as": "sections",
-   "sections": 26
+   "sections": 27
   },
   {
    "code": "UAPA",
@@ -3170,8 +3441,15 @@
     "uapa",
     "unlawful activities prevention act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 67
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "UAPA.pdf",
+   "url": "https://indiacode.gov.in/items/fa986084-35d9-4391-a7e1-9561c880d8bb",
+   "as_on": "22nd August, 2026",
+   "parsed_as": "sections",
+   "sections": 71
   },
   {
    "code": "AADHAAR",
@@ -3187,7 +3465,14 @@
    "aliases": [
     "aadhaar targeted delivery of financial and other subsidies benefits and services act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "AADHAAR.pdf",
+   "url": "https://indiacode.gov.in/items/fcd3b406-8eae-4130-950f-b94cfb11d2d0",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
    "sections": 69
   },
   {
@@ -3204,7 +3489,14 @@
    "aliases": [
     "copyright act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "COPYRIGHT.pdf",
+   "url": "https://indiacode.gov.in/items/6b893162-631a-453b-a7b9-89685716889b",
+   "as_on": "15th June, 2026",
+   "parsed_as": "sections",
    "sections": 105
   },
   {
@@ -3221,7 +3513,14 @@
    "aliases": [
     "designs act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "DESIGNS.pdf",
+   "url": "https://indiacode.gov.in/items/cd8f2852-7085-432b-a264-7b73a6f01fff",
+   "as_on": "15th June, 2026",
+   "parsed_as": "sections",
    "sections": 48
   },
   {
@@ -3241,8 +3540,15 @@
     "dpdpa",
     "data protection act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 41
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "DPDPA.pdf",
+   "url": "https://indiacode.gov.in/items/c058fa9f-eaf0-4ca3-98f1-3443b087bca9",
+   "as_on": "the19th November, 2025",
+   "parsed_as": "sections",
+   "sections": 45
   },
   {
    "code": "GI",
@@ -3258,7 +3564,14 @@
    "aliases": [
     "geographical indications of goods registration and protection act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "GI.pdf",
+   "url": "https://indiacode.gov.in/items/1905d861-7dcd-46d6-a03b-4fe6009dea5b",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
    "sections": 89
   },
   {
@@ -3285,7 +3598,7 @@
    "url": "https://indiacode.gov.in/items/d41fe391-b9c0-40b1-afdc-ad034c7ac62f",
    "as_on": "27th June, 2025",
    "parsed_as": "sections",
-   "sections": 125
+   "sections": 127
   },
   {
    "code": "PATENTS",
@@ -3301,8 +3614,15 @@
    "aliases": [
     "patents act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 175
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PATENTS.pdf",
+   "url": "https://indiacode.gov.in/items/a49ad42b-f2dc-4ee2-9884-11ef0839798d",
+   "as_on": "5th May, 2026",
+   "parsed_as": "sections",
+   "sections": 176
   },
   {
    "code": "TELECOM",
@@ -3318,8 +3638,15 @@
    "aliases": [
     "telecommunications act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 62
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "TELECOM.pdf",
+   "url": "https://indiacode.gov.in/items/3b49d32d-5af1-4bb9-9f6c-ddac6d06fb1c",
+   "as_on": "24th August, 2026",
+   "parsed_as": "sections",
+   "sections": 65
   },
   {
    "code": "TRADEMARKS",
@@ -3335,8 +3662,15 @@
    "aliases": [
     "trade marks act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 169
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "TRADEMARKS.pdf",
+   "url": "https://indiacode.gov.in/items/62219d21-0553-405b-9ccb-a11b4d9c41c2",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
+   "sections": 170
   },
   {
    "code": "MPCIVILAMEND",
@@ -5246,7 +5580,14 @@
    "aliases": [
     "air prevention and control of pollution act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "AIR.pdf",
+   "url": "https://indiacode.gov.in/items/269a874d-1f40-4bd5-af17-d9cf30f58d51",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
    "sections": 62
   },
   {
@@ -5263,7 +5604,14 @@
    "aliases": [
     "environment protection act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "EPA.pdf",
+   "url": "https://indiacode.gov.in/items/10eea11f-bfda-41d0-b8dc-58176e704613",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 37
   },
   {
@@ -5280,8 +5628,15 @@
    "aliases": [
     "national green tribunal act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 39
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "NGT.pdf",
+   "url": "https://indiacode.gov.in/items/b7437cdc-49cc-4bce-9e04-ba768521a2ec",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
+   "sections": 42
   },
   {
    "code": "ANIMALS",
@@ -5322,7 +5677,14 @@
    "aliases": [
     "van sanrakshan evam samvardhan adhiniyam"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "VSA.pdf",
+   "url": "https://indiacode.gov.in/items/8640f9b8-f333-4129-8177-3b9828eae091",
+   "as_on": "5th September, 2026",
+   "parsed_as": "sections",
    "sections": 10
   },
   {
@@ -5356,8 +5718,18 @@
    "aliases": [
     "wild life protection act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 162
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "WPA.pdf",
+   "url": "https://indiacode.gov.in/items/3df23bd4-5433-4baf-92e9-56b72f4f1008",
+   "as_on": "5th June, 2025)",
+   "parsed_as": "sections",
+   "dataset_sections_kept": [
+    "10"
+   ],
+   "sections": 171
   },
   {
    "code": "DMMA",
@@ -5426,8 +5798,15 @@
     "dowry prohibition act",
     "dowry act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 12
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "DPA.pdf",
+   "url": "https://indiacode.gov.in/items/8dc8e1b4-7147-45ea-9e82-5911aa3816d4",
+   "as_on": "30th July, 2026",
+   "parsed_as": "sections",
+   "sections": 13
   },
   {
    "code": "FCA",
@@ -5444,7 +5823,14 @@
     "family courts act",
     "family court act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "FCA.pdf",
+   "url": "https://indiacode.gov.in/items/8f5c7a57-7f5a-4e35-b2f2-fa0cf56947fe",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
    "sections": 23
   },
   {
@@ -5462,7 +5848,14 @@
     "guardians and wards act",
     "guardian and wards act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "GWA.pdf",
+   "url": "https://indiacode.gov.in/items/b11b9515-16ca-4e69-8999-d0032a3913fa",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 55
   },
   {
@@ -5481,7 +5874,14 @@
     "hindu adoptions and maintenance act",
     "hindu adoption and maintenance act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "HAMA.pdf",
+   "url": "https://indiacode.gov.in/items/20c8e8eb-824f-4b64-8ee7-c1204b4cdbb3",
+   "as_on": "1st June, 2026",
+   "parsed_as": "sections",
    "sections": 30
   },
   {
@@ -5630,7 +6030,14 @@
     "senior citizens act",
     "maintenance and welfare of parents and senior citizens act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MWPSC.pdf",
+   "url": "https://indiacode.gov.in/items/2cc52f43-b784-447c-b84e-38cebfda552e",
+   "as_on": "13th April, 2026",
+   "parsed_as": "sections",
    "sections": 32
   },
   {
@@ -5701,7 +6108,14 @@
     "muslim women divorce act",
     "muslim women protection of rights on divorce act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MWPRDA.pdf",
+   "url": "https://indiacode.gov.in/items/d5200a55-74ad-4693-9e63-fb94c700c6d5",
+   "as_on": "",
+   "parsed_as": "sections",
    "sections": 7
   },
   {
@@ -5719,7 +6133,14 @@
     "triple talaq act",
     "muslim women protection of rights on marriage act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MWPRMA.pdf",
+   "url": "https://indiacode.gov.in/items/1f82ee21-741f-4a57-94ef-b26040d515b9",
+   "as_on": "1st July,2026",
+   "parsed_as": "sections",
    "sections": 8
   },
   {
@@ -5762,7 +6183,14 @@
     "child marriage act",
     "prohibition of child marriage act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "PCMA.pdf",
+   "url": "https://indiacode.gov.in/items/81cb6494-1a0a-4c88-95ec-baf6cb43a9f5",
+   "as_on": "15th April, 2026",
+   "parsed_as": "sections",
    "sections": 21
   },
   {
@@ -5807,8 +6235,15 @@
    "aliases": [
     "special marriage act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 57
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "SMA.pdf",
+   "url": "https://indiacode.gov.in/items/6b55de27-1d75-4e3d-9613-7d189ab6091e",
+   "as_on": "15th April, 2026",
+   "parsed_as": "sections",
+   "sections": 62
   },
   {
    "code": "WAQF",
@@ -5850,8 +6285,15 @@
    "aliases": [
     "child and adolescent labour prohibition and regulation act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 29
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CALPRA.pdf",
+   "url": "https://indiacode.gov.in/items/1fe940f9-b6ed-4d97-871c-587007b16632",
+   "as_on": "",
+   "parsed_as": "sections",
+   "sections": 30
   },
   {
    "code": "CSS",
@@ -5868,8 +6310,15 @@
     "social security code",
     "code on social security"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 164
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CSS.pdf",
+   "url": "https://indiacode.gov.in/items/1105cbcb-a765-4321-9758-8b92289371ac",
+   "as_on": "21th November, 2025",
+   "parsed_as": "sections",
+   "sections": 170
   },
   {
    "code": "COW",
@@ -5886,7 +6335,14 @@
     "code on wages",
     "wages code"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "COW.pdf",
+   "url": "https://indiacode.gov.in/items/77a51a9b-c4c0-455c-809c-13d2efb3c8e5",
+   "as_on": "21th November, 2025",
+   "parsed_as": "sections",
    "sections": 69
   },
   {
@@ -5903,8 +6359,15 @@
    "aliases": [
     "industrial relations code"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 100
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "IRC.pdf",
+   "url": "https://indiacode.gov.in/items/8f89967d-6d71-4d1c-bed5-53b6bf63d432",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
+   "sections": 107
   },
   {
    "code": "OSH",
@@ -5921,8 +6384,15 @@
     "osh code",
     "occupational safety health and working conditions code"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 143
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "OSH.pdf",
+   "url": "https://indiacode.gov.in/items/68f0e43a-9120-4028-8e08-0f63f5a0e061",
+   "as_on": "28th November, 2025",
+   "parsed_as": "sections",
+   "sections": 146
   },
   {
    "code": "POSH",
@@ -5941,7 +6411,14 @@
     "posh",
     "sexual harassment of women at workplace act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "POSH.pdf",
+   "url": "https://indiacode.gov.in/items/6497706b-d8a5-4486-a968-9975498de966",
+   "as_on": "1st August, 2026",
+   "parsed_as": "sections",
    "sections": 30
   },
   {
@@ -5958,8 +6435,15 @@
    "aliases": [
     "drugs and cosmetics act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 88
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "DCA.pdf",
+   "url": "https://indiacode.gov.in/items/8725a8a7-45a4-42e3-9046-e2a6383cd049",
+   "as_on": "1st July, 2026",
+   "parsed_as": "sections",
+   "sections": 92
   },
   {
    "code": "ELECTRICITY",
@@ -5975,8 +6459,15 @@
    "aliases": [
     "electricity act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 188
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "ELECTRICITY.pdf",
+   "url": "https://indiacode.gov.in/items/9e67d1ba-388a-411d-8151-1162bfc61789",
+   "as_on": "25 August, 2026",
+   "parsed_as": "sections",
+   "sections": 189
   },
   {
    "code": "ECA",
@@ -6017,8 +6508,15 @@
    "aliases": [
     "food safety and standards act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 101
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "FSSA.pdf",
+   "url": "https://indiacode.gov.in/items/901412c2-ea41-4afb-b6d2-8686b27623e6",
+   "as_on": "1st October, 2026",
+   "parsed_as": "sections",
+   "sections": 103
   },
   {
    "code": "MTP",
@@ -6061,7 +6559,14 @@
     "mental healthcare act",
     "mental health act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "MENTALHEALTH.pdf",
+   "url": "https://indiacode.gov.in/items/63a1a7f4-fc92-49c3-808b-6f0bc3ede89c",
+   "as_on": "1st August, 2026",
+   "parsed_as": "sections",
    "sections": 126
   },
   {
@@ -6181,8 +6686,15 @@
     "cgst",
     "central gst act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 190
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CGST.pdf",
+   "url": "https://indiacode.gov.in/items/1f98f6d0-ec9d-42f0-bd50-dc34d25998e1",
+   "as_on": "11th June, 2026",
+   "parsed_as": "sections",
+   "sections": 193
   },
   {
    "code": "CUSTOMS",
@@ -6198,8 +6710,15 @@
    "aliases": [
     "customs act"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
-   "sections": 278
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "CUSTOMS.pdf",
+   "url": "https://indiacode.gov.in/items/5b38b7b8-6708-4630-85d2-8b14a28e53d3",
+   "as_on": "25th August, 2026",
+   "parsed_as": "sections",
+   "sections": 285
   },
   {
    "code": "INCOMETAX",
@@ -6252,7 +6771,14 @@
     "integrated goods and services tax act",
     "igst"
    ],
-   "source": "Open dataset GSMS-B/indian-legal-mcp (github.com/GSMS-B/indian-legal-mcp, MIT/Apache-2.0), compiled from India Code (indiacode.nic.in)",
+   "source": "India Code (indiacode.gov.in), official text published by the Legislative Department",
+   "kind": "act",
+   "court": "",
+   "jurisdiction": "Central",
+   "pdf": "IGST.pdf",
+   "url": "https://indiacode.gov.in/items/fa807882-959e-4fda-9981-230235661fad",
+   "as_on": "1st September, 2026",
+   "parsed_as": "sections",
    "sections": 28
   }
  ],
